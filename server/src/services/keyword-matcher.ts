@@ -10,7 +10,7 @@ interface Sentence {
 }
 
 // F2-R8: after . ! ? ; followed by whitespace, and at line breaks.
-const SENTENCE_BREAK = /(?<=[.!?;])\s+|[\n\r\p{Zl}\p{Zp}]+/u;
+const SENTENCE_BREAK = /(?<=[.!?;])\s+|[\n\v\f\r\u0085\p{Zl}\p{Zp}]+/u;
 
 const wordsOf = (text: string): Set<string> =>
   new Set(text.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []);

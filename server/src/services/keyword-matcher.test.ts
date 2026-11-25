@@ -16,10 +16,13 @@ describe('F2-R8 sentences', () => {
     },
   );
 
-  it.each([0x2028, 0x2029])('F2-R8 splits at the line break with code %d (T-132)', (code) => {
-    const lease = `Nothing to see in this${String.fromCharCode(code)}Painting is paid by tenant`;
-    expect(find(lease, 'Painting')).toBe('Painting is paid by tenant');
-  });
+  it.each([0x0b, 0x0c, 0x85, 0x2028, 0x2029])(
+    'F2-R8 splits at the line break with code %d (T-132)',
+    (code) => {
+      const lease = `Nothing to see in this${String.fromCharCode(code)}Painting is paid by tenant`;
+      expect(find(lease, 'Painting')).toBe('Painting is paid by tenant');
+    },
+  );
 
   it('F2-R8 does not split inside a number, at a comma or at the end (T-132)', () => {
     const lease = 'Painting costs Rs.5000.50, paid by the tenant on exit.';
