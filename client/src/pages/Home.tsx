@@ -7,8 +7,8 @@ import { useWorkspace } from '../state/workspace-context.js';
 import { stepPath } from './move-out/steps.js';
 
 /**
- * UC-6 ends here. Only the stage that exists is offered: Before signing (step 9) and During the
- * tenancy (step 7) are added as links when their pages are built.
+ * UC-6 ends here. Stage links follow UI.md: Moving out, Before signing, During the tenancy. Before
+ * signing (step 9) is added between the other two when its page is built.
  */
 export function Home() {
   const { workspace } = useWorkspace();
@@ -25,6 +25,12 @@ export function Home() {
         </ButtonLink>
         <p>Check the deductions your landlord listed against your tenancy and your lease.</p>
         {hasData(workspace) ? <p className="font-semibold">Saved in this browser</p> : null}
+      </Card>
+      <Card>
+        <ButtonLink to="/tenancy" variant="secondary" isFullWidth>
+          During the tenancy
+        </ButtonLink>
+        <p>Check a metered bill against your readings, and keep a dated log of repairs.</p>
       </Card>
       <LoadSampleButton />
     </div>

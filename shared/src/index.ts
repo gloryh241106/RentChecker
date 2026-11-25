@@ -50,6 +50,9 @@ export type { Buckets } from './rules/buckets.js';
 export type { Totals } from './rules/totals.js';
 export type { CheckInput, CheckResult, DeductionResult } from './rules/evaluate.js';
 export { evaluate } from './rules/evaluate.js';
+export type { BillCheckResult, BillReason } from './rules/check-bill.js';
+export { checkBill } from './rules/check-bill.js';
+export { sortRepairs } from './rules/repair-log.js';
 
 export type { ReasonFacts } from './wording/index.js';
 export {

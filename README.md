@@ -2,7 +2,7 @@
 
 Check your rent and deposit charges before you argue about them.
 
-> Status: the moving-out check works, with clause matching, the message and a sample case. The bill check, repair log, cloud save and review before signing are not built yet. Progress is in [docs/PLAN.md](docs/PLAN.md).
+> Status: the moving-out check works, with clause matching, the message and a sample case. So do the bill check and the repair log. Cloud save and review before signing are not built yet. Progress is in [docs/PLAN.md](docs/PLAN.md).
 
 ## The problem
 

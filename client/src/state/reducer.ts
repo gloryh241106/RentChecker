@@ -1,10 +1,12 @@
 import { workspaceSchema } from '../shared.js';
 import type { Workspace } from '../shared.js';
 import type { ActionOf, ActionType, Handler, HandlersFor, WorkspaceAction } from './actions.js';
+import { billHandlers } from './handlers/bill.js';
 import { deductionHandlers } from './handlers/deduction.js';
 import { draftHandlers } from './handlers/draft.js';
 import { evidenceHandlers } from './handlers/evidence.js';
 import { leaseHandlers } from './handlers/lease.js';
+import { repairHandlers } from './handlers/repair.js';
 import { tenancyHandlers } from './handlers/tenancy.js';
 import { workspaceHandlers } from './handlers/workspace.js';
 
@@ -15,6 +17,8 @@ const HANDLERS: HandlersFor<ActionType> = {
   ...evidenceHandlers,
   ...workspaceHandlers,
   ...draftHandlers,
+  ...repairHandlers,
+  ...billHandlers,
 };
 
 function apply<Type extends ActionType>(state: Workspace, action: ActionOf<Type>): Workspace {

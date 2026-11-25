@@ -1,10 +1,13 @@
-import type { ClauseMatch, Deduction, Tenancy, Workspace } from '../shared.js';
+import type { BillCheck, ClauseMatch, Deduction, Repair, Tenancy, Workspace } from '../shared.js';
 
 /** FR-11. `unconfirmed` removes an override (F2-R14). */
 export type EvidenceOverride =
   | { readonly state: 'verified'; readonly quote: string }
   | { readonly state: 'none' }
   | { readonly state: 'unconfirmed' };
+
+/** A log entry as typed. The link to a deduction is made from the deduction side (F1-R16). */
+export type RepairFields = Omit<Repair, 'deductionId'>;
 
 /** What each action carries, by action type. FRONTEND.md lists them. */
 interface ActionPayloads {
@@ -19,6 +22,12 @@ interface ActionPayloads {
   'sample/load': unknown;
   'workspace/replace': { readonly workspace: Workspace };
   'workspace/reset': unknown;
+  'repair/add': { readonly repair: RepairFields };
+  /** Keeps the link of the entry (F5-R6). */
+  'repair/update': { readonly repair: RepairFields };
+  /** Removes the entry, and with it its link (F5-R7). */
+  'repair/remove': { readonly id: string };
+  'bill/set': { readonly bill: BillCheck };
   'draft/set': { readonly text: string };
 }
 

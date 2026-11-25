@@ -79,7 +79,7 @@ Every screen has a header with the app name, a footer with the not-legal-advice 
 
 ### Home (/)
 
-h1 "Check your rent and deposit charges". Three stage links in this order: Moving out (main), Before signing, During the tenancy. Each has one line of help. Buttons: Load sample case. Empty state: nothing saved, no note. Saved data: the Moving out link says "Saved in this browser". Errors: storage notices above. Success: not applicable.
+h1 "Check your rent and deposit charges". Three stage links in this order: Moving out (main), Before signing, During the tenancy. Each has one line of help: "Check the deductions your landlord listed against your tenancy and your lease.", "Check a metered bill against your readings, and keep a dated log of repairs." for During the tenancy. Buttons: Load sample case. Empty state: nothing saved, no note. Saved data: the Moving out link says "Saved in this browser". Errors: storage notices above. Success: not applicable.
 
 ### Moving out (/move-out)
 
@@ -101,7 +101,7 @@ h1 "Review a lease before you sign". A text area for the lease (its own text, no
 
 ### During the tenancy (/tenancy)
 
-h1 "During the tenancy". Two sections, each with an h2. Check a bill: Previous reading, Current reading, Rate per unit, Fixed charge (optional), Bill total, button Check bill. Success: "Worked out from your readings: ₹{expected}. Your bill: ₹{total}. Difference: ₹{difference}." followed by one reason sentence from the table. Empty: just the form. Error: messages next to fields, and no amount is shown. Repair log: Date, What was wrong, Reported to, button Add repair. Entries oldest first, each with Edit and Delete. Empty: "No repairs recorded. Add one when you report a problem." At 50: "The log holds up to 50 entries." Deleting an entry says in the status region that its link was removed.
+h1 "During the tenancy". Two sections, each with an h2. Check a bill: Previous reading, Current reading, Rate per unit, Fixed charge (optional), Bill total, button Check bill. Success: "Worked out from your readings: ₹{expected}. Your bill: ₹{total}. Difference: ₹{difference}." followed by one reason sentence from the table. Empty: just the form. Error: messages next to fields, and no amount is shown. Repair log: Date, What was wrong, Reported to, button Add repair. Entries oldest first, each with the date, the description, who it was reported to, the linked deduction if any, Edit and Delete. Empty: "No repairs recorded. Add one when you report a problem." At 50: "The log holds up to 50 entries." Deleting an entry says in the status region that its link was removed, for example "Removed the repair of 10 March 2026. Its link to Repainting was removed." The status region also says "Bill checked." followed by the summary, and "Saved the repair of 10 March 2026."
 
 ## Design tokens
 

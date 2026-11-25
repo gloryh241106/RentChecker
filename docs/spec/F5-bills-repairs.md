@@ -26,7 +26,7 @@ Repair log output: the entries in date order, oldest first.
 - F5-R4 The bill form values are kept in local storage and removed by "Delete everything" (F1-R19).
 - F5-R5 A repair entry needs a valid date (D-5), a description and a reported-to text. Entries can be edited and deleted. The log holds at most 50 entries.
 - F5-R6 A repair entry can be linked to one deduction in F1. A linked entry adds only the reason REPAIR_REPORTED when D-37 says so. It never changes a result, an amount or a total.
-- F5-R7 Deleting an entry removes its links. A notice in F1 marks results as out of date (F1-R14).
+- F5-R7 Deleting an entry removes its links. Results are kept only while the tenant stays on Moving out, so after a visit to the log no old result shows, and Results asks for a new check. A check that is still open is marked as out of date (F1-R14).
 - F5-R8 Repair text is plain text and never leaves the browser. F5 sends nothing to the server.
 
 ## Acceptance criteria
@@ -39,7 +39,7 @@ Repair log output: the entries in date order, oldest first.
 - F5-AC6 Given an entry dated 2026-03-10 linked to a deduction with handover 2026-06-15, then F1 shows REPAIR_REPORTED and the result is unchanged. Given an entry dated 2026-07-01, then no reason is added.
 - F5-AC7 Given three entries dated 2026-05-01, 2026-03-10 and 2026-04-02, then the log lists 2026-03-10, 2026-04-02, 2026-05-01.
 - F5-AC8 Given a log with 50 entries, then the add control is disabled and says why.
-- F5-AC9 Given a linked entry, when it is deleted, then the link is gone and the F1 results are marked out of date.
+- F5-AC9 Given a linked entry, when it is deleted, then the link is gone and F1 shows no result that still uses it.
 
 ## Errors and edge cases
 

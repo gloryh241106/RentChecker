@@ -263,6 +263,8 @@ Each case runs on a desktop and on a phone viewport, unless it says otherwise.
 | T-208 | NFR-5 | 320 px wide viewport on every screen | No horizontal scroll |
 | T-209 | NFR-1 | Whole flow with the console watched. Open `/move-out` directly and reload | No CSP violation or page error. The page loads |
 | T-210 | API errors | Real HTTP: health, unknown path, bad body, body over 200 KB, 21 match requests | 200, 404, 400, 413, 429, each with the body of API.md. Uses its own server |
+| T-214 | UC-4, F5-AC1 | Check the bill of F5-AC1, reload | ₹1,228.75, difference ₹71.25, the reason sentence. The form values are back after the reload |
+| T-215 | UC-5, F5-AC6, F5-AC9 | Record a repair, link it to Repainting in the sample case, run the check, then delete the entry | The card shows the repair and the same result. After the delete the link is announced as removed and no card shows the repair |
 | T-213 | F1-R8, NFR-5 | Type a bad amount, then press Save deduction with one click | The form is submitted: field message and summary, focus on the field |
 
 ## Manual accessibility pass (NFR-5)

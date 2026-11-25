@@ -5,6 +5,7 @@ import { Layout } from './app/Layout.js';
 import { Home } from './pages/Home.js';
 import { MoveOutPage } from './pages/move-out/MoveOutPage.js';
 import { NotFound } from './pages/NotFound.js';
+import { TenancyPage } from './pages/tenancy/TenancyPage.js';
 import { WorkspaceProvider } from './state/WorkspaceProvider.js';
 import type { WorkspaceStorage } from './storage/workspace-storage.js';
 
@@ -22,6 +23,7 @@ export function App({ storage, clauseApi }: AppProps) {
           <Route element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="move-out" element={<MoveOutPage />} />
+            <Route path="tenancy" element={<TenancyPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
