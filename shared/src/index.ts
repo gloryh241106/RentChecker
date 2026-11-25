@@ -50,3 +50,19 @@ export type { Buckets } from './rules/buckets.js';
 export type { Totals } from './rules/totals.js';
 export type { CheckInput, CheckResult, DeductionResult } from './rules/evaluate.js';
 export { evaluate } from './rules/evaluate.js';
+
+export type { ReasonFacts } from './wording/index.js';
+export {
+  BUCKET_NAMES,
+  BUCKET_ORDER,
+  EVIDENCE_STATE_NAMES,
+  KIND_NAMES,
+  KIND_ORDER,
+  PARTIAL_MONTH_NAMES,
+  RESULT_NAMES,
+  SOURCE_TAGS,
+  formatDateText,
+  formatMonthText,
+  joinWithAnd,
+  reasonSentence,
+} from './wording/index.js';

@@ -1,1 +1,79 @@
 @import 'tailwindcss';
+
+/*
+ * Design tokens (UI.md "Design tokens"). Roles, not shades. The contrast ratios of the pairs
+ * below are checked by calculation in client/src/design/contrast.test.ts.
+ */
+@theme {
+  --color-surface: #faf8f3;
+  --color-raised: #ffffff;
+  --color-sunken: #f0ece2;
+  --color-ink: #1c2733;
+  --color-ink-muted: #4a5663;
+  --color-line: #d8d1c2;
+  --color-line-input: #6b7683;
+  --color-primary: #1b4965;
+  --color-primary-hover: #12324a;
+  --color-on-primary: #ffffff;
+  --color-focus: #b4510a;
+  --color-danger: #a4262c;
+  --color-danger-bg: #fdf1f0;
+  --color-warning: #7a4b00;
+  --color-warning-bg: #fff6df;
+  --color-success: #1d6a3b;
+  --color-success-bg: #eaf5ee;
+  --color-info: #1b4965;
+  --color-info-bg: #e9f1f6;
+
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 100%;
+    line-height: 1.5;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-surface);
+    overflow-wrap: anywhere;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    line-height: 1.25;
+  }
+
+  /* UI.md: a 2 px ring with a 2 px offset, always visible. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* The heading and main receive focus from code, so a ring would only be noise. */
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+dialog::backdrop {
+  background-color: rgb(28 39 51 / 0.6);
+}

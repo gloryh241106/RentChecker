@@ -243,6 +243,8 @@ Wording is the wording in [UI.md](../design/UI.md). The fetch fake returns the A
 | T-172 | FR-16 | Add three repairs out of date order. Add 51st. Link, then delete an entry | Listed oldest first. 51st blocked with a reason. Link removed, results out of date |
 | T-173 | NFR-5 | Automated axe check on every screen, in empty, error and results states | No violations |
 | T-174 | FR-1 | Storage throws. Stored JSON is corrupt | Notice that nothing is saved, app works. Corrupt data ignored, notice shown, form empty |
+| T-211 | F1-R15 | Paste 40,001 characters into the lease box, then delete one | All the text stays. Field error, and the lease counts as empty. The error goes and the text is used |
+| T-212 | NFR-5 | Open Paste a quote, send a refused quote, Cancel. Remove an override | Focus goes into the box, stays, and goes back to Paste a quote. Same after the override is removed |
 
 ## End to end (Playwright)
 
@@ -261,6 +263,7 @@ Each case runs on a desktop and on a phone viewport, unless it says otherwise.
 | T-208 | NFR-5 | 320 px wide viewport on every screen | No horizontal scroll |
 | T-209 | NFR-1 | Whole flow with the console watched. Open `/move-out` directly and reload | No CSP violation or page error. The page loads |
 | T-210 | API errors | Real HTTP: health, unknown path, bad body, body over 200 KB, 21 match requests | 200, 404, 400, 413, 429, each with the body of API.md. Uses its own server |
+| T-213 | F1-R8, NFR-5 | Type a bad amount, then press Save deduction with one click | The form is submitted: field message and summary, focus on the field |
 
 ## Manual accessibility pass (NFR-5)
 

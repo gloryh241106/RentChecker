@@ -10,7 +10,7 @@ This file says how RentChecker is tested. The cases themselves are in [CASES.md]
 | API | Vitest and Supertest | Both routes: validation, every error status, AI success, AI failure, timeout, quote rejection, rate limit, logging, injection text | `server/` |
 | Database | Vitest and PGlite, a PostgreSQL engine that runs in the test process | Migrations, constraints, transactions and access by code (F6) | `server/` |
 | Component | Vitest and Testing Library | Screens and flows: field errors and focus, consent notice, keyword notice, labels, out-of-date notice, delete everything, copy | `client/` |
-| End to end | Playwright in a real browser, against the built client and server | Whole use cases, offline use, reload, keyboard, phone width, CSP, axe with colour contrast (T-200 to T-210) | `e2e/` |
+| End to end | Playwright in a real browser, against the built client and server | Whole use cases, offline use, reload, keyboard, phone width, CSP, axe with colour contrast (T-200 to T-210 and T-213) | `e2e/` |
 | Manual | A person | Screen reader, zoom, reflow, contrast, target size, reduced motion, a real phone | CASES.md, last table |
 
 An automated axe check runs inside the component level on every screen. It does not replace the manual pass.

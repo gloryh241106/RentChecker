@@ -2,7 +2,7 @@
 
 Check your rent and deposit charges before you argue about them.
 
-> Status: the calculation rules and the server skeleton are built and tested. There are no screens yet. Progress is in [docs/PLAN.md](docs/PLAN.md).
+> Status: the moving-out check works in the browser, with a sample case and local storage. The server can match clauses, and the screens for that come next. Progress is in [docs/PLAN.md](docs/PLAN.md).
 
 ## The problem
 
