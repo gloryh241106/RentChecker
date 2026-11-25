@@ -41,7 +41,7 @@ test('T-207 NFR-5 Lease has no axe violations, empty and with the sample clause'
   await expectNoAxeViolations(page);
 
   await loadSampleCase(page);
-  await page.getByRole('link', { name: 'Lease' }).click();
+  await page.getByRole('link', { name: 'Lease', exact: true }).click();
   await expect(page.getByText(/Sample match/).first()).toBeVisible();
   await expectNoAxeViolations(page);
 });
@@ -66,7 +66,7 @@ test('T-207 NFR-5 Message has no axe violations, empty and with a draft', async 
 
 test('T-207 NFR-5 the consent notice has no axe violations', async ({ page }) => {
   await loadSampleCase(page);
-  await page.getByRole('link', { name: 'Lease' }).click();
+  await page.getByRole('link', { name: 'Lease', exact: true }).click();
   await page.getByRole('button', { name: 'Find clauses' }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await expectNoAxeViolations(page);
@@ -101,7 +101,7 @@ test.describe('T-208 at 320 px', () => {
 
   test('T-208 NFR-5 Lease has no horizontal scroll with the sample clause', async ({ page }) => {
     await loadSampleCase(page);
-    await page.getByRole('link', { name: 'Lease' }).click();
+    await page.getByRole('link', { name: 'Lease', exact: true }).click();
     await expect(page.getByText(/Sample match/).first()).toBeVisible();
     await expectNoHorizontalScroll(page);
   });

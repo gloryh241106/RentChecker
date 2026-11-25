@@ -20,11 +20,10 @@ export async function loadSampleCase(page: Page): Promise<void> {
   ).toBeVisible();
 }
 
-/** F1-AC2: run the check for the sample case and wait for the status region. */
+/** F1-R17, F1-AC2: the sample case opens with the check already run. */
 export async function runSampleCheck(page: Page): Promise<void> {
   await loadSampleCase(page);
-  await page.getByRole('button', { name: 'Run check' }).click();
-  await expect(page.getByRole('status')).toContainText('Check finished.');
+  await expect(page.getByRole('heading', { level: 2, name: 'Totals' })).toBeVisible();
 }
 
 /** UC-2: the Message step of the checked sample case. */

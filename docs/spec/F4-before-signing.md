@@ -36,6 +36,7 @@ Output: one row for each of the ten topics below, and a list of questions to cop
 - F4-R5 "Copy questions" copies the questions for every topic that is not "Found", one per line, in topic order. If every topic is "Found", the button is replaced by "Every topic has a clause. Read each quote to check the terms."
 - F4-R6 Manual overrides work as in F2-R12 to F2-R14, for each topic. Removing one leaves the row at "Could not confirm". Rows and overrides appear after the first review of a lease text.
 - F4-R7 Editing the lease text clears all topic outcomes (as F1-R15). Results and the lease text are kept in local storage and removed by "Delete everything" (F1-R19).
+- F4-R9 While the lease box is empty, "Use a sample lease" fills it with an invented lease that says it is a sample, and moves focus to the box. Nothing is sent.
 - F4-R8 No amount, result or total is computed in F4.
 
 ## Acceptance criteria

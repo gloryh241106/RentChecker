@@ -12,6 +12,8 @@ export interface MoveOutSession {
   readonly goTo: (step: StepId) => void;
   /** F1-R9. Runs the check, or sends the tenant to the first thing that is wrong (F1-R8). */
   readonly runCheck: () => void;
+  /** F1-R14. After a match run: checks again if results are shown and the facts are valid. */
+  readonly refreshCheck: () => void;
   /** Next on a step. True when the tenant may move on. */
   readonly canLeave: (step: StepId) => boolean;
   /** The id of the field that should get focus when its step opens. Read once. */

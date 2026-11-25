@@ -32,6 +32,7 @@ export function ReviewPage() {
         hint="Paste the whole lease. A missing page can cause a wrong Not found."
         value={reviewLeaseText}
         hasResults={hasRows}
+        offersSample
         emptyText="Paste the lease to see which deposit topics it covers."
         staleText="The lease text changed. Run the review again."
         onChange={(text) => dispatch({ type: 'review/set', text })}

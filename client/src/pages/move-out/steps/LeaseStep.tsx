@@ -8,7 +8,7 @@ import { useWorkspace } from '../../../state/workspace-context.js';
 import { useMoveOutSession } from '../session-context.js';
 
 interface LeaseStepProps {
-  /** Step 4b puts "Find clauses" and its consent notice here. */
+  /** "Find clauses" and its consent notice. */
   readonly matching?: ReactNode;
 }
 

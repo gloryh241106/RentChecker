@@ -16,3 +16,12 @@ export function stepPath(id: StepId): string {
 export function readStep(value: string | null): StepId {
   return STEPS.find((step) => step.id === value)?.id ?? 'details';
 }
+
+/** Sent with a link that opens Moving out with the check already run (F1-R17). */
+export const RUN_CHECK_STATE = { runCheck: true } as const;
+
+export function asksForCheck(state: unknown): boolean {
+  return (
+    typeof state === 'object' && state !== null && 'runCheck' in state && state.runCheck === true
+  );
+}

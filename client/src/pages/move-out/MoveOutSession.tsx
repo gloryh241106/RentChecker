@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useAnnounce } from '../../app/announce-context.js';
 import { problemCountText } from '../../components/ui/ErrorSummary.js';
 import { useTenancyForm } from '../../forms/use-tenancy-form.js';
@@ -8,7 +8,7 @@ import { describeCheck } from '../../hooks/check-snapshot.js';
 import { useCheck } from '../../hooks/use-check.js';
 import { useWorkspace } from '../../state/workspace-context.js';
 import { MoveOutSessionContext } from './session-context.js';
-import { stepPath } from './steps.js';
+import { asksForCheck, stepPath } from './steps.js';
 import type { StepId } from './steps.js';
 
 /** Holds the Moving out state that is not saved: typed text, the last check, a focus request. */
@@ -17,7 +17,7 @@ export function MoveOutSession({ children }: { readonly children: ReactNode }) {
   const announce = useAnnounce();
   const navigate = useNavigate();
   const tenancyForm = useTenancyForm(workspace, dispatch);
-  const check = useCheck(workspace);
+  const check = useCheck(workspace, asksForCheck(useLocation().state));
   const [wasDeductionMissing, setWasDeductionMissing] = useState(false);
   const pendingFocus = useRef<string | null>(null);
 
@@ -85,6 +85,11 @@ export function MoveOutSession({ children }: { readonly children: ReactNode }) {
     isDeductionMissing: wasDeductionMissing && workspace.deductions.length === 0,
     goTo,
     runCheck,
+    refreshCheck: () => {
+      if (tenancyForm.problems.length === 0) {
+        check.refresh();
+      }
+    },
     canLeave: (step: StepId) => guards[step](),
     takePendingFocus,
   };

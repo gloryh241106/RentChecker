@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { useAnnounce } from '../app/announce-context.js';
 import { MAX_LEASE_LENGTH } from '../shared.js';
+import { SAMPLE_REVIEW_LEASE } from '../state/sample-lease.js';
+import { Button } from './ui/Button.js';
 import { TextField } from './ui/Field.js';
 import { Notice } from './ui/Notice.js';
 
@@ -16,6 +19,8 @@ interface LeaseTextBoxProps {
   readonly hasResults: boolean;
   readonly emptyText: string;
   readonly staleText: string;
+  /** Offers the sample lease while the box is empty. */
+  readonly offersSample?: boolean;
   /** Called with the new text, or '' while the text is over the limit (F1-R15). */
   readonly onChange: (text: string) => void;
 }
@@ -27,6 +32,8 @@ interface LeaseTextBoxProps {
  */
 export function LeaseTextBox(props: LeaseTextBoxProps) {
   const { id, hint, value, hasResults, emptyText, staleText, onChange } = props;
+  const { offersSample = false } = props;
+  const announce = useAnnounce();
   const [wasEdited, setWasEdited] = useState(false);
   const [longText, setLongText] = useState<string | null>(null);
   const isTooLong = longText !== null;
@@ -37,6 +44,12 @@ export function LeaseTextBox(props: LeaseTextBoxProps) {
     setLongText(isOverLimit ? next : null);
     setWasEdited(hasResults || wasEdited);
     onChange(isOverLimit ? '' : next);
+  }
+
+  function addSample(): void {
+    changeText(SAMPLE_REVIEW_LEASE);
+    announce('Sample lease added.');
+    document.getElementById(id)?.focus(); // The button is gone by now.
   }
 
   return (
@@ -55,6 +68,11 @@ export function LeaseTextBox(props: LeaseTextBoxProps) {
         {COUNT_FORMAT.format(text.length)} of {COUNT_FORMAT.format(MAX_LEASE_LENGTH)}
       </p>
       {text === '' ? <p>{emptyText}</p> : null}
+      {text === '' && offersSample ? (
+        <Button variant="secondary" isFullWidth onClick={addSample}>
+          Use a sample lease
+        </Button>
+      ) : null}
       {wasEdited && !hasResults ? <Notice tone="warning">{staleText}</Notice> : null}
     </>
   );

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAnnounce } from '../app/announce-context.js';
-import { stepPath } from '../pages/move-out/steps.js';
+import { RUN_CHECK_STATE, stepPath } from '../pages/move-out/steps.js';
 import { hasData } from '../state/has-data.js';
 import { useWorkspace } from '../state/workspace-context.js';
 import { Button } from './ui/Button.js';
@@ -16,7 +16,7 @@ export function LoadSampleButton() {
 
   function load(): void {
     dispatch({ type: 'sample/load' });
-    void navigate(stepPath('results'));
+    void navigate(stepPath('results'), { state: RUN_CHECK_STATE });
     announce('Sample case loaded.');
   }
 

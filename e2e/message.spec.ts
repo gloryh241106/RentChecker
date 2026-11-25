@@ -5,7 +5,6 @@ test.use({ permissions: ['clipboard-read', 'clipboard-write'] });
 test('T-206 UC-2 the message is drafted, edited and copied', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Load sample case' }).click();
-  await page.getByRole('button', { name: 'Run check' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   const box = page.getByLabel('Message to your landlord');
   await expect(box).toHaveValue(/1\. Repainting: ₹12,000/);

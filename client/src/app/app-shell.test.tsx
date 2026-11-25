@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { createSampleWorkspace } from '../state/sample.js';
 import { InMemoryWorkspaceStorage } from '../test-support/in-memory-storage.js';
+import { totalOf } from '../test-support/queries.js';
 import { renderApp } from '../test-support/render-app.js';
 
 const DELETE_QUESTION =
@@ -129,6 +130,13 @@ describe('Load sample case', () => {
     await user.click(confirmButton('Load sample case'));
     expect(screen.getByRole('heading', { level: 1, name: 'Results' })).toBeTruthy();
     expect(screen.getByText(SAMPLE_BANNER)).toBeTruthy();
+  });
+
+  it('F1-R17 the sample opens with the check already run (T-220)', async () => {
+    const { user } = renderApp();
+    await user.click(screen.getByRole('button', { name: 'Load sample case' }));
+    expect(totalOf('Ask about')).toBe('₹10,500');
+    expect(screen.queryByRole('button', { name: 'Run check' })).toBeNull();
   });
 
   it('F1-R17 with nothing stored the sample loads at once, without a question', async () => {
