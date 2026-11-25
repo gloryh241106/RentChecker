@@ -56,7 +56,7 @@ The server never returns `user` or `sample`. Those sources exist only in the bro
 
 There is exactly one match per item, in request order. Keyword mode returns only `verified` or `unconfirmed`.
 
-An AI failure is not an error. The server answers `200` in keyword mode with a warning. The AI call is cancelled after 20 seconds. Only a 503 from Gemini is retried, once, within those 20 seconds.
+An AI failure is not an error. The server answers `200` in keyword mode with a warning. The AI call is cancelled after 20 seconds. Within those 20 seconds a 503 from Gemini is retried, and there is a second round when Gemini stays overloaded or is slow (BACKEND.md).
 
 ## POST /api/assistant/read
 

@@ -2,6 +2,7 @@ import type { Express } from 'express';
 import { createGeminiMatcher } from './ai/gemini-client.js';
 import { createGeminiPromptReader } from './ai/gemini-prompt-reader.js';
 import { retryReaderWhenOverloaded, retryWhenOverloaded } from './ai/retry-overloaded.js';
+import { withSecondReadingRound, withSecondRound } from './ai/second-round.js';
 import { createApp } from './app.js';
 import { parseConfig } from './config.js';
 import type { Env } from './config.js';
@@ -24,8 +25,9 @@ export function createRuntime(env: Env, sink: LogSink): Runtime {
     cloudSaveConfigured,
     logger,
     staticDir,
-    clauseMatcher: ai && retryWhenOverloaded(createGeminiMatcher(ai, fetch)),
-    promptReader: ai && retryReaderWhenOverloaded(createGeminiPromptReader(ai, fetch)),
+    clauseMatcher: ai && withSecondRound(retryWhenOverloaded(createGeminiMatcher(ai, fetch))),
+    promptReader:
+      ai && withSecondReadingRound(retryReaderWhenOverloaded(createGeminiPromptReader(ai, fetch))),
   });
   return { app, port, logger };
 }

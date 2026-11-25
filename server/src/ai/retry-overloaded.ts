@@ -8,7 +8,7 @@ const OVERLOADED = 503;
 // BACKEND.md
 export const RETRY_DELAY_MS = 1_000;
 
-const isOverloaded = (error: unknown): boolean =>
+export const isOverloaded = (error: unknown): boolean =>
   error instanceof AiClientError && error.httpStatus === OVERLOADED;
 
 /**

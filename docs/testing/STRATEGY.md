@@ -15,6 +15,10 @@ This file says how RentChecker is tested. The cases themselves are in [CASES.md]
 
 An automated axe check runs inside the component level on every screen. It does not replace the manual pass.
 
+## On every push
+
+GitHub Actions runs the type check, lint, format check, tests and build on every push to `main` (`.github/workflows/ci.yml`). It needs no secret. The end-to-end level is run by hand, because it uses an installed browser.
+
 ## Rules for tests
 
 - The AI client is always faked. The fake can return a scripted answer, throw, or never answer. No test calls Gemini or a hosted database, and none needs a key.

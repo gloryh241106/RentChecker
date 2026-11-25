@@ -175,6 +175,7 @@ Terms are those of API.md. "Fake answers" means the fake AI client returns that 
 | T-133 | FR-10 | Keyword mode. Best sentence "The tenant shall not pay for painting." Two sentences tied for best. No sentence matches | Each `unconfirmed`, quote null |
 | T-218 | NFR-3, FR-10 | Gemini answers 503, then an answer. Gemini answers 503 twice | Two calls about 1 s apart and the second answer. Two calls and a failure |
 | T-219 | NFR-6, AI_TIMEOUT | 429, 500, invalid reply, failed request. An abort during the wait | One call each, and the failure is passed on |
+| T-263 | NFR-3, FR-10 | The first round is slow: the second answers, the first answers later, or both fail. The first round ends with 503, with another failure or with an answer. The caller aborts | The first valid answer, or the failure of the first round. A second round only when slow or 503. What lost and everything after an abort is aborted |
 | T-134 | NFR-6 | 20 items | Fake called once |
 | T-135 | VALIDATION_ERROR | Body `{not json` | 400, code `VALIDATION_ERROR`, generic message |
 | T-136 | VALIDATION_ERROR | `leaseText` of 49 characters. 49 characters plus 10 spaces. 50 characters | 400 with `fields` `["leaseText"]`. 400. 200 |

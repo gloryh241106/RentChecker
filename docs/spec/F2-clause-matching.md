@@ -64,4 +64,4 @@ Each match run is one request to `POST /api/clauses/match`. Limits (lease length
 
 ## Out of scope
 
-Retries, other than the one after 503 (BACKEND.md), streaming, a client-side keyword fallback when the server is unreachable, stemming, languages other than English, deciding what a clause means in law.
+Retries, other than those after 503 or a slow call (BACKEND.md), streaming, a client-side keyword fallback when the server is unreachable, stemming, languages other than English, deciding what a clause means in law.

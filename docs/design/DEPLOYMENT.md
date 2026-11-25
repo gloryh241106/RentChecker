@@ -106,7 +106,7 @@ Also checked there for UC-8 and UC-9: four questions answered by Gemini, one of 
 
 Item 11: the burst got 429 earlier than the 21st request, because earlier calls from the same address counted. The counter is kept per instance.
 
-Gemini sometimes answers 503 (overloaded), mostly for the ten topics of a lease review: 2 of 8 such calls on a local server on 2026-11-25. The answer then comes from keyword matching, and the page says so.
+Gemini sometimes answers 503 (overloaded), mostly for the ten topics of a lease review: 2 of 8 such calls on a local server on 2026-11-25. The answer then comes from keyword matching, and the page says so. On the deployed site on the same evening, 2 of 3 prompts had no answer within 20 seconds while the same kind of call took 1 to 2 seconds a few minutes later. That is why there is a second round (BACKEND.md).
 
 ## Not verified yet
 
