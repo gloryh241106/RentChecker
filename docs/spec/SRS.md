@@ -13,6 +13,8 @@ The user is a tenant in India with a written lease. They are not a lawyer and ma
 - One tenancy at a time, kept in the user's browser.
 - An optional cloud copy in PostgreSQL, opened with a recovery code.
 - Moving-out deductions, lease review before signing, monthly bill check, repair log.
+- Questions about the pasted lease, answered only with its own words.
+- Reading the charges out of a landlord's pasted message.
 - English lease text pasted by the user, and amounts in Indian rupees.
 
 ### Out of scope
@@ -35,6 +37,8 @@ Anything not listed under "In scope" needs a change to this file before it is bu
 | UC-5 | Keep a repair log | Add a dated entry, link it to a deduction later | [F5](F5-bills-repairs.md), [F1](F1-move-out.md) |
 | UC-6 | Delete everything | Choose delete, confirm, all stored data is removed | [F1](F1-move-out.md) |
 | UC-7 | Keep a cloud copy | Turn on cloud save, keep the recovery code, open the case on another device, delete the copy | [F6](F6-cloud-save.md) |
+| UC-8 | Ask about the lease | Type or choose a question, read the sentence of the lease, copy the questions without an answer | [F7](F7-ask-lease.md), [F2](F2-clause-matching.md) |
+| UC-9 | Read the landlord's message | Paste the message, check the charges found, add them | [F8](F8-read-message.md), [F1](F1-move-out.md) |
 
 ## Functional requirements
 
@@ -61,6 +65,8 @@ Must = needed for the first submission. Should = built if time allows.
 | FR-17 | The user can choose to save the case to the cloud and gets a recovery code | Should | F6 |
 | FR-18 | The user can open a saved case with its recovery code | Should | F6 |
 | FR-19 | The user can delete the cloud copy | Should | F6 |
+| FR-20 | The user can ask a question about the pasted lease and gets the sentence that answers it, or is told that none was found | Should | F7 |
+| FR-21 | The user can paste the landlord's message and add the charges found in it after checking them | Should | F8 |
 
 ## Non-functional requirements
 

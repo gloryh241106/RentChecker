@@ -5,4 +5,7 @@ export const STAGES = [
   { path: '/tenancy', name: 'During the tenancy' },
 ] as const;
 
+/** Not a stage. It works at any time, on the lease of Moving out. */
+export const ASK_PAGE = { path: '/ask', name: 'Ask your lease' } as const;
+
 export type StagePath = (typeof STAGES)[number]['path'];

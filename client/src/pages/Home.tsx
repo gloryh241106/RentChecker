@@ -4,6 +4,7 @@ import { LoadSampleButton } from '../components/LoadSampleButton.js';
 import { ButtonLink } from '../components/ui/Button.js';
 import { hasData } from '../state/has-data.js';
 import { useWorkspace } from '../state/workspace-context.js';
+import { AskTeaser } from './home/AskTeaser.js';
 import { HowItWorks } from './home/HowItWorks.js';
 import { StageCards } from './home/StageCards.js';
 import { stepPath } from './move-out/steps.js';
@@ -30,6 +31,7 @@ export function Home() {
         <ExampleResult />
       </div>
       <StageCards isSaved={hasData(workspace)} />
+      <AskTeaser />
       <HowItWorks />
     </div>
   );
