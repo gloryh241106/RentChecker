@@ -244,6 +244,24 @@ Wording is the wording in [UI.md](../design/UI.md). The fetch fake returns the A
 | T-173 | NFR-5 | Automated axe check on every screen, in empty, error and results states | No violations |
 | T-174 | FR-1 | Storage throws. Stored JSON is corrupt | Notice that nothing is saved, app works. Corrupt data ignored, notice shown, form empty |
 
+## End to end (Playwright)
+
+Each case runs on a desktop and on a phone viewport, unless it says otherwise.
+
+| ID | Rule | Input | Expected |
+|---|---|---|---|
+| T-200 | UC-1, F1-AC2 | Load the sample case, run the check | Results and totals of the worked example |
+| T-201 | UC-1, NFR-6 | Load the app, go offline, type the worked example by keyboard alone, run the check | Same result and expected amount for June rent. The other two charges are Unclear, because no clause was matched. No network call |
+| T-202 | FR-6, F1-R18 | Type facts, reload. Delete everything, reload | Data is back after the first reload and gone after the second |
+| T-203 | FR-8, FR-12, F2-AC12 | Find clauses, Cancel. Again, Continue with a faked AI answer | No request after Cancel. Quotes and results shown after Continue |
+| T-204 | FR-10, F2-AC7 | Find clauses with the real server and no key | Keyword notice, quotes are in the lease |
+| T-205 | NFR-3, F2-AC13 | Find clauses while the API answers 500, then while offline | Failure message. Run check still works |
+| T-206 | UC-2, F3-AC13 | Message step of the sample case: edit, copy | Clipboard holds the edited text |
+| T-207 | NFR-5 | axe on every screen in empty, error and results states | No violations, colour contrast included |
+| T-208 | NFR-5 | 320 px wide viewport on every screen | No horizontal scroll |
+| T-209 | NFR-1 | Whole flow with the console watched. Open `/move-out` directly and reload | No CSP violation or page error. The page loads |
+| T-210 | API errors | Real HTTP: health, unknown path, bad body, body over 200 KB, 21 match requests | 200, 404, 400, 413, 429, each with the body of API.md. Uses its own server |
+
 ## Manual accessibility pass (NFR-5)
 
 Run on a real phone and a desktop. Record the browser, the screen reader and the result.

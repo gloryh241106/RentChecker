@@ -2,6 +2,8 @@ node_modules/
 dist/
 dist-server/
 coverage/
+test-results/
+playwright-report/
 package-lock.json
 *.md
 docs/

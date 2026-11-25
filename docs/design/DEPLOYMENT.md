@@ -22,6 +22,7 @@ A starting `vercel.json` has a build command and output directory for the client
 | `GEMINI_API_KEY` | server | Secret. Set in the Vercel dashboard or the Cloud Run secret store |
 | `GEMINI_MODEL` | server | Model name, chosen at deploy time and not written in code or docs |
 | `DATABASE_URL` | server, migrations | Secret. Optional, only for F6. The pooled Neon connection string |
+| `STATIC_DIR` | Docker and end-to-end tests only | Folder of the built client that Express serves. Not set on Vercel |
 | `PORT` | Docker and local only | Cloud Run sets it. Vercel ignores it |
 
 Never prefix a name with `VITE_`, because Vite copies those into the browser bundle (NFR-1). Change a value, then redeploy.
@@ -32,6 +33,7 @@ Never prefix a name with `VITE_`, because Vite copies those into the browser bun
 GEMINI_API_KEY=
 GEMINI_MODEL=
 DATABASE_URL=
+STATIC_DIR=
 PORT=3001
 ```
 

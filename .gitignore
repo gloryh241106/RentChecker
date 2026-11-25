@@ -6,5 +6,7 @@ dist-server/
 !.env.example
 .vercel/
 coverage/
+test-results/
+playwright-report/
 *.log
 .vitest/

@@ -171,6 +171,7 @@ RentChecker/
   server/                 Express (src/app.ts, index.ts, routes, controllers, services, ai, middleware)
   db/migrations/          numbered SQL files
   shared/                 money, dates, calculations, results, totals, quote check, schemas, types, draft message
+  e2e/                    Playwright tests against the built app
   docs/                   spec, design, adr, testing
   Dockerfile  vercel.json  .env.example  package.json  tsconfig.json
 ```

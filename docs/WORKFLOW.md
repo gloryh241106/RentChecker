@@ -10,6 +10,7 @@ How the work in [PLAN.md](PLAN.md) is carried out. Rules for agents are in [AGEN
 | Orchestrator | Claude Code (Opus) | Assigns work, reviews every change, runs all checks, commits |
 | Writers | Antigravity, OpenCode, Claude subagents | Write one assigned task |
 | Reviewer | An agent that did not write the change | Looks for bugs and broken rules, changes nothing |
+| Tester | OpenCode (attacks the server in a copy without `.env`), Antigravity (writes end-to-end tests) | Writes tests only. The orchestrator confirms each reported bug before anyone fixes it |
 
 ## Loop for each task
 
