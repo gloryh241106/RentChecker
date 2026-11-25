@@ -108,16 +108,16 @@ A union on `kind` (D-10). Zod uses `z.discriminatedUnion("kind", ...)`.
 
 | Field | Types and kinds | Validation |
 |---|---|---|
-| `id` | all | Unique in the workspace |
+| `id` | all | Unique among the deductions |
 | `label` | all | 1 to 120 characters after trimming |
 | `amountPaise` | all | More than 0, at most 1,000,000,000 (D-4) |
 | `rentMonth` | `rent` | `YYYY-MM`, required |
-| `alreadyPaidPaise` | `rent` | int, 0 or more, default 0 |
+| `alreadyPaidPaise` | `rent` | int, 0 up to the D-4 limit, default 0 |
 | `previousReading`, `currentReading` | `metered` | int hundredths, 0 to 1,000,000,000, optional. Current is not below previous (D-22) |
 | `ratePaisePerUnit` | `metered` | int, 0 to 100,000 (D-22), optional |
-| `fixedChargePaise` | `metered` | int, 0 or more, default 0 |
-| `leaseAmountPaise` | `fixed_fee` | int, optional |
-| `receiptAmountPaise` | `cost` | int, optional |
+| `fixedChargePaise` | `metered` | int, 0 up to the D-4 limit, default 0 |
+| `leaseAmountPaise` | `fixed_fee` | int, 0 up to the D-4 limit, optional |
+| `receiptAmountPaise` | `cost` | int, 0 up to the D-4 limit, optional |
 
 Optional means the user may leave it blank. Blank is stored as an absent key, which D-34 and D-35 read as missing.
 
@@ -127,7 +127,7 @@ Optional means the user may leave it blank. Blank is stored as an absent key, wh
 |---|---|---|
 | `deductionId` | string | Must match a deduction |
 | `state` | enum | `verified`, `excludes`, `none`, `unconfirmed` (D-30) |
-| `quote` | string or null | Not null only for `verified` and `excludes`. Not longer than `leaseText` |
+| `quote` | string or null | A non-empty text for `verified` and `excludes`, otherwise null. Its length is checked by F2-R4 when it is set |
 | `source` | enum | `ai` or `keyword` (API.md), `user` for FR-11 overrides, `sample` for F1-R17 |
 
 A deduction without a record is `unconfirmed`. Changing the lease text or a label removes the record, because the old match no longer applies. A match run does not change a record whose source is `user` (F2-R14).

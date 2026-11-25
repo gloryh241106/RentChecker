@@ -6,7 +6,7 @@ Mobile first. One column on a phone, up to 40rem wide on larger screens. Routes 
 
 | Item | Text |
 |---|---|
-| Consent notice, AI on. Title "Before we send your lease" | To find the clause for each charge, RentChecker sends your lease text and the names of your deductions to our server. The server passes them to Google Gemini, which handles them under its own terms. Our server does not save them or write them to logs. The amounts and dates you typed stay in this browser. Please remove names, ID numbers and bank details from the lease text first. Buttons: Continue, Cancel |
+| Consent notice, AI on. Title "Before we send your lease" | To find the clause for each charge, RentChecker sends your lease text and the names of your deductions to our server. The server passes them to Google Gemini, which handles them under its own terms. Google may use them to improve its products, and people may review them. Our server does not save them or write them to logs. The amounts and dates you typed stay in this browser. Please remove names, ID numbers and bank details from the lease text first. Buttons: Continue, Cancel |
 | Consent notice, AI not configured | AI matching is not set up on this server. RentChecker will send your lease text and the names of your deductions to our server, which looks for matching words. They go to no other service, and the server does not save them or write them to logs. Please remove names, ID numbers and bank details from the lease text first. Buttons: Continue, Cancel |
 | Keyword-mode notice | AI matching was not used. Clauses were found by matching words, which is less reliable. Read each quote. If it is wrong, paste the right quote or say there is no clause. Followed by the warning sentence below |
 | AI_NOT_CONFIGURED | AI matching is not set up on this server. |
@@ -23,7 +23,18 @@ Mobile first. One column on a phone, up to 40rem wide on larger screens. Routes 
 | Matching failed (500, network, no answer in 30 s) | Matching failed. Your calculations still work. Run the check without clauses, or try again. |
 | 400, 413, 429 | Check the lease text and labels, then try again. The lease text is too long to send. Too many checks. Try again in a few minutes. |
 | Quote override rejected | That text was not found in the lease. Paste it exactly as written. |
-| Money error | Enter an amount in rupees, like 15,000 or 15,000.50. Use at most 2 decimals. |
+| Field error, required | Enter the {field}. For example: Enter the deposit. |
+| Field error, amount format | Enter an amount in rupees, like 15,000 or 15,000.50. Use at most 2 decimals. |
+| Field error, amount above the limit | Enter an amount up to ₹1,00,00,000. |
+| Field error, amount 0 where it must be more | Enter an amount above 0. |
+| Field error, date | Write the date as YYYY-MM-DD, for example 2026-06-15. |
+| Field error, rent month | Write the month as YYYY-MM, for example 2026-06. |
+| Field error, start after handover | The start date must be on or before the handover date. |
+| Field error, reading | Enter a reading like 120 or 120.50. Use at most 2 decimals and no more than 1,00,00,000. |
+| Field error, current reading | The current reading must not be lower than the previous one. |
+| Field error, rate | Enter a rate in rupees per unit, like 8 or 8.50, up to ₹1,000. |
+| Field error, text too long | Use at most 120 characters. |
+| Field error, no deductions | Add at least one deduction. |
 | Cloud save notice. Title "Save this case to the cloud" | RentChecker will store your dates, amounts, deduction names, repair log and bill form in a database. It will not store your lease text, quotes or message. The case is deleted 365 days after your last save, or when you delete it. Do not put names or bank details in labels. Buttons: Continue, Cancel |
 | Recovery code | Anyone with this code can open and change this case. We cannot recover it if you lose it. Button: Copy code |
 | Cloud save states | Not saved yet. Saved at {time}. Cloud save is not available right now. No case found for this code. Paste the lease again to check clauses. |
@@ -39,7 +50,7 @@ Reason sentences, one for each code in D-37 (amounts are filled in from the calc
 | Code | Sentence |
 |---|---|
 | DUPLICATE_CHARGE | This repeats an earlier charge. |
-| ABOVE_PRORATED_RENT | Rent for the {days} of {daysInMonth} days you lived there is {expected}. This charge is {amount}. |
+| ABOVE_PRORATED_RENT | You used {days} of the {daysInMonth} days. The rent still due for this month works out to {expected}. This charge is {amount}. |
 | RENT_OUTSIDE_TENANCY | None of your tenancy days fall in this month. |
 | ABOVE_METER_TOTAL | The readings and rate give {expected}. This charge is {amount}. |
 | ABOVE_LEASE_AMOUNT | The lease states {expected}. This charge is {amount}. |
@@ -52,7 +63,7 @@ Reason sentences, one for each code in D-37 (amounts are filled in from the calc
 | AMOUNT_NOT_STATED | The lease amount for this fee was not entered. |
 | ASSUMED_PER_DAY | A partial month was calculated per day. Choose how your lease charges it to confirm. |
 | BELOW_EXPECTED | This charge is lower than the {expected} that was worked out. |
-| REPAIR_REPORTED | You reported a repair on {date}, on or before handover. |
+| REPAIR_REPORTED | You reported a repair on {dates}, on or before handover. (Several dates are joined with commas and "and".) |
 | MATCHES | This charge matches the {expected} that was worked out. |
 
 ## Screens

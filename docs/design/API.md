@@ -79,7 +79,7 @@ A cloud case is `{ tenancy, deductions, repairs, bill }`, with the field rules o
 
 | Status | Code | When |
 |---|---|---|
-| 400 | `VALIDATION_ERROR` | Body is not valid JSON or breaks a rule above. `fields` lists the paths, for example `items.0.label` |
+| 400 | `VALIDATION_ERROR` | Body is not valid JSON or breaks a rule above. `fields` lists the paths, for example `items.0.label`, and is absent when the body is not valid JSON |
 | 401 | `UNAUTHORIZED` | Case route with a missing or malformed code |
 | 404 | `NOT_FOUND` | Unknown `/api` path |
 | 404 | `CASE_NOT_FOUND` | The code matches no case, or the case has expired |

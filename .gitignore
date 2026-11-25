@@ -7,3 +7,4 @@ dist-server/
 .vercel/
 coverage/
 *.log
+.vitest/

@@ -2,7 +2,7 @@
 
 Check your rent and deposit charges before you argue about them.
 
-> Status: the project is set up and its checks run. No feature described below is built yet. Progress is in [docs/PLAN.md](docs/PLAN.md).
+> Status: the calculation rules and the server skeleton are built and tested. There are no screens yet. Progress is in [docs/PLAN.md](docs/PLAN.md).
 
 ## The problem
 
@@ -92,7 +92,7 @@ The full scope is in [docs/spec/SRS.md](docs/spec/SRS.md).
 
 ### Privacy
 
-Entries stay in the browser's local storage, and the tenant can delete them. A tenant can also choose to keep a cloud copy in PostgreSQL, opened with a recovery code. It holds dates, amounts, labels, repairs and the bill form, never the lease text or quotes, and it can be deleted at any time. When AI matching is on, the lease text and charge descriptions are sent through the server to the Gemini API, and the app says so before sending. Google handles them under its own terms. The RentChecker server does not save them or write them to logs. Tenants are asked to remove names, ID numbers and bank details first.
+Entries stay in the browser's local storage, and the tenant can delete them. A tenant can also choose to keep a cloud copy in PostgreSQL, opened with a recovery code. It holds dates, amounts, labels, repairs and the bill form, never the lease text or quotes, and it can be deleted at any time. When AI matching is on, the lease text and charge descriptions are sent through the server to the Gemini API, and the app says so before sending. Google handles them under its own terms, and on the free tier it may use them to improve its products and people may review them. The RentChecker server does not save them or write them to logs. Tenants are asked to remove names, ID numbers and bank details first.
 
 ## Assumptions
 
