@@ -24,13 +24,13 @@ export function NextQuestion({ question, onAnswer, onSkip, takesFocus }: NextQue
   const [text, setText] = useState('');
   const [isUnread, setIsUnread] = useState(false);
   const { label, hint, error } = QUESTION_TEXT[question];
+  // Kept from when the question appeared, so a later change does not move the focus.
+  const [tookFocus] = useState(takesFocus);
   useEffect(() => {
-    if (takesFocus) {
+    if (tookFocus) {
       focusAnswer();
     }
-    // Once, when the question appears.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [tookFocus]);
 
   return (
     <form
