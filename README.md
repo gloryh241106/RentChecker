@@ -1,18 +1,66 @@
 # RentChecker
 
-Live: <https://rent-checker-two.vercel.app>
+**An AI assistant that turns a tenant's own words into a checked rental deposit case.** Write what happened. The assistant works out what you need, fills in what you wrote, asks for what is missing, warns you about likely mistakes, and checks each charge against your own lease.
 
-RentChecker is an AI assistant for tenants in India. You write a prompt about your deposit, rent or lease. The assistant works out what you need, fills in what you wrote, asks for what is missing, warns you about likely mistakes, and then checks the charges against your own lease.
+| | |
+|---|---|
+| Hackathon | **PromptWars x Echo Engineer's AI VIBEATHON 2026** |
+| Challenge | **PromptWars – AI Prompt Challenge** (open innovation) |
+| Chosen vertical | Rental housing |
+| Persona | A tenant in India who is moving out, living in or about to sign for a rented home |
+| Live demo | <https://rent-checker-two.vercel.app>, no account needed |
+| Built with | Gemini API, TypeScript, React, Express |
 
-It is an open innovation entry for **PromptWars – AI Prompt Challenge** (PromptWars x Echo Engineer's AI VIBEATHON 2026).
+To try it in a minute, open the site, press **Start with a message**, choose the example **Deductions** and press **Read my message**. For a finished check, press **Load sample case**.
 
-To see it quickly, open the site, press **Start with a message**, choose the example **Deductions** and press **Read my message**. For a finished check, press **Load sample case**.
+![The assistant read "i paid 60k advance, monthly 20k" as a deposit of ₹60,000 and a rent of ₹20,000, warns that 80,000 for cleaning is more than the deposit and that 31 June could not be read, and asks for the handover day](docs/images/assistant.png)
 
-> Status: everything under "What it does" works. Progress is in [docs/PLAN.md](docs/PLAN.md).
+## Problem statement and solution
 
-## Challenge: PromptWars – AI Prompt Challenge
+### The challenge
 
-The challenge is open innovation, so the task is a problem the participant picks. The task chosen here is **checking deposit deductions and rent charges against a lease**. The vertical is rental housing and the persona is a tenant in India.
+PromptWars – AI Prompt Challenge is an AI and prompt-based challenge. Participants show that they can understand prompts, use AI tools effectively, think creatively and solve tasks. The solution has to be a smart, dynamic assistant that makes logical decisions from the context of its user, is usable in the real world and has clean code. The event is open innovation, so the participant picks the real-world task.
+
+The task picked here is **checking deposit deductions and rent charges against a lease**.
+
+### The problem
+
+When tenants move out, the landlord often sends a list of deductions from the security deposit. Working out which ones are fair means rereading the lease, redoing the arithmetic and finding the receipts. Many tenants skip that and accept the total.
+
+A 2026 report by NoBroker, an Indian property platform, found that only [35% of Bengaluru tenants got their last deposit back in full without any dispute](https://www.hindustantimes.com/real-estate/bengaluru-tenants-have-31-628-crore-locked-in-security-deposits-only-35-get-full-refund-without-disputes-report-101784354346796.html). In one [case reported by Mint](https://www.livemint.com/money/personal-finance/bengaluru-tenant-gets-only-rs-19-000-of-1-3-lakh-security-deposit-what-does-the-law-say-on-arbitrary-deductions-11789204342327.html), a tenant got ₹19,000 back from a ₹1.3 lakh deposit. They accepted that the lease required repainting. Their complaint was that there were no bills or itemised calculation, and that a full month's rent was deducted although they left on the 15th.
+
+### The solution
+
+| Step | What the tenant does | What RentChecker does |
+|---|---|---|
+| 1 | Writes a prompt in their own words | Gemini understands it and chooses one of six tasks. Code proves each fact against the words of the prompt |
+| 2 | Answers short questions | Asks only for what is still missing, and warns about numbers and dates that look wrong |
+| 3 | Pastes the lease | Gemini finds the clause for each charge. Code proves each quote against the lease |
+| 4 | Reads the result | Code calculates what to ask about, what needs a receipt and what is consistent |
+| 5 | Sends a message | A draft for the landlord, with the amounts and the reasons |
+
+```mermaid
+flowchart LR
+  P["Prompt of the tenant"] --> G1["Gemini: task and pointers to words"]
+  G1 --> V1{"Words in the prompt?"}
+  V1 -- no --> D1["Dropped, with a warning"]
+  V1 -- yes --> C["Code reads amounts and dates"]
+  C --> Q["Next question and input checks"]
+  Q --> U["Tenant confirms"]
+  U --> L["Lease text"]
+  L --> G2["Gemini: clause and quote per charge"]
+  G2 --> V2{"Quote in the lease?"}
+  V2 -- no --> X["Unclear"]
+  V2 -- yes --> R["Code: result per charge and totals"]
+  X --> R
+  R --> M["Draft message to the landlord"]
+```
+
+![Results of the sample case: ask about ₹10,500 of ₹30,000 deducted, ₹12,000 awaiting proof, ₹7,500 consistent](docs/images/results.png)
+
+## How RentChecker answers the challenge
+
+Every row can be tried on the live site and read in the code.
 
 ### What the challenge asks participants to show
 
@@ -33,7 +81,7 @@ The challenge is open innovation, so the task is a problem the participant picks
 | Practical and real-world usability | Phone first, no account, keeps calculating without a network once the page is open, and ends with a message the tenant can send |
 | Clean and maintainable code | One pure `shared/` package holds every calculation, with a spec and tests for each rule |
 
-### How the prompts are written
+## How the prompts are written
 
 The system instructions are in [assistant-prompt.ts](server/src/ai/assistant-prompt.ts) for prompts and [prompt.ts](server/src/ai/prompt.ts) for clauses.
 
@@ -45,15 +93,9 @@ The system instructions are in [assistant-prompt.ts](server/src/ai/assistant-pro
 | Closed answers | Six tasks, seven kinds of fact and three reasons for a doubt. For clauses only `covers`, `excludes` or `none`. Both through a JSON schema, at temperature 0. The schema has no field for an amount or a date |
 | Defined terms | Each answer value has a definition, and a tie goes to the most specific sentence |
 | Proof | Sources and quotes are copied word for word. Code drops what is not in the prompt or the lease, and a source may not be a piece of a longer number |
-| Recovery | One retry when Gemini is overloaded, a 20 second limit, then code reads the prompt or matches keywords, with a notice |
+| Recovery | A retry and a second round when Gemini is overloaded or slow, a 20 second limit, then code reads the prompt or matches keywords, with a notice |
 
 Prompting also built the project. Each task for the coding agents was a written brief with rule IDs, the files it may touch and an exit check. The rules are in [AGENTS.md](AGENTS.md) and [docs/WORKFLOW.md](docs/WORKFLOW.md).
-
-## The problem
-
-When tenants move out, the landlord often sends a list of deductions from the security deposit. Working out which ones are fair means rereading the lease, redoing the arithmetic and finding the receipts. Many tenants skip that and accept the total.
-
-A 2026 report by NoBroker, an Indian property platform, found that only [35% of Bengaluru tenants got their last deposit back in full without any dispute](https://www.hindustantimes.com/real-estate/bengaluru-tenants-have-31-628-crore-locked-in-security-deposits-only-35-get-full-refund-without-disputes-report-101784354346796.html). In one [case reported by Mint](https://www.livemint.com/money/personal-finance/bengaluru-tenant-gets-only-rs-19-000-of-1-3-lakh-security-deposit-what-does-the-law-say-on-arbitrary-deductions-11789204342327.html), a tenant got ₹19,000 back from a ₹1.3 lakh deposit. They accepted that the lease required repainting. Their complaint was that there were no bills or itemised calculation, and that a full month's rent was deducted although they left on the 15th.
 
 ## Vertical and persona
 
@@ -130,6 +172,29 @@ Each charge is then split into four totals that add up to the amount deducted: a
 
 "Supported" and "Not found" describe the documents the tenant entered. They do not say whether a charge is legal.
 
+## Assumptions
+
+- Amounts are in Indian rupees, and the lease is pasted as English text.
+- Amounts are stored as whole paise to avoid rounding errors.
+- A partial month is charged per calendar day and the handover day counts as a day of use. The tenant can change both.
+- A prompt is in English, with amounts in digits (30,000, 30k, 1.5 lakh) and dates with their year. Anything else is asked for. Dates in digits are read day first.
+- A charge in the landlord's message has its amount in digits, in English text. Totals, refunds and payments in it are left out.
+- The tenant enters the whole lease and reports receipts truthfully. Missing pages can produce a wrong "Not found".
+- Laws differ by state, so state rules are out of scope.
+
+## Evidence for the evaluation criteria
+
+| Criterion | What was done | Where |
+|---|---|---|
+| Problem statement alignment | One task of one persona, solved from the first prompt to the message for the landlord. Each expectation of the challenge is mapped above | [How RentChecker answers the challenge](#how-rentchecker-answers-the-challenge) |
+| Code quality | TypeScript strict without `any`. Lint limits of 200 lines per file, 50 per function and a complexity of 10. Rules live in one pure package, AI sits behind an interface, and tests name the rule ID they check | [shared/src](shared/src), [eslint.config.mjs](eslint.config.mjs), [docs/spec](docs/spec) |
+| Security | The key stays on the server. Zod on every input, a 200 KB body limit, a rate limit, Helmet and a CSP without inline code. User text is data apart from the instructions, and the answer of the model is checked before it is used. Lease text, prompts and quotes are never logged | [server/src/middleware](server/src/middleware), [server/src/security](server/src/security), [match-privacy.test.ts](server/src/routes/match-privacy.test.ts) |
+| Efficiency | One AI request for a whole prompt or all charges, more only when Gemini is overloaded or slow. Answers to questions and all calculations need no request. Assets are cached for a year, and the script is about 146 KB compressed | [BACKEND](docs/design/BACKEND.md), [vercel.json](vercel.json) |
+| Testing | 1,092 unit, API and component tests and 69 browser tests. They cover the domain rules, AI success, failure, timeout and invented quotes, and text that tries to give instructions. No test needs a key. CI runs the type check, lint, format check, unit tests and build on every push | [docs/testing](docs/testing), [e2e](e2e), [ci.yml](.github/workflows/ci.yml) |
+| Accessibility | axe without violations on every screen, colour contrast included. Keyboard only, focus moved to results and errors, live messages, labels on every field, icons and words next to every colour, no sideways scroll at 320 px | [accessibility.spec.ts](e2e/accessibility.spec.ts), [UI](docs/design/UI.md) |
+
+Resilience: with no key, no answer or an overloaded Gemini, code reads the prompt, keywords find the clauses, and the app says so. With no network, an open page keeps calculating.
+
 ## Boundaries
 
 RentChecker will not:
@@ -146,16 +211,6 @@ The full scope is in [docs/spec/SRS.md](docs/spec/SRS.md).
 ### Privacy
 
 Entries stay in the browser's local storage, and the tenant can delete them. The landlord's message is not stored or sent. A prompt to the assistant is sent but not stored, and the answers to its questions are not sent. When AI is on, the prompt, or the lease text with the charge descriptions, review topics or questions, is sent through the server to the Gemini API, and the app says so before sending. Google handles them under its own terms, and on the free tier it may use them to improve its products and people may review them. The RentChecker server does not save them or write them to logs. Tenants are asked to remove names, ID numbers and bank details first.
-
-## Assumptions
-
-- Amounts are in Indian rupees, and the lease is pasted as English text.
-- Amounts are stored as whole paise to avoid rounding errors.
-- A partial month is charged per calendar day and the handover day counts as a day of use. The tenant can change both.
-- A prompt is in English, with amounts in digits (30,000, 30k, 1.5 lakh) and dates with their year. Anything else is asked for. Dates in digits are read day first.
-- A charge in the landlord's message has its amount in digits, in English text. Totals, refunds and payments in it are left out.
-- The tenant enters the whole lease and reports receipts truthfully. Missing pages can produce a wrong "Not found".
-- Laws differ by state, so state rules are out of scope.
 
 ## Tech stack
 
