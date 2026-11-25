@@ -21,6 +21,7 @@ Mobile first. One column on a phone, up to 40rem wide on larger screens. Routes 
 | Evidence source tags | AI match, Keyword match, read the quote, Sample match, Set by you |
 | Delete dialog | Delete all data stored by RentChecker in this browser? This cannot be undone. Buttons: Delete everything, Cancel |
 | Matching failed (500, network, no answer in 30 s) | Matching failed. Your calculations still work. Run the check without clauses, or try again. |
+| Find clauses disabled | Paste at least 50 characters of the lease first. Add a deduction other than rent first. |
 | 400, 413, 429 | Check the lease text and labels, then try again. The lease text is too long to send. Too many checks. Try again in a few minutes. |
 | Quote override rejected | That text was not found in the lease. Paste it exactly as written. |
 | Field error, required | Enter the {field}. For example: Enter the deposit. |

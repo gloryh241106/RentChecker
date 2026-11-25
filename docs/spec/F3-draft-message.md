@@ -41,6 +41,42 @@ Message parts, in order:
 - F3-R15 If no deduction needs asking, the page says "Nothing to ask about. Every deduction is supported." and offers no message and no copy button. The same happens when there are no results yet, with the text "Run the check first."
 - F3-R16 Labels, quotes and repair descriptions are inserted as plain text.
 
+## Template
+
+Parts are separated by one empty line. Lines in a block follow each other. A line is left out when it has nothing to say.
+
+| Part | Text |
+|---|---|
+| Greeting | Dear [landlord's name], |
+| Opening | I am writing about the deductions from my deposit. The deposit was {deposit} and the total deducted is {total}. Could you please help me understand the charges below? |
+| Opening, refund gap (F3-R8), added to the opening | You stated a refund of {refund}. Together with the deductions of {total}, that is {gap} less than the deposit of {deposit}. Could you please explain the difference? |
+| Block, line 1 | {number}. {label}: {amount} |
+| Block, expected amount | Amount I worked out: {expected} |
+| Block, one line for each reason in D-37 order | The sentence below |
+| Block, quote | The lease says: "{quote}" |
+| Block, one line for each repair (F3-R7) | I reported a repair on {date} to {reportedTo}: {description} |
+| Block, last line, not_found | Could you please tell me which clause of the lease covers this charge? |
+| Block, last line, recalculate | Could you please check this amount? |
+| Block, last line, needs_proof | Could you please send me the receipt for this charge? |
+| Block, last line, unclear | Could you please tell me which clause of the lease applies to this charge? |
+| Closing | Could you please also send me an itemised statement of all deductions, and the receipts or bills for each cost? |
+| Sign-off | Thank you, (next line) [your name] |
+
+Reason sentences are those of UI.md, except for these, which the tenant says in their own voice. REPAIR_REPORTED has no sentence of its own, because the repair line says it.
+
+| Code | Sentence in the message |
+|---|---|
+| ABOVE_PRORATED_RENT | I used {days} of the {daysInMonth} days. The rent still due for this month works out to {expected}. This charge is {amount}. |
+| RENT_OUTSIDE_TENANCY | None of my tenancy days fall in this month. |
+| CLAUSE_NOT_FOUND | I could not find a clause in the lease that covers this. |
+| CLAUSE_UNCONFIRMED | I could not confirm a matching clause in the lease. |
+| FACTS_MISSING | I do not have a reading or the rate, so I cannot check the amount. |
+| RECEIPT_MISSING | I was not given a receipt for this cost. |
+| AMOUNT_NOT_STATED | I do not have the amount the lease states for this fee. |
+| ASSUMED_PER_DAY | I worked out the partial month per day. |
+| BELOW_EXPECTED | This charge is lower than the {expected} that I worked out. |
+| MATCHES | This charge matches the {expected} that I worked out. |
+
 ## Acceptance criteria
 
 - F3-AC1 Given the sample case checked, then the message has blocks for Repainting, June rent and Service fee, in that order.
