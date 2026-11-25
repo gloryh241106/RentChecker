@@ -1,6 +1,6 @@
-import { isQuoteInLease } from '../../shared.js';
 import type { ClauseEvidence, ClauseMatch, Workspace } from '../../shared.js';
 import type { EvidenceOverride, HandlersFor } from '../actions.js';
+import { overrideFields } from './override-fields.js';
 
 function toEvidence({ itemId, ...match }: ClauseMatch): ClauseEvidence {
   return { deductionId: itemId, ...match };
@@ -27,20 +27,6 @@ function applyMatches(
   return { ...state, evidence: [...evidence] };
 }
 
-function overrideRecord(
-  deductionId: string,
-  override: EvidenceOverride,
-  leaseText: string,
-): ClauseEvidence | null {
-  if (override.state === 'none') {
-    return { deductionId, state: 'none', quote: null, source: 'user' };
-  }
-  if (override.state === 'verified' && isQuoteInLease(override.quote, leaseText)) {
-    return { deductionId, state: 'verified', quote: override.quote.trim(), source: 'user' };
-  }
-  return null;
-}
-
 function overrideEvidence(
   state: Workspace,
   { deductionId, override }: { readonly deductionId: string; readonly override: EvidenceOverride },
@@ -54,8 +40,10 @@ function overrideEvidence(
       evidence: state.evidence.filter((record) => record.deductionId !== deductionId),
     };
   }
-  const record = overrideRecord(deductionId, override, state.leaseText); // F2-R12
-  return record === null ? state : { ...state, evidence: withRecord(state.evidence, record) };
+  const fields = overrideFields(override, state.leaseText); // F2-R12
+  return fields === null
+    ? state
+    : { ...state, evidence: withRecord(state.evidence, { deductionId, ...fields }) };
 }
 
 export const evidenceHandlers: HandlersFor<'evidence/apply' | 'evidence/override'> = {

@@ -265,6 +265,8 @@ Each case runs on a desktop and on a phone viewport, unless it says otherwise.
 | T-210 | API errors | Real HTTP: health, unknown path, bad body, body over 200 KB, 21 match requests | 200, 404, 400, 413, 429, each with the body of API.md. Uses its own server |
 | T-214 | UC-4, F5-AC1 | Check the bill of F5-AC1, reload | ₹1,228.75, difference ₹71.25, the reason sentence. The form values are back after the reload |
 | T-215 | UC-5, F5-AC6, F5-AC9 | Record a repair, link it to Repainting in the sample case, run the check, then delete the entry | The card shows the repair and the same result. After the delete the link is announced as removed and no card shows the repair |
+| T-216 | UC-3, F4-AC5, F4-AC6 | Review a lease: Cancel, then Continue with a faked AI answer, set one override, copy the questions, reload | No request after Cancel. Outcomes and quotes shown. The clipboard holds the questions of the topics that are not Found, in order. Rows are back after the reload |
+| T-217 | F4-AC4, F4-R7 | Review with the real server and no key, then edit the lease | Only Found and Could not confirm, with the keyword notice. The rows go after the edit |
 | T-213 | F1-R8, NFR-5 | Type a bad amount, then press Save deduction with one click | The form is submitted: field message and summary, focus on the field |
 
 ## Manual accessibility pass (NFR-5)

@@ -1,26 +1,39 @@
 import { MIN_MATCH_LEASE_LENGTH } from '../shared.js';
-import type { Deduction, MatchRequest } from '../shared.js';
+import type { MatchRequest } from '../shared.js';
 
 export const NEEDS_LEASE = `Paste at least ${MIN_MATCH_LEASE_LENGTH} characters of the lease first.`;
 export const NEEDS_DEDUCTION = 'Add a deduction other than rent first.';
 
+/** One thing to find a clause for: a deduction (F2) or a review topic (F4). */
+export interface MatchItem {
+  readonly id: string;
+  readonly label: string;
+}
+
 export interface MatchPlan {
   /** Null while F2-R1 is not met. */
   readonly request: MatchRequest | null;
-  /** The reasons Find clauses is disabled, in UI.md's words. */
+  /** The reasons the run button is disabled, in UI.md's words. */
   readonly blockers: readonly string[];
 }
 
-/** FR-8, F2-R1. Rent is never sent (D-31), and one request carries every other deduction. */
-export function planMatch(leaseText: string, deductions: readonly Deduction[]): MatchPlan {
-  const items = deductions
-    .filter(({ kind }) => kind !== 'rent')
-    .map(({ id, label }) => ({ id, label }));
+/**
+ * FR-8, F2-R1, F4-R2. One request carries every item. `noItems` is the blocker for an empty list,
+ * in the words of the caller.
+ */
+export function planMatch(
+  leaseText: string,
+  items: readonly MatchItem[],
+  noItems: string,
+): MatchPlan {
   const blockers = [
     ...(leaseText.trim().length < MIN_MATCH_LEASE_LENGTH ? [NEEDS_LEASE] : []),
-    ...(items.length === 0 ? [NEEDS_DEDUCTION] : []),
+    ...(items.length === 0 ? [noItems] : []),
   ];
-  return { request: blockers.length === 0 ? { leaseText, items } : null, blockers };
+  return {
+    request: blockers.length === 0 ? { leaseText, items: [...items] } : null,
+    blockers,
+  };
 }
 
 /** Same value for the same request, so a run lives only while what it sent is unchanged. */

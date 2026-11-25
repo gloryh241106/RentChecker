@@ -7,6 +7,7 @@ import { draftHandlers } from './handlers/draft.js';
 import { evidenceHandlers } from './handlers/evidence.js';
 import { leaseHandlers } from './handlers/lease.js';
 import { repairHandlers } from './handlers/repair.js';
+import { reviewHandlers } from './handlers/review.js';
 import { tenancyHandlers } from './handlers/tenancy.js';
 import { workspaceHandlers } from './handlers/workspace.js';
 
@@ -15,6 +16,7 @@ const HANDLERS: HandlersFor<ActionType> = {
   ...leaseHandlers,
   ...deductionHandlers,
   ...evidenceHandlers,
+  ...reviewHandlers,
   ...workspaceHandlers,
   ...draftHandlers,
   ...repairHandlers,

@@ -50,7 +50,7 @@ describe('page frame', () => {
     expect(screen.getByRole('heading', { level: 1, name: title })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Moving out' })).toBeTruthy();
     expect(screen.getByText('Saved in this browser')).toBeTruthy();
-    expect(screen.queryByRole('link', { name: /Before signing/ })).toBeNull();
+    expect(screen.getByRole('link', { name: /Before signing/ })).toBeTruthy();
   });
 
   it('UI Home shows no saved note for an empty browser', () => {

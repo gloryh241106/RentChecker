@@ -41,3 +41,25 @@ export const ERROR_TEXT: Readonly<Record<ApiErrorKind, string>> = {
   storage_unavailable: FAILED,
   aborted: FAILED,
 };
+
+/** What a caller says around a match run. The review page has its own (Open/Closed). */
+export interface MatchWording {
+  readonly consentTitle: string;
+  readonly consentAiOn: string;
+  readonly consentAiOff: string;
+  readonly keywordNotice: string;
+  readonly loading: string;
+  readonly warnings: Readonly<Record<MatchWarning, string>>;
+  readonly errors: Readonly<Record<ApiErrorKind, string>>;
+}
+
+/** FR-8: deductions. */
+export const DEDUCTION_WORDING: MatchWording = {
+  consentTitle: CONSENT_TITLE,
+  consentAiOn: CONSENT_AI_ON,
+  consentAiOff: CONSENT_AI_OFF,
+  keywordNotice: KEYWORD_NOTICE,
+  loading: LOADING_TEXT,
+  warnings: WARNING_TEXT,
+  errors: ERROR_TEXT,
+};

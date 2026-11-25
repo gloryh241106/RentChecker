@@ -19,6 +19,10 @@ interface ActionPayloads {
   'deduction/remove': { readonly id: string };
   'evidence/apply': { readonly matches: readonly ClauseMatch[] };
   'evidence/override': { readonly deductionId: string; readonly override: EvidenceOverride };
+  /** F4-R7. A changed text clears every topic outcome. */
+  'review/set': { readonly text: string };
+  'review/apply': { readonly matches: readonly ClauseMatch[] };
+  'review/override': { readonly topicId: string; readonly override: EvidenceOverride };
   'sample/load': unknown;
   'workspace/replace': { readonly workspace: Workspace };
   'workspace/reset': unknown;

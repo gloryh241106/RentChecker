@@ -6,10 +6,7 @@ import { hasData } from '../state/has-data.js';
 import { useWorkspace } from '../state/workspace-context.js';
 import { stepPath } from './move-out/steps.js';
 
-/**
- * UC-6 ends here. Stage links follow UI.md: Moving out, Before signing, During the tenancy. Before
- * signing (step 9) is added between the other two when its page is built.
- */
+/** UC-6 ends here. Stage links follow UI.md: Moving out, Before signing, During the tenancy. */
 export function Home() {
   const { workspace } = useWorkspace();
   return (
@@ -25,6 +22,12 @@ export function Home() {
         </ButtonLink>
         <p>Check the deductions your landlord listed against your tenancy and your lease.</p>
         {hasData(workspace) ? <p className="font-semibold">Saved in this browser</p> : null}
+      </Card>
+      <Card>
+        <ButtonLink to="/lease-review" variant="secondary" isFullWidth>
+          Before signing
+        </ButtonLink>
+        <p>Paste a lease to see which deposit topics it covers and what to ask.</p>
       </Card>
       <Card>
         <ButtonLink to="/tenancy" variant="secondary" isFullWidth>

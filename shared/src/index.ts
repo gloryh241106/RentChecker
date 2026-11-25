@@ -72,3 +72,12 @@ export {
 
 export type { MessageInput } from './message/index.js';
 export { buildMessage } from './message/index.js';
+
+export type { ReviewTopic, ReviewTopicId } from './review/topics.js';
+export { isReviewTopicId, REVIEW_TOPICS } from './review/topics.js';
+export {
+  questionsToAsk,
+  showsQuestion,
+  TOPIC_OUTCOME_NAMES,
+  topicOutcome,
+} from './review/outcomes.js';
