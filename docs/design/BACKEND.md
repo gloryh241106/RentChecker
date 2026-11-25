@@ -26,14 +26,15 @@ Calls go one way: route, controller, service, then shared functions or the AI cl
 
 1. `trust proxy` setting (not middleware, set first)
 2. Helmet with a Content Security Policy
-3. `express.json` with a 200 KB limit
-4. Rate limits on `/api/clauses/match` and `/api/cases`
-5. Routes
-6. 404 handler for unknown `/api` paths
-7. Static files and SPA fallback, only when `staticDir` is set
-8. Error handler, always last
+3. Request logger, before the body parser so that a rejected body is logged too
+4. `express.json` with a 200 KB limit
+5. Rate limits on `/api/clauses/match` and `/api/cases`
+6. Routes
+7. 404 handler for unknown `/api` paths
+8. Static files and SPA fallback, only when `staticDir` is set
+9. Error handler, always last
 
-The error handler maps a JSON syntax error to 400 `VALIDATION_ERROR`, a body over the limit to 413 `PAYLOAD_TOO_LARGE`, and the rest to 500 `INTERNAL_ERROR` with a generic message.
+The error handler maps a body over the limit to 413 `PAYLOAD_TOO_LARGE`, any other malformed request (a JSON syntax error, an unknown charset, a broken URL) to 400 `VALIDATION_ERROR`, and the rest to 500 `INTERNAL_ERROR` with a generic message.
 
 Helmet's CSP on the API alone protects little. The same policy must also be sent for the client files, from Express in Docker and from `vercel.json` on Vercel. The policy blocks inline scripts and allows only same origin connections. Exact directives are not verified yet.
 
