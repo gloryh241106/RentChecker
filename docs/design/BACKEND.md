@@ -81,4 +81,4 @@ These lower the risk. They do not remove it. A lease that contains the right quo
 
 ## Logging
 
-A small logger wrapper writes one line per request: method, route, status, duration, mode, warning codes and a request id. It never logs bodies, headers with content, lease text, labels, quotes or provider replies (NFR-2). Errors log the error code and class name, not the message. A test sends a lease with a marker string and checks the captured log lines do not contain it.
+A small logger wrapper writes one line per request: method, route, status, duration, mode, warning codes and a request id. It never logs bodies, headers with content, lease text, labels, quotes or provider replies (NFR-2). Errors log the error code and class name, not the message. An AI failure logs its kind (request failed, HTTP status, invalid reply), so a wrong key can be told from an outage. A test sends a lease with a marker string and checks the captured log lines do not contain it.

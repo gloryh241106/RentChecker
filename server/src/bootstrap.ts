@@ -1,24 +1,28 @@
 import type { Express } from 'express';
+import { createGeminiMatcher } from './ai/gemini-client.js';
 import { createApp } from './app.js';
 import { parseConfig } from './config.js';
-import type { AppConfig, Env } from './config.js';
+import type { Env } from './config.js';
 import { createJsonLogger } from './logging/logger.js';
 import type { LogSink, Logger } from './logging/logger.js';
 
+// The AI key stays inside createRuntime, so an entry file cannot log it (NFR-1).
 export interface Runtime {
   app: Express;
-  config: AppConfig;
+  port: number;
   logger: Logger;
 }
 
 // Shared by server/src/index.ts and api/index.ts, the only files that touch process.
 export function createRuntime(env: Env, sink: LogSink): Runtime {
-  const config = parseConfig(env);
+  const { ai, aiConfigured, cloudSaveConfigured, port, staticDir } = parseConfig(env);
   const logger = createJsonLogger(sink);
   const app = createApp({
-    aiConfigured: config.aiConfigured,
-    cloudSaveConfigured: config.cloudSaveConfigured,
+    aiConfigured,
+    cloudSaveConfigured,
     logger,
+    staticDir,
+    clauseMatcher: ai && createGeminiMatcher(ai, fetch),
   });
-  return { app, config, logger };
+  return { app, port, logger };
 }

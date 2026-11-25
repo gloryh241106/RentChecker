@@ -23,6 +23,11 @@ describe('API config', () => {
     expect(parseConfig({ DATABASE_URL: 'postgres://x' }).cloudSaveConfigured).toBe(true);
   });
 
+  it('API config serves a client only when STATIC_DIR is set', () => {
+    expect(parseConfig({ STATIC_DIR: ' ' }).staticDir).toBeUndefined();
+    expect(parseConfig({ STATIC_DIR: 'client/dist' }).staticDir).toBe('client/dist');
+  });
+
   it('API config reads PORT, ignores an empty one and rejects a bad one (T-115)', () => {
     expect(parseConfig({ PORT: '8080' }).port).toBe(8080);
     expect(parseConfig({ PORT: '' }).port).toBe(3001);
