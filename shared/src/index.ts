@@ -81,3 +81,6 @@ export {
   TOPIC_OUTCOME_NAMES,
   topicOutcome,
 } from './review/outcomes.js';
+
+export type { FoundCharge, FoundCharges } from './charges/read-message.js';
+export { MAX_MESSAGE_LENGTH, readMessage, toDeduction } from './charges/read-message.js';
