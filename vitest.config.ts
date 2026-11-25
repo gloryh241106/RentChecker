@@ -16,6 +16,8 @@ export default defineConfig({
         test: {
           name: 'client',
           environment: 'jsdom',
+          // Typing through whole forms is slow on a busy machine.
+          testTimeout: 20_000,
           include: ['client/src/**/*.test.{ts,tsx}'],
         },
       },

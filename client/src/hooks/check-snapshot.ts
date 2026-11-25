@@ -1,9 +1,10 @@
 import { evaluate, formatRupees, isCheckableTenancy } from '../shared.js';
-import type { CheckInput, CheckResult, Workspace } from '../shared.js';
+import type { CheckResult, MessageInput, Workspace } from '../shared.js';
 
 /** The facts of the last check, kept in memory only (FRONTEND.md useCheck). */
 export interface CheckSnapshot {
-  readonly input: CheckInput;
+  /** Carries the quotes and the repair entries that the message needs (F3). */
+  readonly input: MessageInput;
   readonly key: string;
 }
 

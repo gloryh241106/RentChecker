@@ -1,12 +1,10 @@
-/**
- * The steps of UC-1. The Message step (UC-2, F3) is added here when it is built, and the page
- * picks it up. Until then the list has the four steps that work.
- */
+/** UI.md Moving out: the steps of UC-1 and UC-2, in order. */
 export const STEPS = [
   { id: 'details', name: 'Details' },
   { id: 'deductions', name: 'Deductions' },
   { id: 'lease', name: 'Lease' },
   { id: 'results', name: 'Results' },
+  { id: 'message', name: 'Message' },
 ] as const;
 
 export type StepId = (typeof STEPS)[number]['id'];

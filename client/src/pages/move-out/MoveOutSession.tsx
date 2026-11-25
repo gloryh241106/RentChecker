@@ -65,6 +65,7 @@ export function MoveOutSession({ children }: { readonly children: ReactNode }) {
     deductions: canLeaveDeductions,
     lease: () => true,
     results: () => true,
+    message: () => true,
   };
 
   function runCheck(): void {
