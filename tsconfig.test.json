@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "types": ["node", "vite/client"],
+    "noEmit": true
+  },
+  "include": [
+    "shared/src/**/*.test.ts",
+    "server/src/**/*.test.ts",
+    "client/src/**/*.test.ts",
+    "client/src/**/*.test.tsx",
+    "client/vite.config.ts",
+    "vitest.config.ts"
+  ]
+}

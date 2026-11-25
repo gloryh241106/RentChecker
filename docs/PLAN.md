@@ -6,7 +6,7 @@ Work through the steps in order. Tick a step only when its exit check passes, an
 
 | Done | Step | Exit check | Read first |
 |---|---|---|---|
-| [ ] | 0. `.gitignore`, `.env.example`, workspace, lint, test and build scripts | All scripts pass on an empty project | [CONVENTIONS](CONVENTIONS.md), [ARCHITECTURE](design/ARCHITECTURE.md) |
+| [x] | 0. `.gitignore`, `.env.example`, workspace, lint, test and build scripts | All scripts pass on an empty project | [CONVENTIONS](CONVENTIONS.md), [ARCHITECTURE](design/ARCHITECTURE.md) |
 | [ ] | 1. Empty client and `/api/health` on Vercel | The public URL opens in a private window, health answers, refreshing a page does not give 404 | [DEPLOYMENT](design/DEPLOYMENT.md), [BACKEND](design/BACKEND.md) |
 | [ ] | 2. Shared money, dates, rules and totals | Every D-ID case in CASES passes | [DOMAIN_RULES](spec/DOMAIN_RULES.md), [CASES](testing/CASES.md) |
 | [ ] | 3. Moving-out screens with sample case and local storage | UC-1 works without a network, by keyboard alone | [F1](spec/F1-move-out.md), [UI](design/UI.md), [FRONTEND](design/FRONTEND.md), [DATA_MODEL](design/DATA_MODEL.md) |

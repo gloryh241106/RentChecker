@@ -2,7 +2,7 @@
 
 Check your rent and deposit charges before you argue about them.
 
-> Status: planning. Nothing described below is built yet. Progress is in [docs/PLAN.md](docs/PLAN.md).
+> Status: the project is set up and its checks run. No feature described below is built yet. Progress is in [docs/PLAN.md](docs/PLAN.md).
 
 ## The problem
 
@@ -127,6 +127,18 @@ shared/   calculations, result rules, types and Zod schemas
 api/      entry point that runs Express on Vercel
 db/       SQL migrations for the optional cloud copy
 docs/     specifications, design, decisions and test cases
+```
+
+## Development
+
+Needs Node 24.
+
+```text
+npm ci
+npm run typecheck
+npm run lint
+npm test
+npm run build
 ```
 
 ## Documentation
