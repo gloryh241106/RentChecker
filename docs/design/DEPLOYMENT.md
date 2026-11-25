@@ -102,13 +102,14 @@ Two stages. The build stage installs all dependencies, builds the client and com
 
 Checked on https://rent-checker-two.vercel.app on 2026-11-25: items 1 to 6, 8, 9 and 11 of the smoke checklist, and UC-1 and UC-2 in a browser under the real CSP with no console error. Items 7 (key unset) and 10 (platform logs) were not checked.
 
+Also checked there for UC-8 and UC-9: four questions answered by Gemini, one of them an attempt to change its instructions, the sample message, and `Cache-Control: public, max-age=31536000, immutable` on `/assets/`.
+
 Item 11: the burst got 429 earlier than the 21st request, because earlier calls from the same address counted. The counter is kept per instance.
 
 Gemini sometimes answers 503 (overloaded), mostly for the ten topics of a lease review: 2 of 8 such calls on a local server on 2026-11-25. The answer then comes from keyword matching, and the page says so.
 
 ## Not verified yet
 
-- The `Cache-Control` header of `/assets/` on the deployed site.
 - The `vercel.json` key for duration.
 - The right `trust proxy` hop count on Vercel and on Cloud Run.
 - Whether a Vercel link is accepted by the contest form, which asks for a Cloud Run URL (ADR 0004).
