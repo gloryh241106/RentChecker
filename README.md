@@ -2,7 +2,7 @@
 
 Check your rent and deposit charges before you argue about them.
 
-> Status: the moving-out check works in the browser, with a sample case and local storage. The server can match clauses, and the screens for that come next. Progress is in [docs/PLAN.md](docs/PLAN.md).
+> Status: the moving-out check works, with clause matching, the message and a sample case. The bill check, repair log, cloud save and review before signing are not built yet. Progress is in [docs/PLAN.md](docs/PLAN.md).
 
 ## The problem
 
@@ -113,19 +113,19 @@ Entries stay in the browser's local storage, and the tenant can delete them. A t
 | Database | PostgreSQL on Neon, optional cloud save |
 | Validation | Zod |
 | Security | Helmet, request size limits, rate limiting |
-| Tests | Vitest, Supertest, Testing Library, axe |
+| Tests | Vitest, Supertest, Testing Library, axe, Playwright |
 | Hosting | Vercel, with a Dockerfile for Cloud Run |
 
 Rate limits are kept in memory, so on serverless hosting they are only a partial safeguard.
 
-Planned layout:
+Layout:
 
 ```text
 client/   React interface
 server/   Express routes, services and middleware
 shared/   calculations, result rules, types and Zod schemas
 api/      entry point that runs Express on Vercel
-db/       SQL migrations for the optional cloud copy
+e2e/      Playwright tests against the built app
 docs/     specifications, design, decisions and test cases
 ```
 
@@ -139,7 +139,10 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
+npm run e2e
 ```
+
+To run the app, copy `.env.example` to `.env`, then start `npm run dev:server` and `npm run dev:client` in two terminals. Without `GEMINI_API_KEY` the app uses keyword matching. `npm run e2e` uses the installed Microsoft Edge. Set `E2E_CHANNEL=chrome` to use Chrome.
 
 ## Documentation
 
