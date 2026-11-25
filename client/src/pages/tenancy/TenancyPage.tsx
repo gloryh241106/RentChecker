@@ -9,8 +9,10 @@ export function TenancyPage() {
     <div className="space-y-8">
       <SampleBanner />
       <PageHeading title="During the tenancy" />
-      <BillSection />
-      <RepairSection />
+      <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
+        <BillSection />
+        <RepairSection />
+      </div>
     </div>
   );
 }

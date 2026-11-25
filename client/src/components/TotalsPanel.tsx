@@ -1,14 +1,27 @@
+import type { ReactNode } from 'react';
 import { BUCKET_NAMES, BUCKET_ORDER, formatRupees } from '../shared.js';
 import type { Totals } from '../shared.js';
+import { AskAboutLine } from './AskAboutLine.js';
+import { BUCKET_LOOK } from './bucket-look.js';
 import { NOT_LEGAL_ADVICE } from './not-legal-advice.js';
+import { SplitBar } from './SplitBar.js';
 import { Card } from './ui/Card.js';
 import { Notice } from './ui/Notice.js';
 
-function Row({ term, value }: { readonly term: string; readonly value: string }) {
+interface RowProps {
+  readonly term: string;
+  readonly value: string;
+  readonly icon?: ReactNode;
+}
+
+function Row({ term, value, icon }: RowProps) {
   return (
-    <div className="flex flex-wrap items-baseline justify-between gap-x-4 border-b border-line py-2 last:border-b-0">
-      <dt>{term}</dt>
-      <dd className="font-serif text-xl font-bold tabular-nums">{value}</dd>
+    <div className="flex flex-wrap items-center justify-between gap-x-4 border-b border-line py-2 last:border-b-0">
+      <dt className="flex items-center gap-2">
+        {icon}
+        {term}
+      </dt>
+      <dd className="text-xl font-bold tabular-nums">{value}</dd>
     </div>
   );
 }
@@ -27,11 +40,21 @@ export function TotalsPanel({
         Totals
       </h2>
       <Card isSunken={isOutOfDate}>
+        <AskAboutLine totals={totals} />
+        <SplitBar totals={totals} />
         <dl>
           <Row term="Total deducted" value={formatRupees(totals.totalDeductedPaise)} />
-          {BUCKET_ORDER.map((bucket) => (
-            <Row key={bucket} term={BUCKET_NAMES[bucket]} value={formatRupees(totals[bucket])} />
-          ))}
+          {BUCKET_ORDER.map((bucket) => {
+            const { Icon, text } = BUCKET_LOOK[bucket];
+            return (
+              <Row
+                key={bucket}
+                term={BUCKET_NAMES[bucket]}
+                value={formatRupees(totals[bucket])}
+                icon={<Icon className={`size-5 shrink-0 ${text}`} />}
+              />
+            );
+          })}
           {totals.isRefundGapShown && totals.refundGapPaise !== null ? (
             <Row term="Refund gap" value={formatRupees(totals.refundGapPaise)} />
           ) : null}

@@ -1,5 +1,6 @@
 import { useAnnounce } from '../../app/announce-context.js';
 import { Button } from '../../components/ui/Button.js';
+import { Card } from '../../components/ui/Card.js';
 import { ErrorSummary, problemCountText } from '../../components/ui/ErrorSummary.js';
 import { TextField } from '../../components/ui/Field.js';
 import { BILL_FIELDS } from '../../forms/bill-form.js';
@@ -31,33 +32,34 @@ export function BillSection() {
       </h2>
       <form
         noValidate
-        className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
           checkBill();
         }}
       >
-        {form.isSubmitted ? <ErrorSummary problems={form.problems} /> : null}
-        {BILL_FIELD_ORDER.map((field) => {
-          const spec = BILL_FIELDS[field];
-          return (
-            <TextField
-              key={field}
-              id={billFieldId(field)}
-              label={spec.label}
-              hint={spec.hint}
-              isRequired={spec.isRequired}
-              inputMode="decimal"
-              value={form.drafts[field]}
-              error={form.messageOf(field)}
-              onChange={(text) => form.setText(field, text)}
-              onBlur={() => form.blur(field)}
-            />
-          );
-        })}
-        <Button type="submit" isFullWidth>
-          Check bill
-        </Button>
+        <Card>
+          {form.isSubmitted ? <ErrorSummary problems={form.problems} /> : null}
+          {BILL_FIELD_ORDER.map((field) => {
+            const spec = BILL_FIELDS[field];
+            return (
+              <TextField
+                key={field}
+                id={billFieldId(field)}
+                label={spec.label}
+                hint={spec.hint}
+                isRequired={spec.isRequired}
+                inputMode="decimal"
+                value={form.drafts[field]}
+                error={form.messageOf(field)}
+                onChange={(text) => form.setText(field, text)}
+                onBlur={() => form.blur(field)}
+              />
+            );
+          })}
+          <Button type="submit" isFullWidth>
+            Check bill
+          </Button>
+        </Card>
       </form>
       {form.result === null ? null : <BillResult result={form.result} />}
     </section>

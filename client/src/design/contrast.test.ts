@@ -31,6 +31,12 @@ describe('design tokens', () => {
     ['ink', 'success-bg'],
     ['ink', 'info-bg'],
     ...NOTICES.map((tone) => [tone, `${tone}-bg`]),
+    ['on-band', 'band'],
+    ['on-band-muted', 'band'],
+    ['accent', 'band'],
+    ['on-accent', 'accent'],
+    ['on-accent', 'accent-hover'],
+    ...NOTICES.map((tone) => ['on-primary', tone]),
     ['danger', 'raised'],
     ['danger', 'sunken'],
   ])('UI text %s on %s is at least 4.5:1 (NFR-5)', (text, background) => {
@@ -43,6 +49,10 @@ describe('design tokens', () => {
 
   it.each(SURFACES)('UI focus ring on %s is at least 3:1 (NFR-5)', (surface) => {
     expect(ratio('focus', surface)).toBeGreaterThanOrEqual(3);
+  });
+
+  it('UI focus ring in a band is at least 3:1 (NFR-5)', () => {
+    expect(ratio('focus-on-band', 'band')).toBeGreaterThanOrEqual(3);
   });
 
   it.each(NOTICES)('UI %s icon and edge on its notice background are at least 3:1', (tone) => {

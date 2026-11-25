@@ -9,6 +9,7 @@ import { useReviewMatch } from '../../hooks/use-review-match.js';
 import { REVIEW_TOPICS } from '../../shared.js';
 import { useWorkspace } from '../../state/workspace-context.js';
 import { QuestionsBox } from './QuestionsBox.js';
+import { TopicPreview } from './TopicPreview.js';
 import { TopicRow } from './TopicRow.js';
 
 /** UC-3, F4. Paste a lease before signing, and see which deposit topics it covers. */
@@ -45,7 +46,7 @@ export function ReviewPage() {
         <section className="space-y-3">
           <h2 className="text-xl font-bold">Deposit topics</h2>
           <p>A found clause is not a check that its terms are fair.</p>
-          <ul className="space-y-3">
+          <ul className="grid items-start gap-3 lg:grid-cols-2">
             {REVIEW_TOPICS.map((topic) => (
               <TopicRow
                 key={topic.id}
@@ -60,7 +61,9 @@ export function ReviewPage() {
           </ul>
           <QuestionsBox items={leaseReview} />
         </section>
-      ) : null}
+      ) : (
+        <TopicPreview />
+      )}
       <p className="text-ink-muted">{NOT_LEGAL_ADVICE}</p>
     </div>
   );

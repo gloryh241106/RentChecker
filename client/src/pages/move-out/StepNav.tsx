@@ -6,13 +6,13 @@ import type { StepId } from './steps.js';
 export function StepNav({ current }: { readonly current: StepId }) {
   return (
     <nav aria-label="Steps">
-      <ol className="flex flex-wrap gap-x-1 gap-y-1 border-b border-line pb-3">
+      <ol className="flex flex-wrap gap-1 border-b border-line pb-3 lg:sticky lg:top-6 lg:flex-col lg:border-b-0">
         {STEPS.map((step, index) => (
           <li key={step.id}>
             <Link
               to={stepPath(step.id)}
               aria-current={step.id === current ? 'step' : undefined}
-              className={`inline-flex min-h-11 items-center gap-2 rounded-md px-3 no-underline ${
+              className={`inline-flex min-h-11 items-center gap-2 rounded-md px-3 no-underline lg:w-full ${
                 step.id === current
                   ? 'bg-primary font-semibold text-on-primary'
                   : 'text-primary underline hover:bg-sunken'

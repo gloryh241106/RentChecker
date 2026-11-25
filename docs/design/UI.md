@@ -1,6 +1,6 @@
 # UI
 
-Mobile first. One column on a phone, up to 40rem wide on larger screens. Routes and components are in [FRONTEND.md](FRONTEND.md). Flows are in [USER_FLOW.md](USER_FLOW.md). Rules and requirements win over this file.
+Mobile first. One column on a phone. The page is up to 64rem wide on larger screens, and forms and text stay within 48rem. Routes and components are in [FRONTEND.md](FRONTEND.md). Flows are in [USER_FLOW.md](USER_FLOW.md). Rules and requirements win over this file.
 
 ## Fixed wording
 
@@ -75,11 +75,18 @@ Reason sentences, one for each code in D-37 (amounts are filled in from the calc
 
 ## Screens
 
-Every screen has a header with the app name, a footer with the not-legal-advice line and "Delete everything", and one h1.
+Every screen has a dark header with the app name. Every screen except Home also has the stage links in the header (Moving out, Before signing, During the tenancy), with the current one marked. Home has its own stage links. Every screen has a footer with the not-legal-advice line and "Delete everything", and one h1.
 
 ### Home (/)
 
-h1 "Check your rent and deposit charges". Three stage links in this order: Moving out (main), Before signing, During the tenancy. Each has one line of help: "Check the deductions your landlord listed against your tenancy and your lease.", "Check a metered bill against your readings, and keep a dated log of repairs." for During the tenancy. Buttons: Load sample case. Empty state: nothing saved, no note. Saved data: the Moving out link says "Saved in this browser". Errors: storage notices above. Success: not applicable.
+From the top:
+
+- A dark band with the h1 "Check your rent and deposit charges", the introduction, a link "Check my deductions" to Details, and Load sample case. Beside it, under it on a phone, the example.
+- The example, h2 "Example result". It is the sample case, checked by the same rules as a real one, never typed in. It shows "Ask about ₹10,500 of ₹30,000 deducted", the split bar, and each deduction with its amount and result.
+- h2 "Where are you in your tenancy?" with the three stage cards. Each has an icon and an h3 that is the link, and the whole card can be pressed.
+- h2 "How it works" with four points. "Rules work out every amount": "Rent per day, meter readings, receipts and fees the lease states. AI never works out an amount." "Quotes are checked": "Google Gemini looks for the clause. A quote that is not in your lease is ignored." "A message you can edit": "It asks for the clause, the receipt or a new calculation, charge by charge." "Your data stays with you": "Your entries are stored in this browser. The lease is sent only after you agree, to find clauses."
+
+Three stage links in this order: Moving out (main), Before signing, During the tenancy. Each has one line of help: "Check the deductions your landlord listed against your tenancy and your lease.", "Check a metered bill against your readings, and keep a dated log of repairs." for During the tenancy. Buttons: Load sample case. Empty state: nothing saved, no note. Saved data: the Moving out link says "Saved in this browser". Errors: storage notices above. Success: not applicable.
 
 ### Moving out (/move-out)
 
@@ -91,13 +98,13 @@ Deductions. A list of cards, each with label, kind, amount, edit and remove. "Ad
 
 Lease. A text area "Lease text" with a count "0 of 40,000", hint "Paste the whole lease. A missing page can cause a wrong Not found in the lease." Buttons: Find clauses, Run check. Under the text area, each non-rent deduction shows its evidence (the state as words, its source tag, the quote if any) and the controls "Paste a quote", "No clause here" and "Remove override". Text over the limit stays in the box with the field error, and the lease counts as empty until it is shorter. Empty: "No lease pasted. Charges that need a clause will show Unclear." Loading: "Finding clauses. This can take up to 30 seconds." Find clauses is disabled, Run check stays enabled. Error: the matching messages above, with "Try again". Out of date: editing the lease text clears every state and shows "The lease text changed. Find clauses again." Success: mode notice if keyword, warnings, and "Clause matching finished." in the status region. A failed run says "Clause matching failed." there. During a run focus is on the status text, because the button is disabled. Cancel puts focus on Find clauses.
 
-Results. Empty (no check run): "You have not run the check yet." and a Run check button. Success: first the totals as a definition list (Total deducted, Ask about, Awaiting proof, Unclear, Consistent), then the refund gap line only when it is above 0, then an excess notice when the total is above the deposit ("The deductions are ₹{excess} more than the deposit."). Then one card for each deduction in input order: label, kind, amount charged, expected amount when known, result name with icon, reasons as a list, quote with its source tag, linked repairs with date, description and who it was reported to, and the controls from the Lease step. Out of date: the notice appears above the totals, old values stay. Error: field messages as in Details. Not legal advice line under the totals.
+Results. Empty (no check run): "You have not run the check yet." and a Run check button. Before the first check, the sentence and the button are in a card with an icon. Success: first the sentence "Ask about ₹{askAbout} of ₹{total} deducted" and the split bar, then the totals as a definition list (Total deducted, Ask about, Awaiting proof, Unclear, Consistent), then the refund gap line only when it is above 0, then an excess notice when the total is above the deposit ("The deductions are ₹{excess} more than the deposit."). Then one card for each deduction in input order: label, kind, amount charged, expected amount when known, result name with icon, reasons as a list, quote with its source tag, linked repairs with date, description and who it was reported to, and the controls from the Lease step. Out of date: the notice appears above the totals, old values stay. Error: field messages as in Details. Not legal advice line under the totals.
 
 Message. Empty: "Run the check first." Nothing to ask: "Nothing to ask about. Every deduction is supported." with no copy button. Success: a text area "Message to your landlord" with the draft, buttons Copy and Regenerate, and the line "Replace the text in square brackets before you send." Out of date: Regenerate is disabled with "Run the check again first." and an existing draft shows "This draft may be out of date." A stored draft with no check run in this visit shows the same, with "Run the check first." An edited draft with current results shows "You edited this message. Regenerate to start again from the current results." Copy success: "Copied" in the status region. Copy blocked: the text is selected and the page says "Press Ctrl+C or long-press to copy." Regenerate after edits asks "Regenerating will replace your edits. Continue?". Not legal advice line below.
 
 ### Before signing (/lease-review)
 
-h1 "Review a lease before you sign". A text area for the lease (its own text, not shared with moving out), Run review. Ten topic rows after a run, each with the topic, an outcome (Found, Not found, Could not confirm, Lease may rule this out), the quote when there is one, and the question when the outcome is not Found. Page line: "A found clause is not a check that its terms are fair." Copy questions copies the questions that are shown, says "Copied", and works as Copy on the Message step when the clipboard is blocked. The questions to copy are also in a read-only text area "Questions to ask". If every topic is Found: "Every topic has a clause. Read each quote to check the terms." Empty: "Paste the lease to see which deposit topics it covers." Loading, error, keyword notice, consent and override as in Lease above. The consent notices say "each topic" and "the ten topic names" here, in place of "each charge" and "the names of your deductions". QUOTE_REJECTED ends with "Those topics show Could not confirm." A failed match says "Matching failed. The rows did not change. Try again." Run review disabled: "Paste at least 50 characters of the lease first." The hint under the box is "Paste the whole lease. A missing page can cause a wrong Not found." Status region: "Review finished." and "Review failed." Home help line: "Paste a lease to see which deposit topics it covers and what to ask." Out of date: "The lease text changed. Run the review again." Not legal advice line at the bottom.
+h1 "Review a lease before you sign". A text area for the lease (its own text, not shared with moving out), Run review. Until the first run, h2 "What the review looks for" with the ten topic names. Ten topic rows after a run, each with the topic, an outcome (Found, Not found, Could not confirm, Lease may rule this out), the quote when there is one, and the question when the outcome is not Found. Page line: "A found clause is not a check that its terms are fair." Copy questions copies the questions that are shown, says "Copied", and works as Copy on the Message step when the clipboard is blocked. The questions to copy are also in a read-only text area "Questions to ask". If every topic is Found: "Every topic has a clause. Read each quote to check the terms." Empty: "Paste the lease to see which deposit topics it covers." Loading, error, keyword notice, consent and override as in Lease above. The consent notices say "each topic" and "the ten topic names" here, in place of "each charge" and "the names of your deductions". QUOTE_REJECTED ends with "Those topics show Could not confirm." A failed match says "Matching failed. The rows did not change. Try again." Run review disabled: "Paste at least 50 characters of the lease first." The hint under the box is "Paste the whole lease. A missing page can cause a wrong Not found." Status region: "Review finished." and "Review failed." Home help line: "Paste a lease to see which deposit topics it covers and what to ask." Out of date: "The lease text changed. Run the review again." Not legal advice line at the bottom.
 
 ### During the tenancy (/tenancy)
 
@@ -114,6 +121,9 @@ Roles only. Pick the values so the contrast ratios hold. Light theme only for no
 | border, border-input | Dividers, input edges | 3:1 for input edges |
 | primary, primary-text | Main buttons | Text 4.5:1 on the button |
 | focus | Focus ring, 2 px with 2 px offset | 3:1 against both neighbours |
+| band, on-band, on-band-muted | Header and the band on Home | Text 4.5:1 |
+| accent, on-accent | The app mark, the current stage, the main link on Home | Text 4.5:1 on accent, accent 3:1 on band |
+| focus-on-band | Focus ring inside a band | 3:1 on band |
 | danger, warning, success, info | Notices and result accents, always with icon and text | Text 4.5:1, icon 3:1 |
 | space 4, 8, 12, 16, 24, 32 | Gaps, 16 px side gutter on a phone | n/a |
 | text-base 16 px, line height 1.5 | Inputs are at least 16 px so phones do not zoom | n/a |
@@ -121,7 +131,7 @@ Roles only. Pick the values so the contrast ratios hold. Light theme only for no
 
 ## Accessibility
 
-- Landmarks: one `header`, `nav` (the step list, labelled "Steps"), one `main`, one `footer`. A skip link goes to `main`.
+- Landmarks: one `header`, `nav` (the step list, labelled "Steps", and the stage links, labelled "Stages"), one `main`, one `footer`. A skip link goes to `main`.
 - One h1 on each screen. Steps use h2 for sections and h3 for cards. No level is skipped.
 - Every field has a visible label, a hint linked with `aria-describedby`, and `autocomplete="off"` where the value is private. Required fields say "required" in the label text.
 - Errors: the message sits under the field, is linked with `aria-describedby`, and the field has `aria-invalid="true"`. On Run check or Next, an error summary appears at the top listing each problem as a link to its field, and focus moves to the first bad field. The summary is also announced through a polite status region, so a screen reader hears "3 problems" first. A message also shows when the user goes from an edited field to another field. Pressing a button never shows one before the click is done, because the button would move. Messages say how to fix the problem and never rely on colour.
@@ -133,7 +143,8 @@ Roles only. Pick the values so the contrast ratios hold. Light theme only for no
 - Targets are at least 44 by 44 CSS px with at least 8 px between them.
 - Contrast: text 4.5:1, large text, icons, input edges and focus ring 3:1. Check text on every surface and the dimmed state of out-of-date results.
 - Result names are text with an icon. Totals are a definition list. On a phone, results are cards, not tables.
-- Motion: use none that matters. With `prefers-reduced-motion`, there is no animation and the loading state is static text.
+- The split bar shows the four buckets as parts of the total, in the order of the list. It is hidden from screen readers because the list says the same. Each part has the icon of its bucket, which is also beside the bucket name, so colour is never the only signal: Ask about an exclamation mark in a circle, Awaiting proof a receipt, Unclear a question mark in a circle, Consistent a tick in a circle. A bucket of ₹0 has no part, and a total of ₹0 has no bar.
+- Motion: use none that matters. Only colours change on hover. With `prefers-reduced-motion`, there is no animation and the loading state is static text.
 - Reflow: no horizontal scroll at 320 px wide. Long labels, quotes and lease text wrap. 200 percent zoom loses no content or function.
 - Lease text, labels, quotes and repair text are plain text and never HTML.
 - Amounts are written with Indian grouping and `₹`, for example ₹1,30,000, with paise only when not 0.

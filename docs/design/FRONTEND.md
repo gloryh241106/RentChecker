@@ -28,6 +28,9 @@ Routing uses a client router. Vercel and Express both serve `index.html` for the
 | MatchStatus | Says when keyword mode was used and why (FR-10), and lists warnings |
 | EvidenceOverride | Paste a quote or confirm no clause (FR-11) |
 | ResultCard | Primary result, all reasons (D-37), quote, linked repair |
+| StageNav | Links to the three stages in the header, on every screen except Home |
+| ExampleResult | The sample case, checked by `shared/`, as an example on Home |
+| SplitBar | The four totals as parts of one bar, hidden from screen readers |
 | TotalsPanel | The four totals, total deducted, refund gap, excess over deposit (D-40 to D-43) |
 | DraftMessage | Editable textarea and copy button (FR-13) |
 | DeleteAllDialog | Confirm, then clear (FR-6) |

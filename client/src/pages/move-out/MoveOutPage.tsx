@@ -13,9 +13,13 @@ export function MoveOutPage() {
   return (
     <MoveOutSession>
       <SampleBanner />
-      <StepNav current={step} />
-      <StepView step={step} />
-      <StepButtons current={step} />
+      <div className="grid gap-6 lg:grid-cols-[12rem_minmax(0,48rem)] lg:gap-10">
+        <StepNav current={step} />
+        <div className="min-w-0 space-y-6">
+          <StepView step={step} />
+          <StepButtons current={step} />
+        </div>
+      </div>
     </MoveOutSession>
   );
 }

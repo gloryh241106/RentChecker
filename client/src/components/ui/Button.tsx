@@ -1,15 +1,17 @@
 import type { ComponentProps, ComponentPropsWithoutRef } from 'react';
 import { Link } from 'react-router';
 
-type Variant = 'primary' | 'secondary' | 'danger' | 'quiet';
+type Variant = 'primary' | 'secondary' | 'danger' | 'quiet' | 'quietDanger' | 'accent';
 
 const BASE =
-  'inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-md border-2 px-4 py-2 text-center text-base font-semibold no-underline disabled:cursor-not-allowed disabled:opacity-60';
+  'inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-md border-2 px-4 py-2 text-center text-base font-semibold no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-60';
 
 const VARIANTS: Readonly<Record<Variant, string>> = {
   primary: 'border-primary bg-primary text-on-primary hover:bg-primary-hover',
   secondary: 'border-primary bg-raised text-primary hover:bg-sunken',
   danger: 'border-danger bg-danger text-on-primary hover:bg-ink',
+  quietDanger: 'border-transparent bg-transparent text-danger underline hover:bg-danger-bg',
+  accent: 'border-accent bg-accent text-on-accent hover:border-accent-hover hover:bg-accent-hover',
   quiet: 'border-transparent bg-transparent text-primary underline hover:bg-sunken',
 };
 

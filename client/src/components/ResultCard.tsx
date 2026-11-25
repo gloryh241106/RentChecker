@@ -27,7 +27,10 @@ export function ResultCard({ deduction, result, repairs, isOutOfDate }: ResultCa
   const linked = repairs.filter((repair) => result.repairIds.includes(repair.id));
   return (
     <Card isSunken={isOutOfDate}>
-      <h3 className="text-lg font-bold">{deduction.label}</h3>
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+        <h3 className="text-xl font-bold">{deduction.label}</h3>
+        <ResultBadge result={result.result} />
+      </div>
       <p>
         {KIND_NAMES[deduction.kind]}, charged <strong>{formatRupees(result.amountPaise)}</strong>
         {result.expectedPaise === null ? null : (
@@ -36,7 +39,6 @@ export function ResultCard({ deduction, result, repairs, isOutOfDate }: ResultCa
           </>
         )}
       </p>
-      <ResultBadge result={result.result} />
       <ul className="list-disc space-y-1 pl-5">
         {result.reasons.map((code) => (
           <li key={code}>{reasonSentence(code, facts)}</li>

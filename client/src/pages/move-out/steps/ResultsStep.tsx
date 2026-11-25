@@ -2,6 +2,8 @@ import { PageHeading } from '../../../app/PageHeading.js';
 import { ResultCard } from '../../../components/ResultCard.js';
 import { TotalsPanel } from '../../../components/TotalsPanel.js';
 import { Button } from '../../../components/ui/Button.js';
+import { Card } from '../../../components/ui/Card.js';
+import { CalculatorIcon } from '../../../components/ui/Icon.js';
 import { Notice } from '../../../components/ui/Notice.js';
 import { useWorkspace } from '../../../state/workspace-context.js';
 import { useMoveOutSession } from '../session-context.js';
@@ -16,10 +18,13 @@ export function ResultsStep() {
     return (
       <section className="space-y-5">
         <PageHeading title="Results" />
-        <p>You have not run the check yet.</p>
-        <Button isFullWidth onClick={runCheck}>
-          Run check
-        </Button>
+        <Card>
+          <CalculatorIcon className="size-10 text-primary" />
+          <p className="text-lg">You have not run the check yet.</p>
+          <Button isFullWidth onClick={runCheck}>
+            Run check
+          </Button>
+        </Card>
       </section>
     );
   }

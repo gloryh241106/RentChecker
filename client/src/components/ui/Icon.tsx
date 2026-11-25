@@ -55,6 +55,29 @@ export const CheckCircleIcon = makeIcon(
   </>,
 );
 
+export const LeaseIcon = makeIcon(
+  <>
+    <path d="M13 21H6V3h8l4 4v4M14 3v4h4" />
+    <circle cx="16" cy="16" r="3" />
+    <path d="m20.5 20.5-2.3-2.3" />
+  </>,
+);
+
+export const MeterIcon = makeIcon(<path d="M4 17a8 8 0 1 1 16 0M12 17l4-5M4 20h16" />);
+
+export const DoorIcon = makeIcon(<path d="M6 21V4h9v17M3 21h18M15 8h3v13M11.5 12.5h.01" />);
+
+export const MessageIcon = makeIcon(<path d="M4 5h16v11H9l-5 4zM8 9h8M8 12h5" />);
+
+export const LockIcon = makeIcon(
+  <>
+    <rect x="5" y="11" width="14" height="9" rx="2" />
+    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+  </>,
+);
+
+export const QuoteCheckIcon = makeIcon(<path d="M4 5h16M4 10h10M4 15h6m3 1 3 3 5-6" />);
+
 export const InfoIcon = makeIcon(
   <>
     <circle cx="12" cy="12" r="9" />
