@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 import { App } from './App.js';
+import { createHttpAssistantApi } from './api/http-assistant-api.js';
 import { createHttpClauseApi } from './api/http-clause-api.js';
 import './index.css';
 import { createBrowserStorage } from './storage/browser-storage.js';
@@ -11,7 +12,11 @@ if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
       <BrowserRouter>
-        <App storage={createBrowserStorage()} clauseApi={createHttpClauseApi()} />
+        <App
+          storage={createBrowserStorage()}
+          clauseApi={createHttpClauseApi()}
+          assistantApi={createHttpAssistantApi()}
+        />
       </BrowserRouter>
     </StrictMode>,
   );

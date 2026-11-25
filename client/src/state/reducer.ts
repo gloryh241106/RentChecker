@@ -3,6 +3,7 @@ import type { Workspace } from '../shared.js';
 import type { ActionOf, ActionType, Handler, HandlersFor, WorkspaceAction } from './actions.js';
 import { billHandlers } from './handlers/bill.js';
 import { deductionHandlers } from './handlers/deduction.js';
+import { detailsHandlers } from './handlers/details.js';
 import { draftHandlers } from './handlers/draft.js';
 import { evidenceHandlers } from './handlers/evidence.js';
 import { leaseHandlers } from './handlers/lease.js';
@@ -15,6 +16,7 @@ const HANDLERS: HandlersFor<ActionType> = {
   ...tenancyHandlers,
   ...leaseHandlers,
   ...deductionHandlers,
+  ...detailsHandlers,
   ...evidenceHandlers,
   ...reviewHandlers,
   ...workspaceHandlers,

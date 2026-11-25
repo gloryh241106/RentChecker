@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import { describeCharge } from '../../../components/charge-text.js';
 import { Button } from '../../../components/ui/Button.js';
 import { CheckboxField } from '../../../components/ui/Field.js';
-import {
-  KIND_NAMES,
-  MAX_DEDUCTIONS,
-  formatMonthText,
-  formatRupees,
-  toDeduction,
-} from '../../../shared.js';
+import { MAX_DEDUCTIONS, toDeduction } from '../../../shared.js';
 import type { Deduction, FoundCharge, FoundCharges } from '../../../shared.js';
 import { newId } from '../../../state/ids.js';
 
@@ -27,11 +22,6 @@ interface Row {
 
 function toRows({ charges }: FoundCharges): readonly Row[] {
   return charges.map((charge) => ({ charge, deduction: toDeduction(charge, newId()) }));
-}
-
-function describe({ label, amountPaise, kind, rentMonth }: FoundCharge): string {
-  const month = rentMonth === null ? '' : ` for ${formatMonthText(rentMonth)}`;
-  return `${label}, ${formatRupees(amountPaise)}, ${KIND_NAMES[kind]}${month}`;
 }
 
 function leftOutText(count: number): string {
@@ -77,12 +67,12 @@ export function FoundChargeList({ found, room, onAdd }: FoundChargeListProps) {
           <li key={deduction?.id ?? `no-month-${String(index)}`} className="wrap-anywhere">
             {deduction === null ? (
               <p>
-                {describe(charge)}. {NEEDS_MONTH}
+                {describeCharge(charge)}. {NEEDS_MONTH}
               </p>
             ) : (
               <CheckboxField
                 id={`found-${deduction.id}`}
-                label={describe(charge)}
+                label={describeCharge(charge)}
                 isChecked={!unchecked.has(deduction.id)}
                 onChange={(isChecked) => toggle(deduction.id, isChecked)}
               />

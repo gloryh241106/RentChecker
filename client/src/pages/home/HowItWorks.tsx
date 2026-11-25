@@ -4,7 +4,7 @@ const POINTS = [
   {
     Icon: CalculatorIcon,
     title: 'Rules work out every amount',
-    text: 'Rent per day, meter readings, receipts and fees the lease states. AI never works out an amount.',
+    text: 'Rent per day, meter readings, receipts and fees the lease states. AI never gives an amount.',
   },
   {
     Icon: QuoteCheckIcon,
@@ -19,7 +19,7 @@ const POINTS = [
   {
     Icon: LockIcon,
     title: 'Your data stays with you',
-    text: 'Your entries are stored in this browser. The lease is sent only after you agree, to find clauses.',
+    text: 'Your entries are stored in this browser. A message or a lease is sent only after you agree.',
   },
 ] as const;
 

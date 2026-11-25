@@ -17,6 +17,7 @@ export function selectQuestion(): void {
 }
 
 interface QuestionFormProps {
+  readonly firstQuestion: string;
   /** Why asking is not possible yet (F7-R1). */
   readonly blockers: readonly string[];
   readonly isRunning: boolean;
@@ -33,8 +34,8 @@ function problemOf(question: string): string | undefined {
 }
 
 /** F7-R1. The text stays selected after a question, so the next one can be typed over it. */
-export function QuestionForm({ blockers, isRunning, onAsk }: QuestionFormProps) {
-  const [text, setText] = useState('');
+export function QuestionForm({ firstQuestion, blockers, isRunning, onAsk }: QuestionFormProps) {
+  const [text, setText] = useState(firstQuestion);
   const [error, setError] = useState<string | undefined>(undefined);
 
   function submit(): void {

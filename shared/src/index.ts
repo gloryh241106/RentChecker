@@ -1,11 +1,15 @@
 // The public API of shared/. client/ and server/ import only from here.
 export {
   MAX_DEDUCTIONS,
+  MAX_DOUBTS,
+  MAX_FACTS,
   MAX_LEASE_LENGTH,
   MAX_MATCH_ITEMS,
+  MAX_PROMPT_LENGTH,
   MAX_REPAIRS,
   MAX_SHORT_TEXT_LENGTH,
   MIN_MATCH_LEASE_LENGTH,
+  MIN_PROMPT_LENGTH,
 } from './limits.js';
 
 export type { ParseResult } from './parse-result.js';
@@ -81,6 +85,30 @@ export {
   TOPIC_OUTCOME_NAMES,
   topicOutcome,
 } from './review/outcomes.js';
+
+export type {
+  AssistantDoubt,
+  AssistantFact,
+  AssistantRequest,
+  AssistantResponse,
+  AssistantTask,
+  PromptReading,
+} from './schemas/assistant.js';
+export {
+  ASSISTANT_TASKS,
+  assistantRequestSchema,
+  assistantResponseSchema,
+  DOUBT_REASONS,
+  FACT_KINDS,
+} from './schemas/assistant.js';
+export type { CheckedInput, InputCheck } from './assistant/checks.js';
+export { checkInput } from './assistant/checks.js';
+export type { AssistantDraft, DraftFact, SingleFact } from './assistant/draft.js';
+export { buildDraft, chargesOf, checksOf, showValue, tenancyOf } from './assistant/draft.js';
+export { isInPrompt } from './assistant/find-source.js';
+export type { Question } from './assistant/questions.js';
+export { answerQuestion, nextQuestion, removeCharge, removeFact } from './assistant/questions.js';
+export { readPromptByCode } from './assistant/read-by-code.js';
 
 export type { FoundCharge, FoundCharges } from './charges/read-message.js';
 export { MAX_MESSAGE_LENGTH, readMessage, toDeduction } from './charges/read-message.js';

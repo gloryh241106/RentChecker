@@ -29,9 +29,11 @@ export function createClauseService(options: ClauseServiceOptions): ClauseServic
   return {
     async match(request) {
       if (!clauseMatcher) return byKeyword(request, 'AI_NOT_CONFIGURED');
-      const outcome = await askAi({ clauseMatcher, logger }, request);
+      const outcome = await askAi(logger, (signal) =>
+        clauseMatcher.findClauses({ ...request, signal }),
+      );
       return outcome.ok
-        ? buildAiResponse(request, outcome.answers)
+        ? buildAiResponse(request, outcome.reply)
         : byKeyword(request, outcome.warning);
     },
   };

@@ -2,11 +2,17 @@ import { isAfter, isYearMonth, monthOf } from '../dates.js';
 
 const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
-const MONTH_WORD =
+/** A month name or its short form, as one group. */
+export const MONTH_WORD =
   /\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\b/i;
 
 /** Text that ends in a month name, as before the year in "June 2026". */
 export const ENDS_IN_MONTH = new RegExp(`${MONTH_WORD.source}[\\s,]*$`, 'i');
+
+/** 1 to 12 for a match of MONTH_WORD. */
+export function monthNumber(name: string): number {
+  return MONTHS.indexOf(name.slice(0, 3).toLowerCase()) + 1;
+}
 
 function yearMonth(year: number, month: number): string {
   return `${String(year)}-${String(month).padStart(2, '0')}`;
@@ -25,7 +31,7 @@ export function readRentMonth(part: string, handoverDate: string | undefined): s
   if (name === undefined) {
     return handoverMonth;
   }
-  const month = MONTHS.indexOf(name.slice(0, 3).toLowerCase()) + 1;
+  const month = monthNumber(name);
   const year = /\b(20[0-9]{2})\b/.exec(part)?.[1];
   if (year !== undefined && isYearMonth(yearMonth(Number(year), month))) {
     return yearMonth(Number(year), month);

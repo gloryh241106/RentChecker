@@ -4,8 +4,9 @@ import type { FoundAmount } from './amount.js';
 const NO_LABEL = 'Charge';
 
 const LIST_MARK = /^\s*(?:[0-9]{1,2}[.)]|[-–—*•])\s*/;
-const LEAD_IN = /^.*\b(?:deduct(?:ed|ing|ions?)?|cut|charged|charging|less|minus)\b\s*/i;
-const FIRST_WORDS = /^(?:(?:for|towards|as|the|also|of)\s+)+/i;
+const LEAD_IN =
+  /^.*\b(?:deduct(?:ed|ing|ions?)?|cut|cutting|charged|charging|kept|keeping|withheld|took|taken|less|minus)\b\s*/i;
+const FIRST_WORDS = /^(?:(?:for|towards|as|the|a|an|also|of)\s+)+/i;
 const LAST_WORD = /\s+(?:of|is|was|at|for|only)$/i;
 const LAST_SIGNS = /[\s:=@,.\-–—]+$/;
 
@@ -32,8 +33,12 @@ export function namingText({ before, after }: FoundAmount): string {
   return /[a-z]/i.test(before) ? afterColon(before) : after;
 }
 
+/** F8-R3. A capital first letter, and at most 120 characters. */
+export function asLabel(text: string): string {
+  return (text.charAt(0).toUpperCase() + text.slice(1)).slice(0, MAX_SHORT_TEXT_LENGTH).trim();
+}
+
 /** F8-R3. */
 export function readLabel(amount: FoundAmount): string {
-  const label = tidy(afterColon(amount.before)) || tidy(amount.after) || NO_LABEL;
-  return (label.charAt(0).toUpperCase() + label.slice(1)).slice(0, MAX_SHORT_TEXT_LENGTH).trim();
+  return asLabel(tidy(afterColon(amount.before)) || tidy(amount.after) || NO_LABEL);
 }

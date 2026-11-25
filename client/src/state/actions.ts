@@ -23,6 +23,8 @@ interface ActionPayloads {
   'review/set': { readonly text: string };
   'review/apply': { readonly matches: readonly ClauseMatch[] };
   'review/override': { readonly topicId: string; readonly override: EvidenceOverride };
+  /** F9-R10. Replaces the tenancy details and the deductions, and what was found for them. */
+  'details/apply': { readonly tenancy: Tenancy; readonly deductions: readonly Deduction[] };
   'sample/load': unknown;
   'workspace/replace': { readonly workspace: Workspace };
   'workspace/reset': unknown;

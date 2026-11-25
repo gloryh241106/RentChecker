@@ -12,8 +12,14 @@ import { QuestionForm, selectQuestion } from './QuestionForm.js';
 import { SuggestedQuestions } from './SuggestedQuestions.js';
 import { suggestQuestions } from './suggestions.js';
 
+interface AskPanelProps {
+  readonly workspace: Workspace;
+  /** Filled in by the assistant (F9-R12). */
+  readonly firstQuestion: string;
+}
+
 /** F7. Mounted anew for each lease text, so answers never belong to another text (F7-R6). */
-export function AskPanel({ workspace }: { readonly workspace: Workspace }) {
+export function AskPanel({ workspace, firstQuestion }: AskPanelProps) {
   const { leaseText } = workspace;
   const api = useClauseApi();
   const questions = useLeaseQuestions({ api, leaseText, announce: useAnnounce() });
@@ -25,7 +31,12 @@ export function AskPanel({ workspace }: { readonly workspace: Workspace }) {
 
   return (
     <div className="space-y-5">
-      <QuestionForm blockers={blockers} isRunning={isRunning} onAsk={questions.ask} />
+      <QuestionForm
+        firstQuestion={firstQuestion}
+        blockers={blockers}
+        isRunning={isRunning}
+        onAsk={questions.ask}
+      />
       <SuggestedQuestions
         questions={suggestQuestions(workspace, answered)}
         isDisabled={blockers.length > 0 || isRunning}

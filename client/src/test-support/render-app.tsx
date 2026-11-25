@@ -6,6 +6,7 @@ import { App } from '../App.js';
 import type { Workspace } from '../shared.js';
 import { createSampleWorkspace } from '../state/sample.js';
 import { installDialogPolyfill } from './dialog-polyfill.js';
+import { FakeAssistantApi } from './fake-assistant-api.js';
 import { FakeClauseApi } from './fake-clause-api.js';
 import { InMemoryWorkspaceStorage } from './in-memory-storage.js';
 
@@ -20,19 +21,22 @@ interface RenderOptions {
   readonly stored?: Workspace;
   readonly storage?: InMemoryWorkspaceStorage;
   readonly clauseApi?: FakeClauseApi;
+  readonly assistantApi?: FakeAssistantApi;
 }
 
 /** The whole app on an in-memory storage, with a user that types like a person. */
-export function renderApp({ route = '/', stored, storage, clauseApi }: RenderOptions = {}) {
+export function renderApp(options: RenderOptions = {}) {
+  const { route = '/', stored, storage, clauseApi } = options;
+  const assistantApi = options.assistantApi ?? new FakeAssistantApi();
   const api = clauseApi ?? new FakeClauseApi();
   const memory = storage ?? new InMemoryWorkspaceStorage(stored);
   const user = userEvent.setup();
   const view = render(
     <MemoryRouter initialEntries={[route]}>
-      <App storage={memory} clauseApi={api} />
+      <App storage={memory} clauseApi={api} assistantApi={assistantApi} />
     </MemoryRouter>,
   );
-  return { user, storage: memory, clauseApi: api, ...view };
+  return { user, storage: memory, clauseApi: api, assistantApi, ...view };
 }
 
 export const RESULTS_ROUTE = '/move-out?step=results';

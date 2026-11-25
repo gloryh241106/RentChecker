@@ -1,9 +1,11 @@
 import { PageHeading } from '../app/PageHeading.js';
 import { ExampleResult } from '../components/ExampleResult.js';
 import { LoadSampleButton } from '../components/LoadSampleButton.js';
-import { ButtonLink } from '../components/ui/Button.js';
+import { Button, ButtonLink } from '../components/ui/Button.js';
 import { hasData } from '../state/has-data.js';
 import { useWorkspace } from '../state/workspace-context.js';
+import { AssistantPanel } from './home/assistant/AssistantPanel.js';
+import { focusPrompt } from './home/assistant/PromptForm.js';
 import { AskTeaser } from './home/AskTeaser.js';
 import { HowItWorks } from './home/HowItWorks.js';
 import { StageCards } from './home/StageCards.js';
@@ -22,7 +24,10 @@ export function Home() {
             You get a clear result for each charge, and the reasons behind it.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <ButtonLink to={stepPath('details')} variant="accent" isFullWidth>
+            <Button variant="accent" isFullWidth onClick={focusPrompt}>
+              Start with a message
+            </Button>
+            <ButtonLink to={stepPath('details')} isFullWidth>
               Check my deductions
             </ButtonLink>
             <LoadSampleButton />
@@ -30,6 +35,7 @@ export function Home() {
         </div>
         <ExampleResult />
       </div>
+      <AssistantPanel />
       <StageCards isSaved={hasData(workspace)} />
       <AskTeaser />
       <HowItWorks />

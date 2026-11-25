@@ -1,13 +1,16 @@
+import { useLocation } from 'react-router';
 import { PageHeading } from '../../app/PageHeading.js';
 import { LeaseTextBox } from '../../components/LeaseTextBox.js';
 import { NOT_LEGAL_ADVICE } from '../../components/not-legal-advice.js';
 import { SampleBanner } from '../../components/SampleBanner.js';
 import { useWorkspace } from '../../state/workspace-context.js';
+import { readAskState } from './ask-state.js';
 import { AskPanel } from './AskPanel.js';
 
 /** UC-8, F7. Questions about the lease of Moving out, answered with its own words. */
 export function AskPage() {
   const { workspace, dispatch } = useWorkspace();
+  const firstQuestion = readAskState(useLocation().state);
   return (
     <div className="space-y-5">
       <SampleBanner />
@@ -28,7 +31,7 @@ export function AskPage() {
             onChange={(text) => dispatch({ type: 'lease/set', text })}
           />
         </section>
-        <AskPanel key={workspace.leaseText} workspace={workspace} />
+        <AskPanel key={workspace.leaseText} workspace={workspace} firstQuestion={firstQuestion} />
       </div>
       <p className="text-ink-muted">{NOT_LEGAL_ADVICE}</p>
     </div>

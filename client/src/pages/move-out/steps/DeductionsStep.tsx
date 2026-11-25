@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useAnnounce } from '../../../app/announce-context.js';
 import { PageHeading } from '../../../app/PageHeading.js';
+import { InputChecks } from '../../../components/InputChecks.js';
 import { Button } from '../../../components/ui/Button.js';
 import { ErrorSummary } from '../../../components/ui/ErrorSummary.js';
 import { fieldErrorText } from '../../../forms/field-errors.js';
-import { MAX_DEDUCTIONS } from '../../../shared.js';
+import { MAX_DEDUCTIONS, checkInput } from '../../../shared.js';
 import type { Deduction } from '../../../shared.js';
 import { useWorkspace } from '../../../state/workspace-context.js';
+import { todayText } from '../../../state/today.js';
 import { useMoveOutSession } from '../session-context.js';
 import { usePendingFocus } from '../use-pending-focus.js';
 import { DeductionForm } from './DeductionForm.js';
@@ -33,7 +35,7 @@ function focusListHeading(): void {
   document.getElementById('deductions-heading')?.focus();
 }
 
-/** F1-R3, F1-R4, F1-R5, F8-R7. The list of charges, and the ways to add one. */
+/** F1-R3, F1-R4, F1-R5, F8-R7, F9-R11. The list of charges, and the ways to add one. */
 export function DeductionsStep() {
   const { workspace, dispatch } = useWorkspace();
   const { isDeductionMissing } = useMoveOutSession();
@@ -76,6 +78,7 @@ export function DeductionsStep() {
           focusListHeading();
         }}
       />
+      <InputChecks checks={checkInput({ ...tenancy, deductions }, todayText())} />
       {panel.name === 'none' ? <AddButtons count={deductions.length} onOpen={setPanel} /> : null}
       {panel.name === 'message' ? (
         <ReadMessage

@@ -21,6 +21,12 @@ export const MIN_MATCH_LEASE_LENGTH = 50;
 export const MAX_LEASE_LENGTH = 40_000;
 export const MAX_MATCH_ITEMS = 20;
 
+/** F9, API.md. */
+export const MIN_PROMPT_LENGTH = 3;
+export const MAX_PROMPT_LENGTH = 2_000;
+export const MAX_FACTS = 30;
+export const MAX_DOUBTS = 5;
+
 /** F2-R4. */
 export const MIN_QUOTE_LENGTH = 15;
 export const MAX_QUOTE_LENGTH = 600;
