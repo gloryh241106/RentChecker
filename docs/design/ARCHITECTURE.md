@@ -69,12 +69,13 @@ flowchart TB
     draft["Draft message builder"]
     quote["Quote check, F2-R4"]
     charges["Message reader, F8"]
+    assist["Assistant: values, questions, checks, F9"]
   end
   subgraph server["server/"]
     mw["Middleware"]
     routes["Routes"]
     ctrl["Controllers"]
-    svc["Clause service"]
+    svc["Clause service, assistant service"]
     helpers["Keyword matcher"]
     ai["AI client"]
     cases["Case service"]
@@ -90,6 +91,9 @@ flowchart TB
   hooks --> rules
   hooks --> draft
   pages --> charges
+  hooks --> assist
+  svc --> assist
+  assist --> charges
   storage --> schemas
   apiclient --> schemas
   apiclient -->|"HTTP"| mw

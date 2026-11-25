@@ -118,6 +118,33 @@ flowchart TD
     Q10 --> Q3
 ```
 
+## UC-10 Start with a prompt
+
+One request for each prompt. The answers to the questions stay in the browser.
+
+```mermaid
+flowchart TD
+    P1(["Home: write a message"]) --> P2{"Consent given in this visit?"}
+    P2 -- "No" --> P3{"Continue?"}
+    P3 -- "Cancel" --> P1
+    P3 -- "Continue" --> P4["One request to POST /api/assistant/read"]
+    P2 -- "Yes" --> P4
+    P4 --> P5{"Task?"}
+    P5 -- "Question, new lease, bill or repair" --> P6["Link to the page. A question is filled in"]
+    P5 -- "Out of scope" --> P7["Says what the assistant can do"]
+    P5 -- "Deductions" --> P8["Facts with their words, and the checks"]
+    P8 --> P9{"Fact missing?"}
+    P9 -- "Yes" --> P10["Ask for it. Answer or skip"]
+    P10 --> P8
+    P9 -- "No" --> P11["Use these details"]
+    P11 --> P12{"Details in the browser?"}
+    P12 -- "Yes" --> P13{"Replace them?"}
+    P13 -- "Cancel" --> P8
+    P13 -- "Replace" --> P14["Moving out, filled in"]
+    P12 -- "No" --> P14
+    P4 -- "Request failed" --> P15["Failure message, retry offered"]
+```
+
 ## UC-9 Read the landlord's message
 
 A part of the Deductions step of UC-1. It runs in the browser and sends nothing.

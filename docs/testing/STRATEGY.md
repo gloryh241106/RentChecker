@@ -7,10 +7,10 @@ This file says how RentChecker is tested. The cases themselves are in [CASES.md]
 | Level | Tool | Covers | Where |
 |---|---|---|---|
 | Unit | Vitest | Everything in `shared/`: money parsing (D-3, D-4), dates (D-5), expected amounts (D-20 to D-25), results (D-32 to D-36), reasons (D-37), buckets and totals (D-40 to D-43), the quote check, keyword matching, the message template | next to the code, `*.test.ts` |
-| API | Vitest and Supertest | Both routes: validation, every error status, AI success, AI failure, timeout, quote rejection, rate limit, logging, injection text | `server/` |
+| API | Vitest and Supertest | Every route: validation, every error status, AI success, AI failure, timeout, quote rejection, rate limit, logging, injection text | `server/` |
 | Database | Vitest and PGlite, a PostgreSQL engine that runs in the test process | Migrations, constraints, transactions and access by code (F6) | `server/` |
 | Component | Vitest and Testing Library | Screens and flows: field errors and focus, consent notice, keyword notice, labels, out-of-date notice, delete everything, copy | `client/` |
-| End to end | Playwright in a real browser, against the built client and server | Whole use cases, offline use, reload, keyboard, phone width, CSP, axe with colour contrast (T-200 to T-210, T-213 to T-217 and T-236 to T-238) | `e2e/` |
+| End to end | Playwright in a real browser, against the built client and server | Whole use cases, offline use, reload, keyboard, phone width, CSP, axe with colour contrast (T-200 to T-210, T-213 to T-217 T-236 to T-238, T-261 and T-262) | `e2e/` |
 | Manual | A person | Screen reader, zoom, reflow, contrast, target size, reduced motion, a real phone | CASES.md, last table |
 
 An automated axe check runs inside the component level on every screen. It does not replace the manual pass.
@@ -22,14 +22,14 @@ An automated axe check runs inside the component level on every screen. It does 
 - Timeouts and the rate-limit window use fake timers, so the suite stays fast.
 - Calculations are pure functions, so unit tests need no browser and no server.
 - The component level fakes `fetch` and the clipboard, and uses an in-memory local storage.
-- The end-to-end level runs the real server without a key, so it uses keyword mode. AI answers are faked by intercepting `/api/clauses/match` in the browser. Elements are found by role, label or visible text.
+- The end-to-end level runs the real server without a key, so it uses keyword mode. AI answers are faked by intercepting `/api/clauses/match` and `/api/assistant/read` in the browser. Elements are found by role, label or visible text.
 - Tests never use real names, leases or keys. Lease text in API tests carries a marker string, so the log and error tests can search for it.
 
 ## Naming rule
 
 A test title starts with the rule ID, then a short phrase, then the case ID. For example: `D-20 handover day not counted (T-026)`. A test that covers several IDs starts with the first. API and component tests start with the FR, NFR or API term from the Rule column.
 
-The acceptance criteria in the feature specs (F1-AC1 to F8-AC6) are tests too. A test title uses the AC ID when no case in CASES.md covers it.
+The acceptance criteria in the feature specs (F1-AC1 to F9-AC8) are tests too. A test title uses the AC ID when no case in CASES.md covers it.
 
 ## If time runs short
 

@@ -12,7 +12,7 @@ Calls go one way: route, controller, service, then shared functions or the AI cl
 | Controller | Parses the body with the shared Zod schema, calls one service, sends the response | Call the AI client, touch `process.env`, build error bodies by hand |
 | Service | Chooses AI or keyword mode, verifies quotes, builds the match list, maps failures to warnings | Import Express types, read `req` or `res` |
 | Shared functions | Pure code from `shared/` | Be changed for server needs |
-| AI client | One call to Gemini, returns validated data or throws a typed error | Verify quotes, know about HTTP |
+| AI client | One call to Gemini, returns validated data or throws a typed error. `gemini-call.ts` is the call, and the clause matcher and the prompt reader are two users of it | Verify quotes, know about HTTP |
 | Case repository | All SQL, in transactions, behind an interface | Know about HTTP, return rows outside the given case |
 | Error handler | Turns any thrown error into the error body in API.md | Include input text, stack traces or provider responses |
 
@@ -28,7 +28,7 @@ Calls go one way: route, controller, service, then shared functions or the AI cl
 2. Helmet with a Content Security Policy
 3. Request logger, before the body parser so that a rejected body is logged too
 4. `express.json` with a 200 KB limit
-5. Rate limits on `/api/clauses/match` and `/api/cases`
+5. Rate limits on `/api/clauses/match`, `/api/assistant/read` and `/api/cases`
 6. Routes
 7. 404 handler for unknown `/api` paths
 8. Static files and SPA fallback, only when `staticDir` is set
@@ -54,6 +54,7 @@ The limit is 20 match requests per 10 minutes per client (API.md). The counter i
 - `retryWhenOverloaded` wraps the matcher and is added in `bootstrap.ts`, so the Gemini client and the service do not know about it.
 - Failures map to warnings. Timeout gives `AI_TIMEOUT`. Any other failure, including invalid output, gives `AI_UNAVAILABLE`. The route still answers 200 in keyword mode.
 - The AI answer holds only an item id, one of `covers`, `excludes` or `none`, and a quote (F2-R5). It has no amount and no result.
+- The reading of a prompt holds a task, sources and doubts (F9-R2). Its schema has no field for an amount or a date. The assistant service drops what is not in the prompt (F9-R3).
 
 ## Quote check
 
@@ -61,13 +62,14 @@ The comparison is F2-R4, and the mapping to states is F2-R5 and F2-R6. The keywo
 
 ## Prompt injection
 
-Lease text and labels are untrusted. Defences, from strongest:
+Lease text, labels and prompts are untrusted. Defences, from strongest:
 
 1. Code decides results, so a hijacked reply cannot change an amount or a result (ADR 0003).
 2. The output schema allows only three answers and a quote. Extra fields are dropped.
 3. A quote must appear in the lease, so invented text is rejected.
 4. The lease is sent as a separate content part from the instructions, wrapped in delimiters, with an instruction to treat it as data.
-5. Labels are length limited by the schema (API.md).
+5. Labels and prompts are length limited by the schema (API.md).
+6. A prompt can change only the task, facts and doubts shown, and the tenant confirms them (F9-R13).
 
 These lower the risk. They do not remove it. A lease that contains the right quote text can still push a state to `verified`. A-5 in the SRS covers what a quote proves.
 

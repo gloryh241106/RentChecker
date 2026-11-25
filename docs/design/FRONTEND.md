@@ -6,7 +6,7 @@ React, Vite, Tailwind CSS, TypeScript strict, no `any` (NFR-7). All calculations
 
 | Route | Page | Use case | Build step |
 |---|---|---|---|
-| `/` | Home: choose a stage, load the sample case (FR-7), delete all data (FR-6) | UC-6 | 3 |
+| `/` | Home: the prompt assistant, choose a stage, load the sample case (FR-7), delete all data (FR-6) | UC-6, UC-10 | 3, 9c |
 | `/move-out` | Facts, deductions, lease text, results, draft message | UC-1, UC-2, UC-9 | 3 to 5, 9b |
 | `/lease-review` | Paste lease, run review, copy questions | UC-3 | 9 |
 | `/tenancy` | Bill check and repair log | UC-4, UC-5 | 7 |
@@ -31,6 +31,8 @@ Routing uses a client router. Vercel and Express both serve `index.html` for the
 | ResultCard | Primary result, all reasons (D-37), quote, linked repair |
 | ReadMessage, FoundChargeList | Paste the landlord's message, check the charges found by `readMessage` in `shared/`, add them (F8). The message is local state and is not saved |
 | AskPanel | Question, suggestions, answers and the questions to copy (F7). Mounted anew for each lease text |
+| AssistantPanel, PlanView, DetailsPlan, FactList, NextQuestion | The prompt, what was understood, the facts with their words, one question at a time, and filling in Moving out (F9). Nothing of it is stored before Use these details |
+| InputChecks | The warnings of `checkInput` in `shared/`, in the assistant and on the Deductions step (F9-R11) |
 | LeaseTextBox | The lease text area of three pages, with the sample lease button |
 | CopyBox | Read-only lines with a copy button (F4, F7) |
 | StageNav | Links to the three stages and Ask your lease in the header, on every screen except Home |
@@ -53,6 +55,7 @@ Errors are linked to fields with `aria-describedby`. A summary region uses `aria
 | usePersistence | Loads once at start, saves after changes, handles load failures |
 | useCloudSave | Case API calls, revision, save state (F6). Reads health once to see if cloud save is available |
 | useLeaseQuestions | Consent once for each lease text, one request for each question, answers in memory (F7) |
+| useAssistant | Consent once, one request for each prompt, the plan in memory (F9). The plan itself is changed by the pure functions of `assistant-plan.ts` |
 | useClauseMatch | Runs consent, then the API call, then dispatches evidence. Owns the abort controller |
 
 ## State
@@ -64,6 +67,7 @@ One reducer holds the whole workspace as stored. A provider at the app root expo
 | `tenancy/update` | Replace tenancy fields |
 | `lease/set` | Set lease text and reset all evidence to `unconfirmed` (D-30) |
 | `deduction/add`, `deduction/update`, `deduction/remove` | Change the list. A label change resets that item's evidence. Removal also removes its evidence and repair links |
+| `details/apply` | Replace the tenancy facts and deductions, remove evidence, repair links and the draft. On the sample case, start from an empty workspace (F9-R10) |
 | `evidence/apply` | Store matches from the API, one per item |
 | `evidence/override` | Store a user quote or a user confirmed `none` (FR-11) |
 | `repair/*`, `bill/*`, `review/*` | Same pattern for the Should features. The F4 lease text is separate from the F1 lease text |

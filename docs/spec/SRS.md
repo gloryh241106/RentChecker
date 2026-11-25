@@ -19,7 +19,7 @@ The user is a tenant in India with a written lease. They are not a lawyer and ma
 
 ### Out of scope
 
-- Payments, accounts, landlord access, chat, sending messages.
+- Payments, accounts, landlord access, free chat, sending messages.
 - File upload, OCR, photo comparison, checking that a receipt is genuine.
 - Legal advice, state law, or deciding who is right.
 - Storing lease text on a server.
@@ -39,6 +39,7 @@ Anything not listed under "In scope" needs a change to this file before it is bu
 | UC-7 | Keep a cloud copy | Turn on cloud save, keep the recovery code, open the case on another device, delete the copy | [F6](F6-cloud-save.md) |
 | UC-8 | Ask about the lease | Type or choose a question, read the sentence of the lease, copy the questions without an answer | [F7](F7-ask-lease.md), [F2](F2-clause-matching.md) |
 | UC-9 | Read the landlord's message | Paste the message, check the charges found, add them | [F8](F8-read-message.md), [F1](F1-move-out.md) |
+| UC-10 | Start with a prompt | Say what is needed, check the details found and the warnings, answer the questions, open the right page filled in | [F9](F9-prompt-assistant.md), [F1](F1-move-out.md) |
 
 ## Functional requirements
 
@@ -67,13 +68,14 @@ Must = needed for the first submission. Should = built if time allows.
 | FR-19 | The user can delete the cloud copy | Should | F6 |
 | FR-20 | The user can ask a question about the pasted lease and gets the sentence that answers it, or is told that none was found | Should | F7 |
 | FR-21 | The user can paste the landlord's message and add the charges found in it after checking them | Should | F8 |
+| FR-22 | The user can describe the need in a prompt. The app picks the task, fills in the facts found in the prompt, asks for what is missing and warns about input that looks wrong | Should | F9 |
 
 ## Non-functional requirements
 
 | ID | Requirement | How it is checked |
 |---|---|---|
 | NFR-1 Security | No secret reaches the browser or the repository. Every request is validated and limited in size and rate | Tests, search of the built client |
-| NFR-2 Privacy | The server never logs lease text, labels, quotes or recovery codes, and never stores lease text or quotes. It stores labels only in a case the user chose to save | Code review, test on the logger |
+| NFR-2 Privacy | The server never logs lease text, prompts, labels, quotes or recovery codes, and never stores lease text or quotes. It stores labels only in a case the user chose to save | Code review, test on the logger |
 | NFR-3 Reliability | A failed or slow AI call never blocks the calculations | Test with the AI client failing |
 | NFR-4 Correctness | Every rule ID in DOMAIN_RULES.md has at least one test | [CASES.md](../testing/CASES.md) |
 | NFR-5 Accessibility | WCAG 2.2 AA for the main flow: keyboard, visible focus, labels, contrast, announced errors | Manual pass, automated check |

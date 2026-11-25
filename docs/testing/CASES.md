@@ -263,6 +263,28 @@ Wording is the wording in [UI.md](../design/UI.md). The fetch fake returns the A
 | T-233 | F8-AC1, F8-R7 | Find charges, uncheck one, add | Two deductions, "Added 2 charges.", nothing sent |
 | T-234 | F8-AC3 to F8-AC5 | A total, rent with no handover date, no amount | Left-out line. Reason with no checkbox. No charge was found |
 | T-235 | F8-AC6, F8-R8 | 19 deductions and three charges. The sample message. 4,001 characters | One added and the limit named. Nothing stored. Field message |
+| T-239 | F9-AC3, F9-R3 | Sources in the prompt, not in it, and inside a word or a number (unit) | Only whole words and numbers of the prompt pass |
+| T-240 | F9-R5 | Dates in every form, dates that do not exist, dates without a year (unit) | The date and whether it was read day first, or none |
+| T-241 | F9-AC1, F9-R5, F8-R2 | Facts of F9-AC1, `30k` and `1.5 lakh`, two amounts, words, sums, above the limit (unit) | The values, or not filled in with `NOT_READ` |
+| T-242 | F9-R2, F9-R6, F9-R7 | Two values, the same value twice, doubts, rent before the handover date is known (unit) | `TWO_VALUES`. One value. Fixed sentence. The month follows the date |
+| T-243 | F9-AC2, F9-R8, F9-R9 | Answers, answers that cannot be read, skip, change, remove (unit) | Next question in order, or asked again |
+| T-244 | F9-AC4, F9-AC7, F9-R4 | Prompts read by code (unit) | Task and facts of each. An instruction gives none |
+| T-245 | F9-AC5, F9-R11 | Each check, and the value just inside its limit (unit) | One check. None |
+| T-246 | F9-R2 | Read a prompt with a faked reader (API) | Task and facts, one call |
+| T-247 | F9-AC3, F9-R3 | Facts, doubts and labels that are not in the prompt (API) | Dropped with `QUOTE_REJECTED`. Label ignored |
+| T-248 | F9-AC4 | No key, a failing reader, one that never answers (API) | Read by code with the warning. The log has no prompt |
+| T-249 | API | Short, long, missing and unknown fields. Request 21 (API) | 400 with the field. 429, and matching still works |
+| T-250 | F9-R2, F9-R13 | The request to Gemini (API) | Prompt apart from the instruction, markers differ, no field for an amount |
+| T-251 | F9-R3, NFR-6 | Replies with a bad shape, long lists, 503 and 500 (API) | Failure, cut, one more call, no more call |
+| T-252 | F9-R1 | Cancel, Continue, a second prompt | Nothing sent. One notice for both prompts |
+| T-253 | F9-AC1 | The prompt of F9-AC1, then Use these details | Five rows with their words. Lease step, details stored |
+| T-254 | F9-AC2, F9-R8 | Three answers, one that cannot be read, skip | Focus on each question. One request in all. Details step |
+| T-255 | F9-R9 | Remove a deduction, change the deposit | Row gone. Asked again with focus |
+| T-256 | F9-AC5, F9-R2, F9-R6 | A charge above the deposit, a doubt, two deposits | Please check with each sentence, values unchanged |
+| T-257 | F9-AC6, F9-AC7, F9-R12 | A question, a lease to sign, a bill, a repair, an instruction | The page of each. Nothing filled in |
+| T-258 | F9-AC8, F9-R10 | Details in the browser, the sample case, rent with no month | Asked first. Sample lease gone. Left out, and says so |
+| T-259 | F9-AC4, F9-R1 | A failed request, keyword mode, empty and long messages, an example | Try again. Notice. Field messages. Nothing sent |
+| T-260 | F9-R11 | Deductions step with a charge above the deposit, and with the sample case | Please check. Nothing |
 
 ## End to end (Playwright)
 
@@ -288,6 +310,8 @@ Each case runs on a desktop and on a phone viewport, unless it says otherwise.
 | T-236 | UC-8, F7-AC1 to F7-AC3 | Ask with Cancel, then Continue with faked AI answers, ask again, edit the lease | No request, then one for each question with one notice. Quote and no-clause sentence. The answers go |
 | T-237 | F7-R9 | Sample lease and a suggested question with the real server and no key | Keyword notice and an answer |
 | T-238 | UC-9, F8-AC1, F8-AC3, F8-R8 | Read a message at 320 px, add two of three charges, reload | No API call, focus on the list, deductions back after the reload, message not stored |
+| T-261 | UC-10, F9-AC2 | A prompt with a faked reading and two answers at 320 px, then Use these details | Focus on each question, details in Moving out, one request, prompt not stored |
+| T-262 | F9-AC4, F9-AC6 | A question with the real server and no key | Notice. Ask your lease with the question filled in |
 | T-213 | F1-R8, NFR-5 | Type a bad amount, then press Save deduction with one click | The form is submitted: field message and summary, focus on the field |
 
 ## Manual accessibility pass (NFR-5)
