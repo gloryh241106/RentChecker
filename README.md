@@ -4,7 +4,9 @@ Live: <https://rent-checker-two.vercel.app>
 
 Check your rent and deposit charges before you argue about them.
 
-> Status: all three stages work: the lease review before signing, the bill check and the repair log, and the moving-out check with clause matching and the message. Cloud save is not built yet. Progress is in [docs/PLAN.md](docs/PLAN.md).
+> Status: everything under "What it does" works. Progress is in [docs/PLAN.md](docs/PLAN.md).
+
+To see it quickly, open the site and press **Load sample case**. It opens on a finished check.
 
 ## The problem
 
@@ -27,6 +29,9 @@ RentChecker is an assistant that changes its checks and questions depending on w
 | Before signing | Lease text | Deposit terms that are missing or vague, with questions to ask |
 | During the tenancy | Meter readings, rates, bill total, repairs they reported | A recalculated bill and a dated repair log |
 | Moving out (core feature) | Lease, deposit, handover date, deductions, receipts they were given | A result for each deduction and a draft message to the landlord |
+| At any time: Ask your lease | A question in their own words | The sentence of the lease that answers it, or a plain "no clause was found" |
+
+Deductions do not have to be typed one by one. The tenant can paste the landlord's message, and the app lists the charges it found, each with its amount, kind and rent month. Nothing is added before the tenant has checked the list.
 
 The repair log carries over. If a tenant reported a leaking tap in March and is charged for it in June, the moving-out check shows the March entry next to that charge.
 
@@ -42,26 +47,38 @@ The deposit is ₹30,000 and rent is ₹15,000 a month. The tenant hands over th
 
 RentChecker reports ₹10,500 to ask about (₹7,500 + ₹3,000) and ₹12,000 waiting for a receipt, then drafts the message.
 
+## How it answers the brief
+
+| The brief asks for | Where it is |
+|---|---|
+| A smart, dynamic assistant | Ask your lease takes free questions and suggests ones that fit the case: first about the deductions the tenant entered, then about the latest repair they logged. Reading the landlord's message turns free text into charges |
+| Logical decisions based on user context | Each result follows from the handover date, how the lease charges a partial month, the readings, the receipts, the clause found and the repair log. A new clause match updates the results that are on screen |
+| Practical, real-world use | Phone first, no account, keeps calculating without a network once the page is open, and ends with a message the tenant can send |
+| Clean, maintainable code | One pure `shared/` package holds every calculation, with a spec and tests for each rule |
+
 ## Approach and logic
 
 Code makes every decision that can be checked, and AI only reads.
 
 - Plain TypeScript functions do the arithmetic, choose each result and write the draft message. The same facts always give the same answer.
-- Gemini finds the lease clause that relates to each charge. It never calculates an amount or decides a result.
+- Gemini finds the lease clause that relates to each charge, review topic or question. It never calculates an amount, decides a result or writes an answer.
 - A quote from Gemini is kept only if it appears in the pasted lease.
+- The landlord's message is read by code in the browser. AI never sees its amounts.
 - When something cannot be confirmed, the app says so. It does not guess.
 
 The exact rules are in [docs/spec/DOMAIN_RULES.md](docs/spec/DOMAIN_RULES.md).
 
 ## How it works
 
-1. The tenant enters the facts and pastes the lease text. Zod checks every field.
+1. The tenant enters the facts, types the deductions or reads them out of the landlord's message, and pastes the lease text. Zod checks every field.
 2. If the tenant agrees, the server sends the lease and the charge labels to Gemini, which suggests a clause and an exact quote for each charge. Rent is skipped, because the tenant enters the monthly rent.
 3. The server compares each quote with the lease. A quote that does not match is thrown away and the charge becomes "Unclear".
 4. The browser calculates the results and totals. This works without a network or a database.
 5. A message is drafted from the results. The tenant edits it, copies it and sends it themselves.
 
-Lease text is treated as untrusted data and kept apart from the instructions, which limits prompt injection. If Gemini is unavailable or no API key is set, the app falls back to keyword matching and tells the user. The tenant can overrule any match.
+A question in Ask your lease goes through the same steps 2 and 3. The question is the label, and the answer is the quote that passed the check.
+
+Lease text and questions are treated as untrusted data and kept apart from the instructions, which limits prompt injection. If Gemini is unavailable or no API key is set, the app falls back to keyword matching and tells the user. The tenant can overrule any match.
 
 ### Results
 
@@ -94,13 +111,14 @@ The full scope is in [docs/spec/SRS.md](docs/spec/SRS.md).
 
 ### Privacy
 
-Entries stay in the browser's local storage, and the tenant can delete them. A tenant can also choose to keep a cloud copy in PostgreSQL, opened with a recovery code. It holds dates, amounts, labels, repairs and the bill form, never the lease text or quotes, and it can be deleted at any time. When AI matching is on, the lease text and charge descriptions are sent through the server to the Gemini API, and the app says so before sending. Google handles them under its own terms, and on the free tier it may use them to improve its products and people may review them. The RentChecker server does not save them or write them to logs. Tenants are asked to remove names, ID numbers and bank details first.
+Entries stay in the browser's local storage, and the tenant can delete them. The landlord's message is not stored or sent. When AI matching is on, the lease text and the charge descriptions, review topics or questions are sent through the server to the Gemini API, and the app says so before sending. Google handles them under its own terms, and on the free tier it may use them to improve its products and people may review them. The RentChecker server does not save them or write them to logs. Tenants are asked to remove names, ID numbers and bank details first.
 
 ## Assumptions
 
 - Amounts are in Indian rupees, and the lease is pasted as English text.
 - Amounts are stored as whole paise to avoid rounding errors.
 - A partial month is charged per calendar day and the handover day counts as a day of use. The tenant can change both.
+- A charge in the landlord's message has its amount in digits, in English text. Totals, refunds and payments in it are left out.
 - The tenant enters the whole lease and reports receipts truthfully. Missing pages can produce a wrong "Not found".
 - Laws differ by state, so state rules are out of scope.
 
@@ -112,7 +130,6 @@ Entries stay in the browser's local storage, and the tenant can delete them. A t
 | Client | React, Vite, Tailwind CSS |
 | Server | Node.js, Express |
 | AI | Gemini API, called only from the server |
-| Database | PostgreSQL on Neon, optional cloud save |
 | Validation | Zod |
 | Security | Helmet, request size limits, rate limiting |
 | Tests | Vitest, Supertest, Testing Library, axe, Playwright |
@@ -145,6 +162,10 @@ npm run e2e
 ```
 
 To run the app, copy `.env.example` to `.env`, then start `npm run dev:server` and `npm run dev:client` in two terminals. Without `GEMINI_API_KEY` the app uses keyword matching. `npm run e2e` uses the installed Microsoft Edge. Set `E2E_CHANNEL=chrome` to use Chrome.
+
+### Not built
+
+An optional cloud copy of a case ([F6](docs/spec/F6-cloud-save.md), [ADR 0006](docs/adr/0006-optional-postgres-cloud-save.md)) is specified and not built. The app has no database.
 
 ## Documentation
 

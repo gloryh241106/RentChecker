@@ -16,6 +16,8 @@ Work through the steps in order. Tick a step only when its exit check passes, an
 | [x] | 7. Bill check and repair log | UC-4 and UC-5 work | [F5](spec/F5-bills-repairs.md) |
 | [ ] | 8. Cloud save | UC-7 works on the deployed site, and F6-AC1 to F6-AC8 pass | [F6](spec/F6-cloud-save.md), [DATA_MODEL](design/DATA_MODEL.md), [ADR 0006](adr/0006-optional-postgres-cloud-save.md) |
 | [x] | 9. Review before signing | UC-3 works | [F4](spec/F4-before-signing.md) |
+| [x] | 9a. Ask your lease | UC-8 works, and F7-AC1 to F7-AC6 pass | [F7](spec/F7-ask-lease.md) |
+| [x] | 9b. Read the landlord's message | UC-9 works, and F8-AC1 to F8-AC6 pass | [F8](spec/F8-read-message.md) |
 | [ ] | 10. Final pass | Definition of done below | [STRATEGY](testing/STRATEGY.md) |
 
 Submit the first attempt after step 6, so a working version is in. Use the score to decide how far to go with steps 7 to 9. Step 10 always happens. Who does what is in [WORKFLOW.md](WORKFLOW.md).

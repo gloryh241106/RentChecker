@@ -68,6 +68,7 @@ flowchart TB
     schemas["Zod schemas and types"]
     draft["Draft message builder"]
     quote["Quote check, F2-R4"]
+    charges["Message reader, F8"]
   end
   subgraph server["server/"]
     mw["Middleware"]
@@ -88,6 +89,7 @@ flowchart TB
   hooks --> calc
   hooks --> rules
   hooks --> draft
+  pages --> charges
   storage --> schemas
   apiclient --> schemas
   apiclient -->|"HTTP"| mw
@@ -112,7 +114,7 @@ flowchart TB
 | Workspace reducer | One state object for the whole workspace |
 | Storage module | Load with validation, save, delete all |
 | API client | One typed call with abort |
-| shared/ | Everything in DOMAIN_RULES.md, the quote check, the Zod schemas for API.md and the workspace, the draft message |
+| shared/ | Everything in DOMAIN_RULES.md, the quote check, the Zod schemas for API.md and the workspace, the draft message, reading charges out of the landlord's message |
 | Middleware, routes, controllers | HTTP concerns, validation, status codes |
 | Clause service | Chooses AI or keyword mode, checks quotes, builds the response |
 | AI client | The only code that talks to Gemini |

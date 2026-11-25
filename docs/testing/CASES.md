@@ -247,6 +247,22 @@ Wording is the wording in [UI.md](../design/UI.md). The fetch fake returns the A
 | T-174 | FR-1 | Storage throws. Stored JSON is corrupt | Notice that nothing is saved, app works. Corrupt data ignored, notice shown, form empty |
 | T-211 | F1-R15 | Paste 40,001 characters into the lease box, then delete one | All the text stays. Field error, and the lease counts as empty. The error goes and the text is used |
 | T-212 | NFR-5 | Open Paste a quote, send a refused quote, Cancel. Remove an override | Focus goes into the box, stays, and goes back to Paste a quote. Same after the override is removed |
+| T-220 | F1-R17 | Load sample case | Results opens with totals, with no Run check |
+| T-221 | F1-R14 | Find clauses with results shown, with none shown, and with facts that are not valid | Results update by themselves. No results appear. The old results stay |
+| T-222 | F4-R9 | Use a sample lease on Before signing. A lease that was typed | Box filled and focused, nothing sent. The button is not offered |
+| T-223 | F7-AC1 | Ask with a verified answer | The question, "The lease says:" and the quote |
+| T-224 | F7-AC2 | Cancel, then ask and continue, then ask again | No request. One request. One request with no notice |
+| T-225 | F7-AC3 | Answers `none` and `unconfirmed`, then Copy questions | The two sentences. Both questions copied, oldest first |
+| T-226 | F7-AC4, F7-R5 | Suggestions for deductions, repairs and nothing entered. Press one | At most 5, deductions first. It is asked once and then not suggested |
+| T-227 | F7-AC5 | Change the lease after an answer | Answers gone, consent asked again |
+| T-228 | F7-AC6, F7-R1 | Empty question, 121 characters, no lease | Field message. Ask is disabled with a reason |
+| T-229 | F7-R9 | A failed request, a running one, keyword mode | Try again keeps the answers. Asking is blocked. The notice shows |
+| T-230 | F8-AC1, F8-AC2, F8-R1 to F8-R5 | Messages with one charge on each line and in one sentence (unit) | Label, amount and kind of each |
+| T-231 | F8-AC3, F8-AC5, F8-R2 to F8-R4 | Totals, refunds, payments, dates, times, flat numbers, ₹0, above the limit, text past 4,000 characters (unit) | No charge. Sums and payments are counted |
+| T-232 | F8-R6, F8-R7 | Rent with a month, a year, no month and no handover date (unit) | The month of F8-R6, or none. Every other charge becomes a valid deduction |
+| T-233 | F8-AC1, F8-R7 | Find charges, uncheck one, add | Two deductions, "Added 2 charges.", nothing sent |
+| T-234 | F8-AC3 to F8-AC5 | A total, rent with no handover date, no amount | Left-out line. Reason with no checkbox. No charge was found |
+| T-235 | F8-AC6, F8-R8 | 19 deductions and three charges. The sample message. 4,001 characters | One added and the limit named. Nothing stored. Field message |
 
 ## End to end (Playwright)
 
@@ -254,7 +270,7 @@ Each case runs on a desktop and on a phone viewport, unless it says otherwise.
 
 | ID | Rule | Input | Expected |
 |---|---|---|---|
-| T-200 | UC-1, F1-AC2 | Load the sample case, run the check | Results and totals of the worked example |
+| T-200 | UC-1, F1-AC2 | Load the sample case, then run the check from the Lease step | Results and totals of the worked example at once. "Check finished." is announced after Run check |
 | T-201 | UC-1, NFR-6 | Load the app, go offline, type the worked example by keyboard alone, run the check | Same result and expected amount for June rent. The other two charges are Unclear, because no clause was matched. No network call |
 | T-202 | FR-6, F1-R18 | Type facts, reload. Delete everything, reload | Data is back after the first reload and gone after the second |
 | T-203 | FR-8, FR-12, F2-AC12 | Find clauses, Cancel. Again, Continue with a faked AI answer | No request after Cancel. Quotes and results shown after Continue |
@@ -269,6 +285,9 @@ Each case runs on a desktop and on a phone viewport, unless it says otherwise.
 | T-215 | UC-5, F5-AC6, F5-AC9 | Record a repair, link it to Repainting in the sample case, run the check, then delete the entry | The card shows the repair and the same result. After the delete the link is announced as removed and no card shows the repair |
 | T-216 | UC-3, F4-AC5, F4-AC6 | Review a lease: Cancel, then Continue with a faked AI answer, set one override, copy the questions, reload | No request after Cancel. Outcomes and quotes shown. The clipboard holds the questions of the topics that are not Found, in order. Rows are back after the reload |
 | T-217 | F4-AC4, F4-R7 | Review with the real server and no key, then edit the lease | Only Found and Could not confirm, with the keyword notice. The rows go after the edit |
+| T-236 | UC-8, F7-AC1 to F7-AC3 | Ask with Cancel, then Continue with faked AI answers, ask again, edit the lease | No request, then one for each question with one notice. Quote and no-clause sentence. The answers go |
+| T-237 | F7-R9 | Sample lease and a suggested question with the real server and no key | Keyword notice and an answer |
+| T-238 | UC-9, F8-AC1, F8-AC3, F8-R8 | Read a message at 320 px, add two of three charges, reload | No API call, focus on the list, deductions back after the reload, message not stored |
 | T-213 | F1-R8, NFR-5 | Type a bad amount, then press Save deduction with one click | The form is submitted: field message and summary, focus on the field |
 
 ## Manual accessibility pass (NFR-5)

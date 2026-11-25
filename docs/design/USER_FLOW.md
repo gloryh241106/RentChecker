@@ -4,7 +4,7 @@ These diagrams show the steps of each use case in [SRS.md](../spec/SRS.md). Scre
 
 ## UC-1 Check moving-out deductions
 
-The tenant works through five steps: Details, Deductions, Lease, Results, Message. Next checks the fields of the step. The step list can open any step without checking. On a bad field the page shows a message next to the field and puts focus on the first bad field. Finding clauses is optional. If the AI is not available, the server answers in keyword mode and the flow goes on. If the request itself fails, the tenant can retry or run the check without clauses, because calculations never wait for the server (NFR-3). Rent deductions are not sent for matching (D-31). Results appear only after "Run check", and any later edit marks them out of date. The Message step is UC-2.
+The tenant works through five steps: Details, Deductions, Lease, Results, Message. Next checks the fields of the step. The step list can open any step without checking. On a bad field the page shows a message next to the field and puts focus on the first bad field. Finding clauses is optional. If the AI is not available, the server answers in keyword mode and the flow goes on. If the request itself fails, the tenant can retry or run the check without clauses, because calculations never wait for the server (NFR-3). Rent deductions are not sent for matching (D-31). Results appear after "Run check", or at once for the sample case, and any later edit marks them out of date. A clause match that finishes while results are shown runs the check again. The Message step is UC-2.
 
 ```mermaid
 flowchart TD
@@ -94,6 +94,45 @@ flowchart TD
     B10 --> B2
     B10 -.->|"At move-out"| B11["UC-1 Deductions: link the entry to one deduction"]
     B11 --> B12["Results show the entry and REPAIR_REPORTED"]
+```
+
+## UC-8 Ask about the lease
+
+The page uses the lease text of UC-1. Suggested questions come from the deductions and the repair log, by code. The request, the keyword mode and the failure handling are the same as in UC-1. Consent is asked once for each lease text.
+
+```mermaid
+flowchart TD
+    Q1(["Any screen: choose Ask your lease"]) --> Q2["Paste the lease, or use the one from Moving out"]
+    Q2 --> Q3["Type a question, or press a suggested one"]
+    Q3 --> Q4{"Consent given for this text?"}
+    Q4 -- "No" --> Q5{"Continue?"}
+    Q5 -- "Cancel" --> Q3
+    Q5 -- "Continue" --> Q6["One request to POST /api/clauses/match, the question is the label"]
+    Q4 -- "Yes" --> Q6
+    Q6 --> Q7{"Answer?"}
+    Q7 -- "A quote that is in the lease" --> Q8["The lease says: the quote"]
+    Q7 -- "No clause, or not confirmed" --> Q9["Says so. The question is added to the list to copy"]
+    Q7 -- "Request failed" --> Q10["Failure message, answers kept, retry offered"]
+    Q8 --> Q3
+    Q9 --> Q3
+    Q10 --> Q3
+```
+
+## UC-9 Read the landlord's message
+
+A part of the Deductions step of UC-1. It runs in the browser and sends nothing.
+
+```mermaid
+flowchart TD
+    M1(["Deductions: Read the landlord's message"]) --> M2["Paste the message"]
+    M2 --> M3["Find charges"]
+    M3 --> M4{"Any charge found?"}
+    M4 -- "No" --> M5["Says so, with an example"]
+    M5 --> M2
+    M4 -- "Yes" --> M6["List with checkboxes, and how many amounts were left out"]
+    M6 --> M7["Uncheck what is wrong"]
+    M7 --> M8["Add charges, up to 20 deductions"]
+    M8 --> M9(["Deductions: edit any of them"])
 ```
 
 ## UC-7 Keep a cloud copy

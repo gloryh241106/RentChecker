@@ -10,7 +10,7 @@ This file says how RentChecker is tested. The cases themselves are in [CASES.md]
 | API | Vitest and Supertest | Both routes: validation, every error status, AI success, AI failure, timeout, quote rejection, rate limit, logging, injection text | `server/` |
 | Database | Vitest and PGlite, a PostgreSQL engine that runs in the test process | Migrations, constraints, transactions and access by code (F6) | `server/` |
 | Component | Vitest and Testing Library | Screens and flows: field errors and focus, consent notice, keyword notice, labels, out-of-date notice, delete everything, copy | `client/` |
-| End to end | Playwright in a real browser, against the built client and server | Whole use cases, offline use, reload, keyboard, phone width, CSP, axe with colour contrast (T-200 to T-210 and T-213 to T-217) | `e2e/` |
+| End to end | Playwright in a real browser, against the built client and server | Whole use cases, offline use, reload, keyboard, phone width, CSP, axe with colour contrast (T-200 to T-210, T-213 to T-217 and T-236 to T-238) | `e2e/` |
 | Manual | A person | Screen reader, zoom, reflow, contrast, target size, reduced motion, a real phone | CASES.md, last table |
 
 An automated axe check runs inside the component level on every screen. It does not replace the manual pass.
@@ -29,7 +29,7 @@ An automated axe check runs inside the component level on every screen. It does 
 
 A test title starts with the rule ID, then a short phrase, then the case ID. For example: `D-20 handover day not counted (T-026)`. A test that covers several IDs starts with the first. API and component tests start with the FR, NFR or API term from the Rule column.
 
-The acceptance criteria in the feature specs (F1-AC1 to F6-AC8) are tests too. A test title uses the AC ID when no case in CASES.md covers it.
+The acceptance criteria in the feature specs (F1-AC1 to F8-AC6) are tests too. A test title uses the AC ID when no case in CASES.md covers it.
 
 ## If time runs short
 
@@ -55,6 +55,8 @@ There is no percentage target. Instead:
 | FR-11, FR-12 | Component |
 | FR-13 | Unit for the template, component for edit and copy |
 | FR-14 to FR-16 (Should) | Same rule, once built |
+| FR-20 | Component, with a unit test for the suggestions |
+| FR-21 | Unit, then component for the list |
 | FR-17 to FR-19, NFR-9 (Should) | Database and API, then component, once built |
 | NFR-1, NFR-2 | API |
 | NFR-3, NFR-6 | API and component |

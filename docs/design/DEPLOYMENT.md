@@ -13,7 +13,7 @@ Primary target is Vercel Hobby with one project. A Docker image for Cloud Run is
 | Duration | Hobby maximum is 300 seconds. The AI call is limited to 20 seconds, so the default is enough. A shorter explicit value is still worth setting |
 | Body size | Vercel allows 4.5 MB by default. Express rejects bodies above 200 KB first (API.md) |
 
-A starting `vercel.json` has a build command and output directory for the client, the two rewrites, and a `headers` block that sends the same CSP as Helmet for client files.
+A starting `vercel.json` has a build command and output directory for the client, the two rewrites, and a `headers` block that sends the same CSP as Helmet for client files. Files under `/assets/` have a hash in their name, so they are cached for a year as immutable.
 
 ## Environment variables
 
@@ -108,6 +108,7 @@ Gemini sometimes answers 503 (overloaded), mostly for the ten topics of a lease 
 
 ## Not verified yet
 
+- The `Cache-Control` header of `/assets/` on the deployed site.
 - The `vercel.json` key for duration.
 - The right `trust proxy` hop count on Vercel and on Cloud Run.
 - Whether a Vercel link is accepted by the contest form, which asks for a Cloud Run URL (ADR 0004).

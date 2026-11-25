@@ -7,9 +7,10 @@ React, Vite, Tailwind CSS, TypeScript strict, no `any` (NFR-7). All calculations
 | Route | Page | Use case | Build step |
 |---|---|---|---|
 | `/` | Home: choose a stage, load the sample case (FR-7), delete all data (FR-6) | UC-6 | 3 |
-| `/move-out` | Facts, deductions, lease text, results, draft message | UC-1, UC-2 | 3 to 5 |
+| `/move-out` | Facts, deductions, lease text, results, draft message | UC-1, UC-2, UC-9 | 3 to 5, 9b |
 | `/lease-review` | Paste lease, run review, copy questions | UC-3 | 9 |
 | `/tenancy` | Bill check and repair log | UC-4, UC-5 | 7 |
+| `/ask` | Questions about the lease of Moving out | UC-8 | 9a |
 | `*` | Not found page with a link home | | 3 |
 
 Routing uses a client router. Vercel and Express both serve `index.html` for these paths (see [DEPLOYMENT.md](DEPLOYMENT.md)). Pages for steps 7 and 9 are not built if time runs out (SRS "Should").
@@ -28,7 +29,11 @@ Routing uses a client router. Vercel and Express both serve `index.html` for the
 | MatchStatus | Says when keyword mode was used and why (FR-10), and lists warnings |
 | EvidenceOverride | Paste a quote or confirm no clause (FR-11) |
 | ResultCard | Primary result, all reasons (D-37), quote, linked repair |
-| StageNav | Links to the three stages in the header, on every screen except Home |
+| ReadMessage, FoundChargeList | Paste the landlord's message, check the charges found by `readMessage` in `shared/`, add them (F8). The message is local state and is not saved |
+| AskPanel | Question, suggestions, answers and the questions to copy (F7). Mounted anew for each lease text |
+| LeaseTextBox | The lease text area of three pages, with the sample lease button |
+| CopyBox | Read-only lines with a copy button (F4, F7) |
+| StageNav | Links to the three stages and Ask your lease in the header, on every screen except Home |
 | ExampleResult | The sample case, checked by `shared/`, as an example on Home |
 | SplitBar | The four totals as parts of one bar, hidden from screen readers |
 | TotalsPanel | The four totals, total deducted, refund gap, excess over deposit (D-40 to D-43) |
@@ -44,9 +49,10 @@ Errors are linked to fields with `aria-describedby`. A summary region uses `aria
 | Hook | Does |
 |---|---|
 | useWorkspace | Context access to state and dispatch |
-| useCheck | Holds the facts that were last checked, in memory only. Results come from the shared evaluate function with `useMemo`. They are out of date (F1-R14) when the tenancy, lease text, deductions, evidence or repairs are no longer the checked ones |
+| useCheck | Holds the facts that were last checked, in memory only. Results come from the shared evaluate function with `useMemo`. They are out of date (F1-R14) when the tenancy, lease text, deductions, evidence or repairs are no longer the checked ones. It can start checked (F1-R17), and runs again after a clause match if results were shown (F1-R14) |
 | usePersistence | Loads once at start, saves after changes, handles load failures |
 | useCloudSave | Case API calls, revision, save state (F6). Reads health once to see if cloud save is available |
+| useLeaseQuestions | Consent once for each lease text, one request for each question, answers in memory (F7) |
 | useClauseMatch | Runs consent, then the API call, then dispatches evidence. Owns the abort controller |
 
 ## State
