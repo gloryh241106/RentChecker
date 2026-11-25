@@ -29,12 +29,12 @@ Output: one row for each of the ten topics below, and a list of questions to cop
 
 ## Rules
 
-- F4-R1 The topics and questions are fixed, in the order above. Each topic is one match item with a fixed ID and the topic name as its label.
+- F4-R1 The topics and questions are fixed, in the order above. Each topic is one match item with a fixed ID and the topic name as its label. The IDs are deposit-amount, refund-deadline, partial-month-rent, painting, cleaning, repairs-and-wear, notice-period, receipts, handover-inspection and meter-charges.
 - F4-R2 "Run review" is enabled under the same conditions as F2-R1 and uses the same request, consent notice, mode notice and warnings (F2-R2, F2-R3, F2-R7, F2-R16).
 - F4-R3 Each topic shows one of four outcomes from the evidence state (D-30). `verified` is "Found" with the quote. `none` is "Not found" with the question. `unconfirmed` is "Could not confirm" with the question. `excludes` is "Lease may rule this out" with the quote and the question.
 - F4-R4 "Found" means only that the words are in the lease. The page says "A found clause is not a check that its terms are fair."
 - F4-R5 "Copy questions" copies the questions for every topic that is not "Found", one per line, in topic order. If every topic is "Found", the button is replaced by "Every topic has a clause. Read each quote to check the terms."
-- F4-R6 Manual overrides work as in F2-R12 and F2-R13, for each topic.
+- F4-R6 Manual overrides work as in F2-R12 to F2-R14, for each topic. Removing one leaves the row at "Could not confirm". Rows and overrides appear after the first review of a lease text.
 - F4-R7 Editing the lease text clears all topic outcomes (as F1-R15). Results and the lease text are kept in local storage and removed by "Delete everything" (F1-R19).
 - F4-R8 No amount, result or total is computed in F4.
 
