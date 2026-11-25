@@ -16,6 +16,7 @@ How the work in [PLAN.md](PLAN.md) is carried out. Rules for agents are in [AGEN
 1. The orchestrator writes a brief: the step, rule IDs, files the writer may touch, files it must not touch, and the exit check.
 2. The writer works only in those files. It does not commit, push, switch branches or install anything that the brief does not list.
 3. The orchestrator reads the diff and runs typecheck, lint, format check, tests and build itself. A writer's own report is not proof.
+   The diff is also checked against the SOLID table in [CONVENTIONS.md](CONVENTIONS.md). A change that works but breaks it is sent back.
 4. Changes to `shared/`, the server, security or the database get a second review.
 5. Problems go back to the same writer once. After that the orchestrator fixes them or changes the writer.
 6. The orchestrator commits to `main`. The owner pushes, or tells the orchestrator to push.

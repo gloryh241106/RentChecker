@@ -5,7 +5,6 @@
 - TypeScript strict mode everywhere. No `any`, no `@ts-ignore`, no non-null `!`. Use `unknown` and narrow it.
 - Code, comments, commits and interface text are in English.
 - Prettier formats, ESLint checks. Both pass before a commit.
-- Functions do one thing. Split a file that passes about 200 lines.
 - Comments explain why. A rule is cited by its ID, for example `// D-20`.
 - No dead code, commented-out code or `console.log`.
 
@@ -28,6 +27,20 @@
 - Calculations and results live only in `shared/`, never in components, controllers or prompts.
 - Data from users, local storage, the network, the database or AI is parsed with Zod before use.
 - SQL appears only in the case repository and in `db/migrations/`. Values are always query parameters.
+
+## Design: SOLID, kept small
+
+| Principle | In this project |
+|---|---|
+| Single responsibility | One reason to change per file. A component renders, a hook holds state, a service decides, a repository stores. A component never calls `fetch` or local storage |
+| Open and closed | Kinds, reasons and warnings are typed tables or discriminated unions. Adding a kind adds an entry, and the compiler reports every place that must handle it. No long `if` chains on `kind` |
+| Liskov substitution | Every implementation of an interface passes the same tests: real and fake AI client, database and in-memory repository |
+| Interface segregation | Small interfaces made for the caller: `ClauseMatcher`, `CaseRepository`, `WorkspaceStorage`, `Logger`. Pass only the fields a function needs |
+| Dependency inversion | Services and hooks get their dependencies as arguments or options. Only `createApp` and the React root choose the real ones. Nothing but the server entry reads `process.env` |
+
+- Add an interface only where a second implementation exists, including a test fake. No base classes, no factories for one type, no layers that only pass calls on.
+- Pure functions before classes. Composition before inheritance.
+- ESLint enforces the limits: 200 lines per file, 50 per function (150 for a React component or a test), complexity 10, depth 3, 4 parameters. A rule table or test table may be longer, with a reason in a comment.
 
 ## Errors
 
