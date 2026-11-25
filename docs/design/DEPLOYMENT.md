@@ -106,5 +106,6 @@ Two stages. The build stage installs all dependencies, builds the client and com
 - The right `trust proxy` hop count on Vercel and on Cloud Run.
 - Whether a Vercel link is accepted by the contest form, which asks for a Cloud Run URL (ADR 0004).
 - Cloud Run request timeout and cold start time with this image.
+- `docker build` itself. The steps of the Dockerfile were run one by one on a clean folder, and the server served the client and health.
 - The CSP directives that let the built client run with no inline script.
 - The Node version to use on both platforms.
