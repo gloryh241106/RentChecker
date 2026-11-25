@@ -2,7 +2,7 @@
 
 Check your rent and deposit charges before you argue about them.
 
-> Status: planning. Nothing described below is built yet. Features are ticked in [Build order](#build-order) once they work.
+> Status: planning. Nothing described below is built yet. Progress is in [docs/PLAN.md](docs/PLAN.md).
 
 ## The problem
 
@@ -40,27 +40,40 @@ The deposit is ₹30,000 and rent is ₹15,000 a month. The tenant hands over th
 
 RentChecker reports ₹10,500 to ask about (₹7,500 + ₹3,000) and ₹12,000 waiting for a receipt, then drafts the message.
 
+## Approach and logic
+
+Code makes every decision that can be checked, and AI only reads.
+
+- Plain TypeScript functions do the arithmetic, choose each result and write the draft message. The same facts always give the same answer.
+- Gemini finds the lease clause that relates to each charge. It never calculates an amount or decides a result.
+- A quote from Gemini is kept only if it appears in the pasted lease.
+- When something cannot be confirmed, the app says so. It does not guess.
+
+The exact rules are in [docs/spec/DOMAIN_RULES.md](docs/spec/DOMAIN_RULES.md).
+
 ## How it works
 
 1. The tenant enters the facts and pastes the lease text. Zod checks every field.
-2. Gemini reads the lease and suggests the clause that relates to each charge, with an exact quote. Lease text is sent separately from the instructions to limit prompt injection.
-3. The server checks that each quote really appears in the lease. A quote that does not match is thrown away and the charge becomes "Unclear".
-4. Plain TypeScript functions do all the arithmetic and choose the result. Gemini never calculates an amount or decides a result.
+2. If the tenant agrees, the server sends the lease and the charge labels to Gemini, which suggests a clause and an exact quote for each charge. Rent is skipped, because the tenant enters the monthly rent.
+3. The server compares each quote with the lease. A quote that does not match is thrown away and the charge becomes "Unclear".
+4. The browser calculates the results and totals. This works without a network.
 5. A message is drafted from the results. The tenant edits it, copies it and sends it themselves.
 
-If Gemini is unavailable or no API key is set, the app falls back to keyword matching and tells the user.
+Lease text is treated as untrusted data and kept apart from the instructions, which limits prompt injection. If Gemini is unavailable or no API key is set, the app falls back to keyword matching and tells the user. The tenant can overrule any match.
 
 ### Results
 
-Rules are tried from top to bottom and the first match wins. Every result shows its reason.
+Rules are tried from top to bottom and the first match gives the main result. All other reasons that apply are listed with it.
 
 | Result | When |
 |---|---|
-| Recalculate | The amount differs from the recalculated one, or the charge is a duplicate |
-| Unclear | A clause could not be confirmed, or facts needed for the check are missing |
-| Not found in the lease | No clause in the pasted lease covers the charge |
-| Needs proof | A clause covers a cost the landlord paid, such as painting, but the tenant received no receipt |
-| Supported | A clause covers it, and either the amount matches the lease formula (rent, metered bills) or a receipt was given |
+| Not found in the lease | No clause in the pasted lease covers the charge (rent does not need one) |
+| Recalculate | The amount is higher than the recalculated one, or the charge is a duplicate |
+| Unclear | A clause could not be confirmed or appears to rule the charge out, or a meter reading or rate is missing |
+| Needs proof | A cost has no receipt, or a fixed fee has no amount in the lease |
+| Supported | Everything else |
+
+Each charge is then split into four totals that add up to the amount deducted: ask about, awaiting proof, unclear and consistent.
 
 "Supported" and "Not found" describe the documents the tenant entered. They do not say whether a charge is legal.
 
@@ -75,15 +88,17 @@ RentChecker will not:
 - compare photos, scan documents or check that a receipt is genuine
 - need an account or store data in a server-side database
 
+The full scope is in [docs/spec/SRS.md](docs/spec/SRS.md).
+
 ### Privacy
 
-Entries stay in the browser's local storage, and the tenant can delete them. When AI matching is on, the lease text and charge descriptions are sent through the server to the Gemini API, and the app says so before sending. The server does not save them or write them to logs. Tenants are asked to remove names, ID numbers and bank details first.
+Entries stay in the browser's local storage, and the tenant can delete them. When AI matching is on, the lease text and charge descriptions are sent through the server to the Gemini API, and the app says so before sending. Google handles them under its own terms. The RentChecker server does not save them or write them to logs. Tenants are asked to remove names, ID numbers and bank details first.
 
 ## Assumptions
 
 - Amounts are in Indian rupees, and the lease is pasted as English text.
 - Amounts are stored as whole paise to avoid rounding errors.
-- A partial month is charged per calendar day unless the lease says otherwise, and the handover day counts as a day of use.
+- A partial month is charged per calendar day and the handover day counts as a day of use. The tenant can change both.
 - The tenant enters the whole lease and reports receipts truthfully. Missing pages can produce a wrong "Not found".
 - Laws differ by state, so state rules are out of scope.
 
@@ -97,7 +112,7 @@ Entries stay in the browser's local storage, and the tenant can delete them. Whe
 | AI | Gemini API, called only from the server |
 | Validation | Zod |
 | Security | Helmet, request size limits, rate limiting |
-| Tests | Vitest, Supertest |
+| Tests | Vitest, Supertest, Testing Library, axe |
 | Hosting | Vercel, with a Dockerfile for Cloud Run |
 
 Rate limits are kept in memory, so on serverless hosting they are only a partial safeguard.
@@ -109,22 +124,18 @@ client/   React interface
 server/   Express routes, services and middleware
 shared/   calculations, result rules, types and Zod schemas
 api/      entry point that runs Express on Vercel
+docs/     specifications, design, decisions and test cases
 ```
 
-## Build order
+## Documentation
 
-Each step should leave a version that can be deployed and submitted.
-
-- [ ] 1. Deploy an empty client and one API route to Vercel
-- [ ] 2. Moving-out calculations and result rules, with tests
-- [ ] 3. Moving-out screens, usable by keyboard and screen reader
-- [ ] 4. Gemini clause matching, quote checking and the fallback
-- [ ] 5. Draft message
-- [ ] 6. Before-signing check
-- [ ] 7. Bill check and repair log
-- [ ] 8. Final test, security and accessibility pass
-
-Steps 1 to 5 are the minimum version. Steps 6 and 7 are dropped if time runs out, and this README is updated to match what was built.
+| Topic | Files |
+|---|---|
+| Requirements and use cases | [SRS](docs/spec/SRS.md), [domain rules](docs/spec/DOMAIN_RULES.md), [feature specs](docs/spec) |
+| Design | [architecture](docs/design/ARCHITECTURE.md), [data model](docs/design/DATA_MODEL.md), [API](docs/design/API.md), [user flow](docs/design/USER_FLOW.md), [UI](docs/design/UI.md), [deployment](docs/design/DEPLOYMENT.md) |
+| Decisions | [ADRs](docs/adr/README.md) |
+| Tests | [strategy](docs/testing/STRATEGY.md), [cases](docs/testing/CASES.md) |
+| Work | [plan](docs/PLAN.md), [conventions](docs/CONVENTIONS.md), [instructions for coding agents](AGENTS.md) |
 
 ## License
 
