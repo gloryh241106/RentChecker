@@ -26,7 +26,8 @@
 - `shared/` holds pure functions, types and Zod schemas. It does no I/O, reads no environment variables and never reads the clock.
 - `client/` and `server/` may import `shared/`. `shared/` imports neither, and `client/` never imports `server/`.
 - Calculations and results live only in `shared/`, never in components, controllers or prompts.
-- Data from users, local storage, the network or AI is parsed with Zod before use.
+- Data from users, local storage, the network, the database or AI is parsed with Zod before use.
+- SQL appears only in the case repository and in `db/migrations/`. Values are always query parameters.
 
 ## Errors
 

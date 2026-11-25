@@ -32,20 +32,23 @@ flowchart LR
     ls[("localStorage<br/>key rentchecker:v1")]
   end
   subgraph host["Vercel function or Cloud Run container"]
-    api["Express API<br/>two routes"]
+    api["Express API"]
   end
   gem["Gemini API"]
+  db[("PostgreSQL on Neon<br/>optional, F6")]
   tenant --> spa
   spa <-->|"read and write"| ls
   spa -->|"HTTPS JSON to /api"| api
   api -->|"HTTPS, 20 second limit"| gem
+  api -->|"TLS, parameterised SQL"| db
 ```
 
 | Element | Technology | Holds |
 |---|---|---|
 | Single page app | React, Vite, Tailwind, TypeScript strict | UI, the workspace reducer, all calculations through `shared/` |
-| localStorage | Browser storage | The whole workspace. No other copy exists (ADR 0002) |
-| Express API | Node.js, Express, Zod | Clause matching only. No state, no database |
+| localStorage | Browser storage | The working copy of the whole workspace (ADR 0002) |
+| Express API | Node.js, Express, Zod | Clause matching and cloud save. No state of its own |
+| PostgreSQL | Neon, `pg` driver | Saved cases, only when the tenant turns cloud save on (ADR 0006). No lease text |
 | Gemini API | Google | Nothing after the call. Prompt and response are not stored by RentChecker |
 
 ## Level 3: components
@@ -73,7 +76,10 @@ flowchart TB
     svc["Clause service"]
     helpers["Keyword matcher"]
     ai["AI client"]
+    cases["Case service"]
+    repo["Case repository"]
   end
+  db[("PostgreSQL")]
   gem["Gemini API"]
   pages --> hooks
   hooks --> reducer
@@ -89,6 +95,9 @@ flowchart TB
   routes --> ctrl
   ctrl --> schemas
   ctrl --> svc
+  ctrl --> cases
+  cases --> repo
+  repo -->|"SQL"| db
   svc --> helpers
   svc --> quote
   hooks --> quote
@@ -107,6 +116,7 @@ flowchart TB
 | Middleware, routes, controllers | HTTP concerns, validation, status codes |
 | Clause service | Chooses AI or keyword mode, checks quotes, builds the response |
 | AI client | The only code that talks to Gemini |
+| Case service, case repository | Recovery codes, revisions and expiry. The repository is the only code with SQL |
 
 ## Check deductions
 
@@ -159,6 +169,7 @@ RentChecker/
   api/index.ts            exports the Express app for Vercel
   client/                 React app (src/pages, components, hooks, state, storage, api)
   server/                 Express (src/app.ts, index.ts, routes, controllers, services, ai, middleware)
+  db/migrations/          numbered SQL files
   shared/                 money, dates, calculations, results, totals, quote check, schemas, types, draft message
   docs/                   spec, design, adr, testing
   Dockerfile  vercel.json  .env.example  package.json  tsconfig.json

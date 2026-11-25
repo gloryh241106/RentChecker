@@ -56,7 +56,7 @@ The exact rules are in [docs/spec/DOMAIN_RULES.md](docs/spec/DOMAIN_RULES.md).
 1. The tenant enters the facts and pastes the lease text. Zod checks every field.
 2. If the tenant agrees, the server sends the lease and the charge labels to Gemini, which suggests a clause and an exact quote for each charge. Rent is skipped, because the tenant enters the monthly rent.
 3. The server compares each quote with the lease. A quote that does not match is thrown away and the charge becomes "Unclear".
-4. The browser calculates the results and totals. This works without a network.
+4. The browser calculates the results and totals. This works without a network or a database.
 5. A message is drafted from the results. The tenant edits it, copies it and sends it themselves.
 
 Lease text is treated as untrusted data and kept apart from the instructions, which limits prompt injection. If Gemini is unavailable or no API key is set, the app falls back to keyword matching and tells the user. The tenant can overrule any match.
@@ -86,13 +86,13 @@ RentChecker will not:
 - contact the landlord or submit anything for the tenant
 - manage properties, repair requests or chat between tenants and landlords
 - compare photos, scan documents or check that a receipt is genuine
-- need an account or store data in a server-side database
+- need an account, or store lease text on a server
 
 The full scope is in [docs/spec/SRS.md](docs/spec/SRS.md).
 
 ### Privacy
 
-Entries stay in the browser's local storage, and the tenant can delete them. When AI matching is on, the lease text and charge descriptions are sent through the server to the Gemini API, and the app says so before sending. Google handles them under its own terms. The RentChecker server does not save them or write them to logs. Tenants are asked to remove names, ID numbers and bank details first.
+Entries stay in the browser's local storage, and the tenant can delete them. A tenant can also choose to keep a cloud copy in PostgreSQL, opened with a recovery code. It holds dates, amounts, labels, repairs and the bill form, never the lease text or quotes, and it can be deleted at any time. When AI matching is on, the lease text and charge descriptions are sent through the server to the Gemini API, and the app says so before sending. Google handles them under its own terms. The RentChecker server does not save them or write them to logs. Tenants are asked to remove names, ID numbers and bank details first.
 
 ## Assumptions
 
@@ -110,6 +110,7 @@ Entries stay in the browser's local storage, and the tenant can delete them. Whe
 | Client | React, Vite, Tailwind CSS |
 | Server | Node.js, Express |
 | AI | Gemini API, called only from the server |
+| Database | PostgreSQL on Neon, optional cloud save |
 | Validation | Zod |
 | Security | Helmet, request size limits, rate limiting |
 | Tests | Vitest, Supertest, Testing Library, axe |
@@ -124,6 +125,7 @@ client/   React interface
 server/   Express routes, services and middleware
 shared/   calculations, result rules, types and Zod schemas
 api/      entry point that runs Express on Vercel
+db/       SQL migrations for the optional cloud copy
 docs/     specifications, design, decisions and test cases
 ```
 
@@ -135,7 +137,7 @@ docs/     specifications, design, decisions and test cases
 | Design | [architecture](docs/design/ARCHITECTURE.md), [data model](docs/design/DATA_MODEL.md), [API](docs/design/API.md), [user flow](docs/design/USER_FLOW.md), [UI](docs/design/UI.md), [deployment](docs/design/DEPLOYMENT.md) |
 | Decisions | [ADRs](docs/adr/README.md) |
 | Tests | [strategy](docs/testing/STRATEGY.md), [cases](docs/testing/CASES.md) |
-| Work | [plan](docs/PLAN.md), [conventions](docs/CONVENTIONS.md), [instructions for coding agents](AGENTS.md) |
+| Work | [plan](docs/PLAN.md), [workflow](docs/WORKFLOW.md), [conventions](docs/CONVENTIONS.md), [instructions for coding agents](AGENTS.md) |
 
 ## License
 

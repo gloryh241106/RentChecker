@@ -96,6 +96,34 @@ flowchart TD
     B11 --> B12["Results show the entry and REPAIR_REPORTED"]
 ```
 
+## UC-7 Keep a cloud copy
+
+Optional. The local copy stays the working copy. Saving is always started by the tenant.
+
+```mermaid
+flowchart TD
+    H1(["Home or Moving out"]) --> H2{"Save or open?"}
+    H2 -- "Save to cloud" --> H3{"First save?"}
+    H3 -- "Yes" --> H4["Notice: what is stored"]
+    H4 --> H5{"Continue?"}
+    H5 -- "Cancel" --> H1
+    H5 -- "Continue" --> H6["POST /api/cases"]
+    H6 --> H7["Recovery code shown, copy it"]
+    H3 -- "No" --> H8["PUT /api/cases/current"]
+    H8 --> H9{"Answer?"}
+    H9 -- "200" --> H10["Saved at time"]
+    H9 -- "409" --> H11{"Load or replace?"}
+    H11 -- "Load the cloud copy" --> H12["Local data replaced after confirming"]
+    H11 -- "Replace the cloud copy" --> H8
+    H9 -- "503 or network error" --> H13["Not available, local data kept"]
+    H2 -- "Open a saved case" --> H14["Enter recovery code"]
+    H14 --> H15{"Found?"}
+    H15 -- "No" --> H16["No case found for this code"]
+    H16 --> H14
+    H15 -- "Yes" --> H12
+    H12 --> H17["All evidence unconfirmed, paste the lease again"]
+```
+
 ## UC-6 Delete everything
 
 Available from the footer of every screen. The dialog names what happens and that it cannot be undone. Cancel changes nothing and returns focus to the control that opened the dialog. After a delete the app shows the empty Home screen and moves focus to its heading.

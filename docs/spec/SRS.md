@@ -11,6 +11,7 @@ The user is a tenant in India with a written lease. They are not a lawyer and ma
 ### In scope
 
 - One tenancy at a time, kept in the user's browser.
+- An optional cloud copy in PostgreSQL, opened with a recovery code.
 - Moving-out deductions, lease review before signing, monthly bill check, repair log.
 - English lease text pasted by the user, and amounts in Indian rupees.
 
@@ -19,7 +20,7 @@ The user is a tenant in India with a written lease. They are not a lawyer and ma
 - Payments, accounts, landlord access, chat, sending messages.
 - File upload, OCR, photo comparison, checking that a receipt is genuine.
 - Legal advice, state law, or deciding who is right.
-- A server-side database.
+- Storing lease text on a server.
 
 Anything not listed under "In scope" needs a change to this file before it is built.
 
@@ -33,6 +34,7 @@ Anything not listed under "In scope" needs a change to this file before it is bu
 | UC-4 | Check a monthly bill | Enter readings, rate and total, read the recalculated amount | [F5](F5-bills-repairs.md) |
 | UC-5 | Keep a repair log | Add a dated entry, link it to a deduction later | [F5](F5-bills-repairs.md), [F1](F1-move-out.md) |
 | UC-6 | Delete everything | Choose delete, confirm, all stored data is removed | [F1](F1-move-out.md) |
+| UC-7 | Keep a cloud copy | Turn on cloud save, keep the recovery code, open the case on another device, delete the copy | [F6](F6-cloud-save.md) |
 
 ## Functional requirements
 
@@ -56,19 +58,23 @@ Must = needed for the first submission. Should = built if time allows.
 | FR-14 | The app reviews a lease against a fixed list of deposit topics and suggests questions | Should | F4 |
 | FR-15 | The app recalculates a metered bill from readings and rate | Should | F5 |
 | FR-16 | The user can record dated repairs and link them to a deduction | Should | F5 |
+| FR-17 | The user can choose to save the case to the cloud and gets a recovery code | Should | F6 |
+| FR-18 | The user can open a saved case with its recovery code | Should | F6 |
+| FR-19 | The user can delete the cloud copy | Should | F6 |
 
 ## Non-functional requirements
 
 | ID | Requirement | How it is checked |
 |---|---|---|
 | NFR-1 Security | No secret reaches the browser or the repository. Every request is validated and limited in size and rate | Tests, search of the built client |
-| NFR-2 Privacy | The server does not store or log lease text, deduction labels or quotes | Code review, test on the logger |
+| NFR-2 Privacy | The server never logs lease text, labels, quotes or recovery codes, and never stores lease text or quotes. It stores labels only in a case the user chose to save | Code review, test on the logger |
 | NFR-3 Reliability | A failed or slow AI call never blocks the calculations | Test with the AI client failing |
 | NFR-4 Correctness | Every rule ID in DOMAIN_RULES.md has at least one test | [CASES.md](../testing/CASES.md) |
 | NFR-5 Accessibility | WCAG 2.2 AA for the main flow: keyboard, visible focus, labels, contrast, announced errors | Manual pass, automated check |
 | NFR-6 Efficiency | One AI request per check, however many deductions. Calculations run without a network call | Test, code review |
 | NFR-7 Maintainability | TypeScript strict mode, no `any`, lint and type check pass | Build |
 | NFR-8 Size | Repository under 10 MB, one branch | Manual |
+| NFR-9 Data access | A saved case can be read, changed or deleted only with its recovery code. Only a hash of the code is stored | Tests against a real PostgreSQL engine |
 
 ## Assumptions
 

@@ -21,6 +21,7 @@ A starting `vercel.json` has a build command and output directory for the client
 |---|---|---|
 | `GEMINI_API_KEY` | server | Secret. Set in the Vercel dashboard or the Cloud Run secret store |
 | `GEMINI_MODEL` | server | Model name, chosen at deploy time and not written in code or docs |
+| `DATABASE_URL` | server, migrations | Secret. Optional, only for F6. The pooled Neon connection string |
 | `PORT` | Docker and local only | Cloud Run sets it. Vercel ignores it |
 
 Never prefix a name with `VITE_`, because Vite copies those into the browser bundle (NFR-1). Change a value, then redeploy.
@@ -30,6 +31,7 @@ Never prefix a name with `VITE_`, because Vite copies those into the browser bun
 ```text
 GEMINI_API_KEY=
 GEMINI_MODEL=
+DATABASE_URL=
 PORT=3001
 ```
 
@@ -56,6 +58,15 @@ coverage/
 
 Script names are chosen when the project is created and are not fixed here.
 
+## Database for F6
+
+1. The owner creates a free Neon project and copies the pooled connection string.
+2. The owner puts it in `.env` and in the Vercel environment variables. It is never pasted into chat or committed.
+3. Run the migration script once from a local machine.
+4. Deploy, then save, open and delete a test case.
+
+Neon's free plan needs no card and allows 1 GB of storage, 100 compute hours and 5 GB of transfer a month per project. Compute sleeps after 5 idle minutes. Checked on neon.com/pricing on 2026-11-25.
+
 ## Docker for Cloud Run
 
 Two stages. The build stage installs all dependencies, builds the client and compiles the server. The run stage installs production dependencies only, copies the build output and runs the server as a non-root user.
@@ -67,7 +78,7 @@ Two stages. The build stage installs all dependencies, builds the client and com
 
 ## Smoke checklist after deploy
 
-1. `GET /api/health` returns 200 and `aiConfigured` is true.
+1. `GET /api/health` returns 200 and `aiConfigured` is true. After step 8, `cloudSaveConfigured` is true too.
 2. An unknown `/api/x` path returns 404 `NOT_FOUND` as JSON.
 3. Open `/move-out` directly and reload. The page loads (SPA fallback).
 4. Load the sample case with the network off. Results and totals still show (NFR-6).

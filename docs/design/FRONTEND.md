@@ -8,11 +8,11 @@ React, Vite, Tailwind CSS, TypeScript strict, no `any` (NFR-7). All calculations
 |---|---|---|---|
 | `/` | Home: choose a stage, load the sample case (FR-7), delete all data (FR-6) | UC-6 | 3 |
 | `/move-out` | Facts, deductions, lease text, results, draft message | UC-1, UC-2 | 3 to 5 |
-| `/lease-review` | Paste lease, run review, copy questions | UC-3 | 7 |
-| `/tenancy` | Bill check and repair log | UC-4, UC-5 | 8 |
+| `/lease-review` | Paste lease, run review, copy questions | UC-3 | 9 |
+| `/tenancy` | Bill check and repair log | UC-4, UC-5 | 7 |
 | `*` | Not found page with a link home | | 3 |
 
-Routing uses a client router. Vercel and Express both serve `index.html` for these paths (see [DEPLOYMENT.md](DEPLOYMENT.md)). Pages for steps 7 and 8 are not built if time runs out (SRS "Should").
+Routing uses a client router. Vercel and Express both serve `index.html` for these paths (see [DEPLOYMENT.md](DEPLOYMENT.md)). Pages for steps 7 and 9 are not built if time runs out (SRS "Should").
 
 ## Components
 
@@ -32,6 +32,7 @@ Routing uses a client router. Vercel and Express both serve `index.html` for the
 | DraftMessage | Editable textarea and copy button (FR-13) |
 | DeleteAllDialog | Confirm, then clear (FR-6) |
 | SampleBanner | Shown while `isSample` is true (FR-7) |
+| CloudSavePanel | Turn on, save, recovery code, open, delete, conflict choice (F6). On Home and Moving out |
 
 Errors are linked to fields with `aria-describedby`. A summary region uses `aria-live` so screen readers hear new results and errors.
 
@@ -42,6 +43,7 @@ Errors are linked to fields with `aria-describedby`. A summary region uses `aria
 | useWorkspace | Context access to state and dispatch |
 | useCheck | Holds the facts that were last checked, in memory only. Results come from the shared evaluate function with `useMemo`. They are out of date (F1-R14) when the tenancy, lease text, deductions, evidence or repairs are no longer the checked ones |
 | usePersistence | Loads once at start, saves after changes, handles load failures |
+| useCloudSave | Case API calls, revision, save state (F6). Reads health once to see if cloud save is available |
 | useClauseMatch | Runs consent, then the API call, then dispatches evidence. Owns the abort controller |
 
 ## State
@@ -85,6 +87,7 @@ One function, `matchClauses(request, signal)`, calls `POST /api/clauses/match` w
 | `too_large` | 413 `PAYLOAD_TOO_LARGE` |
 | `rate_limited` | 429 `RATE_LIMITED` |
 | `server` | 500 `INTERNAL_ERROR` or any other status |
+| `unauthorized`, `case_not_found`, `conflict`, `storage_unavailable` | Case routes only: 401, 404 `CASE_NOT_FOUND`, 409, 503 |
 | `network` | `fetch` rejected |
 | `aborted` | The user cancelled or the page left |
 | `bad_response` | The body fails the schema |

@@ -1,6 +1,6 @@
 # Backend
 
-Express with TypeScript strict. The server has two routes, specified in [API.md](API.md). This file does not repeat them. It has no database and no session. Calculations are not done here (see [ARCHITECTURE.md](ARCHITECTURE.md)).
+Express with TypeScript strict. Routes are specified in [API.md](API.md) and not repeated here. There is no session. PostgreSQL is optional and used only by F6. Calculations are not done here (see [ARCHITECTURE.md](ARCHITECTURE.md)).
 
 ## Layers
 
@@ -13,6 +13,7 @@ Calls go one way: route, controller, service, then shared functions or the AI cl
 | Service | Chooses AI or keyword mode, verifies quotes, builds the match list, maps failures to warnings | Import Express types, read `req` or `res` |
 | Shared functions | Pure code from `shared/` | Be changed for server needs |
 | AI client | One call to Gemini, returns validated data or throws a typed error | Verify quotes, know about HTTP |
+| Case repository | All SQL, in transactions, behind an interface | Know about HTTP, return rows outside the given case |
 | Error handler | Turns any thrown error into the error body in API.md | Include input text, stack traces or provider responses |
 
 ## App factory
@@ -26,7 +27,7 @@ Calls go one way: route, controller, service, then shared functions or the AI cl
 1. `trust proxy` setting (not middleware, set first)
 2. Helmet with a Content Security Policy
 3. `express.json` with a 200 KB limit
-4. Rate limit on `/api/clauses/match`
+4. Rate limits on `/api/clauses/match` and `/api/cases`
 5. Routes
 6. 404 handler for unknown `/api` paths
 7. Static files and SPA fallback, only when `staticDir` is set
@@ -66,6 +67,16 @@ Lease text and labels are untrusted. Defences, from strongest:
 5. Labels are length limited by the schema (API.md).
 
 These lower the risk. They do not remove it. A lease that contains the right quote text can still push a state to `verified`. A-5 in the SRS covers what a quote proves.
+
+## Case storage (F6)
+
+- The repository is created only when `DATABASE_URL` is set. Without it, case routes answer 503 and the rest works.
+- `pg` pool with 1 connection per instance, TLS with certificate checks, 5 second connect and statement limits.
+- All values are query parameters. Every statement filters by the case found from the code hash.
+- Saving runs in one transaction: lock the case row, compare the revision, replace the child rows, add 1 to the revision.
+- Dates are read as text, not as JavaScript `Date`, so no time zone can shift them (D-5).
+- The recovery code is hashed as soon as the header is parsed. It is never logged.
+- Migrations are run by a script before deploy, never when the server starts.
 
 ## Logging
 

@@ -1,6 +1,6 @@
 # Data model
 
-There is no server database (ADR 0002). The whole model is one JSON document in the browser. Zod schemas for it live in `shared/` and are used to read it back. Rules for amounts and dates are D-1 to D-5 in [DOMAIN_RULES.md](../spec/DOMAIN_RULES.md).
+The working copy is one JSON document in the browser (ADR 0002). An optional cloud copy is in PostgreSQL (ADR 0006), described at the end. Zod schemas for it live in `shared/` and are used to read it back. Rules for amounts and dates are D-1 to D-5 in [DOMAIN_RULES.md](../spec/DOMAIN_RULES.md).
 
 ## Logical model
 
@@ -165,7 +165,7 @@ One per fixed deposit topic (FR-14). The topic list comes from the F4 feature fi
 
 ## Storage
 
-Key `rentchecker:v1` holds the Workspace as JSON. `rentchecker:v1:corrupt` may hold the raw text of an unreadable value. Delete all removes both (FR-6).
+Key `rentchecker:v1` holds the Workspace as JSON. `rentchecker:v1:corrupt` may hold the raw text of an unreadable value. Delete all removes both (FR-6). `rentchecker:cloud:v1` holds the recovery code, the last revision and the last save time (F6).
 
 On load, the value is parsed, then checked with the shared schema. Failure and version rules are in [FRONTEND.md](FRONTEND.md).
 
@@ -176,3 +176,70 @@ On load, the value is parsed, then checked with the shared schema. Failure and v
 | Invalid JSON or invalid shape | Same as above |
 
 The next change to the model that breaks old data raises `schemaVersion` and the key to `rentchecker:v2`. A migration is written only then.
+
+## Cloud database (F6)
+
+```mermaid
+erDiagram
+  cases ||--o{ deductions : contains
+  cases ||--o{ repairs : logs
+  cases ||--o| bill_checks : holds
+  deductions |o--o{ repairs : "linked from"
+  cases {
+    uuid id PK
+    bytea code_hash UK
+    integer revision
+    integer deposit_paise
+    integer monthly_rent_paise
+    date handover_date
+    date start_date
+    integer stated_refund_paise
+    text partial_month
+    boolean handover_day_counts
+    timestamptz created_at
+    timestamptz updated_at
+    timestamptz expires_at
+  }
+  deductions {
+    uuid case_id PK, FK
+    text id PK
+    smallint position
+    text kind
+    text label
+    integer amount_paise
+    text rent_month
+    integer already_paid_paise
+    integer previous_reading
+    integer current_reading
+    integer rate_paise_per_unit
+    integer fixed_charge_paise
+    integer lease_amount_paise
+    integer receipt_amount_paise
+  }
+  repairs {
+    uuid case_id PK, FK
+    text id PK
+    date repair_date
+    text description
+    text reported_to
+    text deduction_id FK
+  }
+  bill_checks {
+    uuid case_id PK, FK
+    integer previous_reading
+    integer current_reading
+    integer rate_paise_per_unit
+    integer fixed_charge_paise
+    integer billed_total_paise
+  }
+```
+
+- A deduction is one of four disjoint kinds (D-10). They share one table. A check constraint per kind allows only the fields of that kind.
+- `integer` is wide enough, because every amount and reading is at most 1,000,000,000 (D-4, D-22).
+- `code_hash` is 32 bytes and unique. The recovery code itself is never stored.
+- Child rows are deleted with their case. `repairs.deduction_id` must belong to the same case and becomes null when its deduction is deleted.
+- `(case_id, position)` is unique and keeps the order the tenant entered.
+- Limits on length, range and enum values in this file are also check constraints.
+- `expires_at` has an index and is 365 days after the last save.
+- Evidence, quotes, lease text, the review and the draft message have no column.
+- Migrations are numbered SQL files in `db/migrations/`, run by one script that records which have been applied.

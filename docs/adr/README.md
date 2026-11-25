@@ -9,3 +9,4 @@ One file per decision. Each is short. A new decision gets the next number. A dec
 | [0003](0003-code-decides-ai-only-finds-clauses.md) | Code decides, AI only finds clauses | Accepted | 2026-11-25 |
 | [0004](0004-vercel-with-docker-fallback.md) | Vercel with a Docker fallback | Accepted | 2026-11-25 |
 | [0005](0005-integer-paise.md) | Money as integer paise | Accepted | 2026-11-25 |
+| [0006](0006-optional-postgres-cloud-save.md) | Optional PostgreSQL cloud save | Accepted, amends 0002 | 2026-11-25 |

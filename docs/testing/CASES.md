@@ -154,7 +154,7 @@ Terms are those of API.md. "Fake answers" means the fake AI client returns that 
 
 | ID | Rule | Input | Expected |
 |---|---|---|---|
-| T-115 | API health | `GET /api/health`, key set | 200 `{ "status": "ok", "aiConfigured": true }` |
+| T-115 | API health | `GET /api/health`, key set | 200 `{ "status": "ok", "aiConfigured": true, "cloudSaveConfigured": false }` without a database |
 | T-116 | API health | `GET /api/health`, no key | 200, `aiConfigured` false |
 | T-117 | API health, API errors | 20 valid match requests, then 25 health requests | All 25 return 200. Health is not limited |
 | T-118 | D-30 | Valid body. Fake answers `covers` with a quote copied from the lease | 200, `mode` `ai`, `warnings` `[]`, state `verified`, quote shown, `source` `ai` |
@@ -191,6 +191,28 @@ Terms are those of API.md. "Fake answers" means the fake AI client returns that 
 | T-149 | API match | Same lease. Fake answers `none` for an item | State `none` unchanged. Response has only `mode`, `warnings`, `matches`. No amount or result field |
 | T-150 | API match | Every response above | Every `source` is `ai` or `keyword`, never `user` or `sample` |
 | T-151 | NFR-1 | Build the client. Search it for the key value and `GEMINI_API_KEY`. Search the repository and its history for the key value. Check a response header | No match. A Helmet header such as `x-content-type-options` is present |
+
+## Cloud save (F6, PGlite and Supertest)
+
+Needed for step 8 only.
+
+| ID | Rule | Input | Expected |
+|---|---|---|---|
+| T-185 | FR-17, F6-R3 | Create a case, read the rows | 201, 32 code characters in groups of 4. `code_hash` is the SHA-256 of the code, and the code is in no column |
+| T-186 | FR-18 | Save 2 deductions of each kind and 1 linked repair, then open | Same values, order and link. Absent fields stay absent. Dates do not shift in any server time zone |
+| T-187 | NFR-9 | Two cases. Read, save and delete with code A | Rows of case B never change or appear |
+| T-188 | F6-R6 | Header missing, not Bearer, 31 characters, with `U`. Well formed but unknown code | 401 for the first four. 404 `CASE_NOT_FOUND` |
+| T-189 | F6-R5 | Code in lower case, no hyphens, `O` for `0` and `L` for `1` | Case opens |
+| T-190 | F6-R8 | Two saves based on revision 1 | 200 with revision 2, then 409 with `currentRevision` 2 and rows unchanged |
+| T-191 | F6-R7 | A child insert fails in the transaction | Error, earlier rows and revision complete |
+| T-192 | FR-19 | Delete, then open | 204, then 404. No child rows left |
+| T-193 | F6-R11 | Case past `expires_at`. Then create another case | 404. The expired rows are gone |
+| T-194 | F6-R13 | No `DATABASE_URL`. Database that never answers | 503 `STORAGE_UNAVAILABLE`, within 5 seconds. Health and matching still work |
+| T-195 | F6-R14 | Body with `leaseText`, `evidence`, a quote, 21 deductions, a repair linked to an unknown deduction, or a label of `'); DROP TABLE cases;--` | 400 for all but the last. The last is stored as text and the tables exist |
+| T-196 | NFR-2 | Logs over every case route | No code, label, description or SQL values |
+| T-197 | RATE_LIMITED | 11 creates in an hour. 121 other requests in 10 minutes | Last one 429 in both |
+| T-198 | F6-R14 | Direct inserts that break a kind constraint, a range or a foreign key | The database rejects each |
+| T-199 | F6-R2, F6-R4, F6-R9, F6-R10, F6-R12 | Component: cancel notice, first save, open over local data, conflict, delete, server down during Delete everything, sample case | No request after Cancel. Code shown with Copy. Confirmation before replacing. Evidence `unconfirmed` after opening. Local data deleted, code kept and message shown when the server is down. Save disabled for the sample |
 
 ## Component and flow (Testing Library, fetch faked)
 

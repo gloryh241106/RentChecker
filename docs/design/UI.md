@@ -24,6 +24,11 @@ Mobile first. One column on a phone, up to 40rem wide on larger screens. Routes 
 | 400, 413, 429 | Check the lease text and labels, then try again. The lease text is too long to send. Too many checks. Try again in a few minutes. |
 | Quote override rejected | That text was not found in the lease. Paste it exactly as written. |
 | Money error | Enter an amount in rupees, like 15,000 or 15,000.50. Use at most 2 decimals. |
+| Cloud save notice. Title "Save this case to the cloud" | RentChecker will store your dates, amounts, deduction names, repair log and bill form in a database. It will not store your lease text, quotes or message. The case is deleted 365 days after your last save, or when you delete it. Do not put names or bank details in labels. Buttons: Continue, Cancel |
+| Recovery code | Anyone with this code can open and change this case. We cannot recover it if you lose it. Button: Copy code |
+| Cloud save states | Not saved yet. Saved at {time}. Cloud save is not available right now. No case found for this code. Paste the lease again to check clauses. |
+| Cloud conflict | This case was changed on another device. Buttons: Load the cloud copy, Replace the cloud copy |
+| Delete cloud copy | Delete the cloud copy? The data in this browser stays. Buttons: Delete the cloud copy, Cancel |
 | Storage unavailable | Your browser is blocking storage. Nothing will be saved, but the app still works until you close this page. |
 | Stored data unreadable | Your saved data could not be read, so you are starting empty. |
 

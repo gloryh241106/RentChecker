@@ -1,6 +1,6 @@
 # 0002 Browser storage, no database
 
-Status: Accepted, 2026-11-25
+Status: Accepted, 2026-11-25. Amended by [0006](0006-optional-postgres-cloud-save.md), which adds an optional cloud copy.
 
 ## Context
 
