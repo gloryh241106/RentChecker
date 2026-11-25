@@ -7,11 +7,11 @@ Work through the steps in order. Tick a step only when its exit check passes, an
 | Done | Step | Exit check | Read first |
 |---|---|---|---|
 | [x] | 0. `.gitignore`, `.env.example`, workspace, lint, test and build scripts | All scripts pass on an empty project | [CONVENTIONS](CONVENTIONS.md), [ARCHITECTURE](design/ARCHITECTURE.md) |
-| [ ] | 1. Empty client and `/api/health` on Vercel | The public URL opens in a private window, health answers, refreshing a page does not give 404 | [DEPLOYMENT](design/DEPLOYMENT.md), [BACKEND](design/BACKEND.md) |
+| [x] | 1. Empty client and `/api/health` on Vercel | The public URL opens in a private window, health answers, refreshing a page does not give 404 | [DEPLOYMENT](design/DEPLOYMENT.md), [BACKEND](design/BACKEND.md) |
 | [x] | 2. Shared money, dates, rules and totals | Every D-ID case in CASES passes | [DOMAIN_RULES](spec/DOMAIN_RULES.md), [CASES](testing/CASES.md) |
 | [x] | 3. Moving-out screens with sample case and local storage | UC-1 works without a network, by keyboard alone | [F1](spec/F1-move-out.md), [UI](design/UI.md), [FRONTEND](design/FRONTEND.md), [DATA_MODEL](design/DATA_MODEL.md) |
 | [x] | 4. Clause matching with fallback | Works with a key, without a key and with a failing AI service | [F2](spec/F2-clause-matching.md), [API](design/API.md) |
-| [ ] | 5. Draft message | UC-2 works on the deployed site | [F3](spec/F3-draft-message.md) |
+| [x] | 5. Draft message | UC-2 works on the deployed site | [F3](spec/F3-draft-message.md) |
 | [ ] | 6. First submission check | Definition of done below | [STRATEGY](testing/STRATEGY.md) |
 | [x] | 7. Bill check and repair log | UC-4 and UC-5 work | [F5](spec/F5-bills-repairs.md) |
 | [ ] | 8. Cloud save | UC-7 works on the deployed site, and F6-AC1 to F6-AC8 pass | [F6](spec/F6-cloud-save.md), [DATA_MODEL](design/DATA_MODEL.md), [ADR 0006](adr/0006-optional-postgres-cloud-save.md) |

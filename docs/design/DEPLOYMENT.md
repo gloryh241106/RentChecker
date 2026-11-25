@@ -13,7 +13,7 @@ Primary target is Vercel Hobby with one project. A Docker image for Cloud Run is
 | Duration | Hobby maximum is 300 seconds. The AI call is limited to 20 seconds, so the default is enough. A shorter explicit value is still worth setting |
 | Body size | Vercel allows 4.5 MB by default. Express rejects bodies above 200 KB first (API.md) |
 
-A starting `vercel.json` has a build command and output directory for the client, the two rewrites, and a `headers` block that sends the same CSP as Helmet for client files. Its exact keys are not verified yet.
+A starting `vercel.json` has a build command and output directory for the client, the two rewrites, and a `headers` block that sends the same CSP as Helmet for client files.
 
 ## Environment variables
 
@@ -98,14 +98,19 @@ Two stages. The build stage installs all dependencies, builds the client and com
 - Cloud Run: send traffic back to the previous revision.
 - A leaked key: revoke it in the Google console, create a new one, set it, redeploy.
 
+## Verified on Vercel
+
+Checked on https://rent-checker-two.vercel.app on 2026-11-25: items 1 to 6, 8, 9 and 11 of the smoke checklist, and UC-1 and UC-2 in a browser under the real CSP with no console error. Items 7 (key unset) and 10 (platform logs) were not checked.
+
+Item 11: the burst got 429 earlier than the 21st request, because earlier calls from the same address counted. The counter is kept per instance.
+
+Gemini sometimes answers 503 (overloaded), mostly for the ten topics of a lease review: 2 of 8 such calls on a local server on 2026-11-25. The answer then comes from keyword matching, and the page says so.
+
 ## Not verified yet
 
-- Whether the `/api/(.*)` rewrite hands Express the original path, so routes match as written.
-- How `api/index.ts` pulls in `server/` and `shared/` at build time, including module format and import extensions.
-- The `vercel.json` keys for headers, duration and rewrites.
+- The `vercel.json` key for duration.
 - The right `trust proxy` hop count on Vercel and on Cloud Run.
 - Whether a Vercel link is accepted by the contest form, which asks for a Cloud Run URL (ADR 0004).
 - Cloud Run request timeout and cold start time with this image.
 - `docker build` itself. The steps of the Dockerfile were run one by one on a clean folder, and the server served the client and health.
-- The CSP directives that let the built client run with no inline script.
-- The Node version to use on both platforms.
+- The Node version to use on Cloud Run.

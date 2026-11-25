@@ -71,7 +71,7 @@ Must = needed for the first submission. Should = built if time allows.
 | NFR-3 Reliability | A failed or slow AI call never blocks the calculations | Test with the AI client failing |
 | NFR-4 Correctness | Every rule ID in DOMAIN_RULES.md has at least one test | [CASES.md](../testing/CASES.md) |
 | NFR-5 Accessibility | WCAG 2.2 AA for the main flow: keyboard, visible focus, labels, contrast, announced errors | Manual pass, automated check |
-| NFR-6 Efficiency | One AI request per check, however many deductions. Calculations run without a network call | Test, code review |
+| NFR-6 Efficiency | One AI request per check, however many deductions. One more only when the AI service is overloaded (BACKEND.md). Calculations run without a network call | Test, code review |
 | NFR-7 Maintainability | TypeScript strict mode, no `any`, lint and type check pass | Build |
 | NFR-8 Size | Repository under 10 MB, one branch | Manual |
 | NFR-9 Data access | A saved case can be read, changed or deleted only with its recovery code. Only a hash of the code is stored | Tests against a real PostgreSQL engine |

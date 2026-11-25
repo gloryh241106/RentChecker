@@ -25,7 +25,7 @@ function logFailure(logger: Logger, error: unknown): void {
 }
 
 /**
- * One call, no retry. An AI failure is an expected outcome, so it is returned (API.md). The race
+ * One call to the matcher. An AI failure is an expected outcome, so it is returned (API.md). The race
  * ends the wait at 20 seconds even if the matcher ignores the abort signal.
  */
 export async function askAi(

@@ -1,5 +1,6 @@
 import type { Express } from 'express';
 import { createGeminiMatcher } from './ai/gemini-client.js';
+import { retryWhenOverloaded } from './ai/retry-overloaded.js';
 import { createApp } from './app.js';
 import { parseConfig } from './config.js';
 import type { Env } from './config.js';
@@ -22,7 +23,7 @@ export function createRuntime(env: Env, sink: LogSink): Runtime {
     cloudSaveConfigured,
     logger,
     staticDir,
-    clauseMatcher: ai && createGeminiMatcher(ai, fetch),
+    clauseMatcher: ai && retryWhenOverloaded(createGeminiMatcher(ai, fetch)),
   });
   return { app, port, logger };
 }

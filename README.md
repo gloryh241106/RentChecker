@@ -1,5 +1,7 @@
 # RentChecker
 
+Live: <https://rent-checker-two.vercel.app>
+
 Check your rent and deposit charges before you argue about them.
 
 > Status: all three stages work: the lease review before signing, the bill check and the repair log, and the moving-out check with clause matching and the message. Cloud save is not built yet. Progress is in [docs/PLAN.md](docs/PLAN.md).

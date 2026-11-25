@@ -82,7 +82,7 @@ Every screen has a dark header with the app name. Every screen except Home also 
 From the top:
 
 - A dark band with the h1 "Check your rent and deposit charges", the introduction, a link "Check my deductions" to Details, and Load sample case. Beside it, under it on a phone, the example.
-- The example, h2 "Example result". It is the sample case, checked by the same rules as a real one, never typed in. It shows "Ask about ₹10,500 of ₹30,000 deducted", the split bar, and each deduction with its amount and result.
+- The example, h2 "Example result". It is the sample case, checked by the same rules as a real one, never typed in. It shows "Ask about ₹10,500 of ₹30,000 deducted", the split bar, the name and amount of each bucket above ₹0, and each deduction with its amount and result.
 - h2 "Where are you in your tenancy?" with the three stage cards. Each has an icon and an h3 that is the link, and the whole card can be pressed.
 - h2 "How it works" with four points. "Rules work out every amount": "Rent per day, meter readings, receipts and fees the lease states. AI never works out an amount." "Quotes are checked": "Google Gemini looks for the clause. A quote that is not in your lease is ignored." "A message you can edit": "It asks for the clause, the receipt or a new calculation, charge by charge." "Your data stays with you": "Your entries are stored in this browser. The lease is sent only after you agree, to find clauses."
 

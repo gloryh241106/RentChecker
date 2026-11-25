@@ -10,6 +10,8 @@ describe('Home', () => {
     const example = within(screen.getByRole('region', { name: 'Example result' }));
     expect(example.getByText('Ask about ₹10,500')).toBeTruthy();
     expect(example.getByText('of ₹30,000 deducted')).toBeTruthy();
+    const terms = example.getAllByRole('term').map((term) => term.textContent);
+    expect(terms).toEqual(['Ask about', 'Awaiting proof', 'Consistent']);
     const rows = example.getAllByRole('listitem').map((row) => row.textContent);
     expect(rows).toEqual([
       'Repainting ₹12,000Needs proof',

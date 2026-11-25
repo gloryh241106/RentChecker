@@ -2,6 +2,7 @@ import { checkResultOf, takeSnapshot } from '../hooks/check-snapshot.js';
 import { formatRupees } from '../shared.js';
 import { createSampleWorkspace } from '../state/sample.js';
 import { AskAboutLine } from './AskAboutLine.js';
+import { BucketLegend } from './BucketLegend.js';
 import { ResultBadge } from './ResultBadge.js';
 import { SplitBar } from './SplitBar.js';
 
@@ -20,6 +21,7 @@ export function ExampleResult() {
       </h2>
       <AskAboutLine totals={RESULT.totals} />
       <SplitBar totals={RESULT.totals} />
+      <BucketLegend totals={RESULT.totals} />
       <ul className="divide-y divide-line">
         {SAMPLE.deductions.map((deduction, index) => {
           const result = RESULT.deductions[index]?.result;

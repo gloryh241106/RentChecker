@@ -47,9 +47,11 @@ The limit is 20 match requests per 10 minutes per client (API.md). The counter i
 ## AI client
 
 - The key and the model name come only from `GEMINI_API_KEY` and `GEMINI_MODEL`. No default model is written in code. If either is missing, `aiConfigured` is false and the service uses keyword mode with `AI_NOT_CONFIGURED`.
-- One request per check, however many items (NFR-6).
+- One request per check, however many items (NFR-6). The one retry after 503 is the exception.
 - Structured JSON output is requested with a response schema. The reply is parsed again with Zod. Anything that does not parse is a failure, not a partial result.
-- The request is aborted after 20 seconds. There is no retry.
+- The request is aborted after 20 seconds.
+- When Gemini answers 503 (overloaded), the server waits 1 second and asks one more time. Both calls and the wait share the 20 seconds. No other failure is retried, because a second call would not help or would add to the load.
+- `retryWhenOverloaded` wraps the matcher and is added in `bootstrap.ts`, so the Gemini client and the service do not know about it.
 - Failures map to warnings. Timeout gives `AI_TIMEOUT`. Any other failure, including invalid output, gives `AI_UNAVAILABLE`. The route still answers 200 in keyword mode.
 - The AI answer holds only an item id, one of `covers`, `excludes` or `none`, and a quote (F2-R5). It has no amount and no result.
 
