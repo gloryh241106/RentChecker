@@ -66,3 +66,6 @@ export {
   joinWithAnd,
   reasonSentence,
 } from './wording/index.js';
+
+export type { MessageInput } from './message/index.js';
+export { buildMessage } from './message/index.js';

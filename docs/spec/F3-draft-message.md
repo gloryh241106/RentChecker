@@ -43,7 +43,7 @@ Message parts, in order:
 
 ## Template
 
-Parts are separated by one empty line. Lines in a block follow each other. A line is left out when it has nothing to say.
+Parts are separated by one empty line. Lines in a block follow each other. A line is left out when it has nothing to say. Blocks are numbered from 1 among the blocks shown. A run of white space in a label, quote or repair becomes one space, so each stays on its line.
 
 | Part | Text |
 |---|---|
